@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkoderBindingMauiiOS", "BarkoderBindingMauiiOS.csproj", "{C63C3D28-B907-4E01-BC00-2C0B2939D016}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C63C3D28-B907-4E01-BC00-2C0B2939D016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63C3D28-B907-4E01-BC00-2C0B2939D016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63C3D28-B907-4E01-BC00-2C0B2939D016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63C3D28-B907-4E01-BC00-2C0B2939D016}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC1DB955-B920-42A3-9C81-E672FD88A416}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.Maui.Barkoder", "Plugin.Maui.Barkoder.csproj", "{654CE045-5DF9-4589-83E8-517CB0544BB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{654CE045-5DF9-4589-83E8-517CB0544BB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{654CE045-5DF9-4589-83E8-517CB0544BB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{654CE045-5DF9-4589-83E8-517CB0544BB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{654CE045-5DF9-4589-83E8-517CB0544BB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {19096BA5-1EC9-46D5-85D5-43E90DFDD564}
+	EndGlobalSection
+EndGlobal

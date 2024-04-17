@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<Authors>Barkoder</Authors>
+		<Description>The barKoder SDK Maui plugin grants an easy to use Maui solution with a great interface that can be integrated in both iOS and Android apps. Integrating the barKoder Barcode Scanner SDK into your Enterprise or Consumer-facing mobile apps will instantly transform your user's smartphones and tablets into rugged barcode scanning devices without the need to procure and maintain expensive and sluggish hardware devices that have a very short life span.</Description>
+		<Copyright>Copyright @2023 Barkoder</Copyright>
+		<PackageProjectUrl>https://barkoder.com</PackageProjectUrl>
+		<PackageTags>barkoder,bkd,maui,android,ios,native,scanner,barcode</PackageTags>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AndroidErrorOnCustomJavaObject>false</AndroidErrorOnCustomJavaObject>
+		<AndroidLinkResources>false</AndroidLinkResources>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<Version>1.2.8</Version>
+		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Reference Include="BarkoderBindingMauiAndroid">
+	    <HintPath>lib\BarkoderBindingMauiAndroid.dll</HintPath>
+	  </Reference>
+
+	  <Reference Include="BarkoderBindingMauiiOS">
+	    <HintPath>lib\BarkoderBindingMauiiOS.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="lib\BarkoderBindingMauiAndroid.dll" Pack="true" PackagePath="\lib\net8.0-android34.0" />
+		<None Include="lib\BarkoderBindingMauiiOS.dll" Pack="true" PackagePath="\lib\net8.0-ios17.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Handlers\" />
+	  <None Remove="Common\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Handlers\" />
+	  <Folder Include="Common\" />
+	</ItemGroup>
+
+	<ItemGroup>
+        <None Include="docs\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+</Project>
