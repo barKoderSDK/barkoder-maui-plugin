@@ -83,6 +83,10 @@ namespace Barkoder.Xamarin
         // @property (copy, nonatomic) NSArray<DecoderResult *> * _Nonnull results;
         [Export("results", ArgumentSemantic.Copy)]
         DecoderResult[] Results { get; set; }
+
+        // @property (copy, nonatomic) NSString * _Nonnull imageInBase64;
+        [Export("imageInBase64")]
+        string ImageInBase64 { get; set; }
     }
 
     // @interface DecoderResult : NSObject

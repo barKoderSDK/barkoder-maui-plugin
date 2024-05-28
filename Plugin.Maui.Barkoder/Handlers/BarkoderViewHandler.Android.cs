@@ -28,6 +28,8 @@ using AndroidCode39ChecksumType = Com.Barkoder.BKD.Code39ChecksumType;
 using AndroidX.AppCompat.App;
 using Plugin.Maui.Barkoder.Interfaces;
 using Org.Json;
+using Java.IO;
+using Android.Util;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
@@ -1039,7 +1041,7 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
             barcodeResults[i] = barcodeResult;
         }
 
-        BarkoderDelegate?.DidFinishScanning(barcodeResults);
+        BarkoderDelegate?.DidFinishScanning(barcodeResults, BitmapToImageSource(originalImage));
     }
 
     public void isFlashAvailable(Action<bool> completion)
@@ -1069,6 +1071,28 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
             maxZoomFactorCompletion(maxZoomFactor);
         }
     }
+
+    private static ImageSource BitmapToImageSource(Bitmap bitmap)
+    {
+        if (bitmap == null || Bitmap.CompressFormat.Jpeg == null)
+        {
+            return ImageSource.FromStream(() => new MemoryStream());
+        }
+
+        // Converting from Bitmap to Base64 string
+        MemoryStream stream = new MemoryStream();
+        bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+        byte[] bytes = stream.ToArray();
+        string ImageInBase64 = Convert.ToBase64String(bytes);
+
+        // Converting from Base64 string to ImageSource
+        byte[] imageBytes = Convert.FromBase64String(ImageInBase64);
+        MemoryStream imageSourceStream = new MemoryStream(imageBytes);
+        ImageSource imageSource = ImageSource.FromStream(() => imageSourceStream);
+
+        return imageSource;
+    }
+
 }
 
 #endif
