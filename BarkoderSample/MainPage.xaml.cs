@@ -77,8 +77,8 @@ public partial class MainPage : ContentPage, IBarkoderDelegate
         SubtitleLbl.Text = BKDView.Version.ToString();
 
         BarkoderConfig barkoderConfig = new BarkoderConfig(
-            roiLineWidth: 10,
-            pinchToZoomEnabled: true,
+            closeSessionOnResultEnabled: true,
+            imageResultEnabled: true,
             roiOverlayBackgroundColor: 555555,
             decoder: new DekoderConfig(
                 qr: new BarcodeConfig(true),
@@ -97,6 +97,17 @@ public partial class MainPage : ContentPage, IBarkoderDelegate
             SubtitleLbl.Text = result[0].TextualData;
         }
     }
+
+    public void DidFinishScanning(BarcodeResult[] result, ImageSource originalImageSource)
+    {
+        if (result.Length > 0)
+        {
+            SubtitleLbl.Text = result[0].TextualData;
+        }
+
+        ResultImage.Source = originalImageSource;
+    }
+
 }
 
 

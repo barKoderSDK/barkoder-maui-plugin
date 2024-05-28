@@ -419,7 +419,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                     barcodeResults[i] = barcodeResult;
                 }
 
-                barkoderDelegate?.DidFinishScanning(barcodeResults);
+                barkoderDelegate?.DidFinishScanning(barcodeResults, Base64ToImageSource(completion.ImageInBase64));
             });
         }
     }
@@ -952,6 +952,17 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         {
             handler.BKDView.ConfigureBarkoder(configAsJsonString);
         }
+    }
+
+    private static ImageSource Base64ToImageSource(String imageInBase64format)
+    {
+        byte[] imageBytes = Convert.FromBase64String(imageInBase64format);
+
+        MemoryStream stream = new MemoryStream(imageBytes);
+
+        ImageSource imageSource = ImageSource.FromStream(() => stream);
+
+        return imageSource;
     }
 
 }

@@ -37,6 +37,11 @@
                 x:Name="SubtitleLbl"
                 HorizontalOptions="Fill" />
 
+            <Image
+                x:Name="ResultImage"
+                HeightRequest="200"
+                />
+
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1302,6 +1302,9 @@ private class Util {
 public class DecoderPayload: NSObject {
     @objc
     public var results: [DecoderResult] = []
+    
+    @objc
+    public var imageInBase64: String = ""
 }
 
 @objc(DecoderResult)
@@ -1312,6 +1315,11 @@ extension BarkoderProxy: BarkoderResultDelegate {
     public func scanningFinished(_ decoderResults: [DecoderResult], thumbnails: [UIImage]?, image: UIImage?) {
         let decoderPayload = DecoderPayload()
         decoderPayload.results = decoderResults
+        
+        if let imageData = image?.jpegData(compressionQuality: 1.0) {
+            let base64String = imageData.base64EncodedString()
+            decoderPayload.imageInBase64 = base64String
+        }
         
         DispatchQueue.main.async {
             self.resultCallbackDecoderResult?(decoderPayload)

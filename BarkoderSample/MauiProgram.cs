@@ -12,12 +12,11 @@ public static class MauiProgram
 			.UseMauiApp<App>()
 			.ConfigureFonts(fonts =>
 			{
-				// Your custom fonts
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			})
 			.ConfigureMauiHandlers(handlers =>
 			{
-				// Your other maui handlers
-				// *
 				handlers.AddHandler(typeof(BarkoderView), typeof(BarkoderViewHandler));
             });
 

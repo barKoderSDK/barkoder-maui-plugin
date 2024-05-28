@@ -5,6 +5,6 @@ namespace Plugin.Maui.Barkoder.Interfaces;
 
 public interface IBarkoderDelegate
 {
-    void DidFinishScanning(BarcodeResult[] result);
+    void DidFinishScanning(BarcodeResult[] result, ImageSource originalImageSource);
 }
 
