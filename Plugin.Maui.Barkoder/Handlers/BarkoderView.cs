@@ -238,6 +238,10 @@ public class BarkoderView : View
 
     // Properties
 
+
+    /// <summary>
+    /// Retrieves the version of the Barkoder library.
+    /// </summary>
     public string Version
     {
         get => (string)GetValue(VersionProperty);
@@ -251,7 +255,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the region of interest (ROI) overlay is visible.
+    /// Checks or sets if the region of interest (ROI) is visible.
     /// </summary>
     public bool RegionOfInterestVisible
     {
@@ -264,7 +268,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the flash is available.
+    /// Checks whether the device has a built-in flash (torch) that can be used for illumination during barcode scanning.
     /// </summary>
     public bool IsFlashAvailable
     {
@@ -273,7 +277,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the maximum zoom factor.
+    /// Retrieves or sets the maximum available zoom factor for the device's camera.
     /// </summary>
     public double MaxZoomFactor
     {
@@ -286,7 +290,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the hexadecimal representation of the location line color.
+    /// Retrieves or sets the hexadecimal color code representing the line color used to indicate the location of detected barcodes.
     /// </summary>
     public string LocationLineColorHex
     {
@@ -299,7 +303,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the hexadecimal representation of the region of interest (ROI) line color.
+    /// Retrieves or sets the hexadecimal color code representing the line color of the Region of Interest (ROI) on the camera preview.
     /// </summary>
     public string RoiLineColorHex
     {
@@ -312,7 +316,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the hexadecimal representation of the region of interest (ROI) overlay background color.
+    /// Retrieves or sets the hexadecimal color code representing the background color of the overlay within the Region of Interest (ROI) on the camera preview.
     /// </summary>
     public string RoiOverlayBackgroundColorHex
     {
@@ -325,7 +329,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the character set used for encoding.
+    /// Retrieves or sets the character set used for encoding barcode data.
     /// </summary>
     public string EncodingCharacterSet
     {
@@ -338,7 +342,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the width of the location line.
+    /// Retrieves or sets the current width setting for the lines indicating the location of detected barcodes on the camera feed.
     /// </summary>
     public double LocationLineWidth
     {
@@ -351,7 +355,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the width of the region of interest (ROI) line.
+    /// Retrieves or sets the current width setting for the lines outlining the Region of Interest (ROI) on the camera preview.
     /// </summary>
     public double RoiLineWidth
     {
@@ -364,7 +368,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether image results are enabled.
+    /// Checks or sets if image result is enabled.
     /// </summary>
     public bool ImageResultEnabled
     {
@@ -377,7 +381,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the location is displayed in image results.
+    /// Checks or sets if location in image result is enabled.
     /// </summary>
     public bool LocationInImageResultEnabled
     {
@@ -390,7 +394,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the location is displayed in the camera preview.
+    /// Checks if location in preview is enabled.
     /// </summary>
     public bool LocationInPreviewEnabled
     {
@@ -403,7 +407,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether pinch-to-zoom functionality is enabled.
+    /// Checks or sets if pinch to zoom is enabled.
     /// </summary>
     public bool PinchToZoomEnabled
     {
@@ -455,7 +459,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the resolution for barcode scanning.
+    /// Retrieves or sets the resolution for barcode scanning.
     /// </summary>
     public BarkoderResolution BarkoderResolution
     {
@@ -468,7 +472,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the decoding speed for barcode scanning.
+    /// Retrieves or sets the current decoding speed setting for barcode scanning.
     /// </summary>
     public DecodingSpeed DecodingSpeed
     {
@@ -481,7 +485,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the formatting type for barcode scanning.
+    /// Retrieves or sets the formatting type used for presenting decoded barcode data..
     /// </summary>
     public FormattingType FormattingType
     {
@@ -494,7 +498,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the checksum type for MSI barcodes.
+    /// Retrieves or sets the MSI checksum type.
     /// </summary>
     public MsiChecksumType MsiChecksumType
     {
@@ -507,7 +511,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the checksum type for Code 11 barcodes.
+    /// Retrieves or sets the Code11 checksum type.
     /// </summary>
     public Code11ChecksumType Code11ChecksumType
     {
@@ -520,7 +524,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the checksum type for Code 39 barcodes.
+    /// Retrieves or sets the checksum type for Code 39 barcodes.
     /// </summary>
     public Code39ChecksumType Code39ChecksumType
     {
@@ -546,7 +550,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether deblurring is enabled for UPC/EAN barcodes.
+    /// Sets or retrieves the value indicating whether deblurring is enabled for UPC/EAN barcodes.
     /// </summary>
     public bool UpcEanDeblurEnabled
     {
@@ -559,7 +563,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether decoding of misshaped 1D barcodes is enabled.
+    /// Checks if the detection of misshaped 1D barcodes is enabled.
     /// </summary>
     public bool EnableMisshaped1DEnabled
     {
@@ -572,7 +576,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether barcode thumbnails are enabled in the scan results.
+    /// Checks if the barcode thumbnail on result is enabled.
     /// </summary>
     public bool BarcodeThumbnailOnResultEnabled
     {
@@ -585,7 +589,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the maximum number of results to be returned from barcode scanning.
+    /// Retrieves the maximum number of results to be returned from barcode scanning at once.
     /// </summary>
     public int MaximumResultsCount
     {
@@ -598,7 +602,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the delay in milliseconds for considering duplicate barcodes during scanning.
+    /// Retrieves or sets the delay in milliseconds for considering duplicate barcodes during scanning.
     /// </summary>
     public int DuplicatesDelayMs
     {
@@ -611,7 +615,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether Vehicle Identification Number (VIN) restrictions are enabled for scanning.
+    /// Sets or checks if VIN restrictions are enabled.
     /// </summary>
     public bool VINRestrictionsEnabled
     {
@@ -624,7 +628,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the threshold between duplicate scans in seconds.
+    /// Retrieves the threshold between duplicate scans.
     /// </summary>
     public int ThresholdBetweenDuplicatesScans
     {
@@ -637,7 +641,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Gets or sets the region of interest (ROI) for barcode scanning.
+    /// Retrieves or sets the region of interest (ROI).
     /// </summary>
     public (int, int, int, int) RegionOfInterest
     {
@@ -662,7 +666,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Starts scanning for barcodes.
+    /// Initiates the barcode scanning process, allowing the application to detect and decode barcodes from the device's camera feed.
     /// </summary>
     /// <param name="barkoderDelegate">The delegate to handle barcode scanning events.</param>
     public void StartScanning(IBarkoderDelegate barkoderDelegate)
@@ -671,7 +675,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Stops the barcode scanning process.
+    /// Halts the barcode scanning process, stopping the camera from capturing and processing barcode information.
     /// </summary>
     public void StopScanning()
     {
@@ -679,7 +683,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Pauses the barcode scanning process.
+    /// Temporarily suspends the barcode scanning process, pausing the camera feed without completely stopping the scanning session.
     /// </summary>
     public void PauseScanning()
     {
@@ -687,7 +691,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the flash (torch) on or off for barcode scanning.
+    /// Enables or disables the device's flash (torch) for illumination during barcode scanning.
     /// </summary>
     /// <param name="enabled">True to enable the flash, false to disable it.</param>
     public void SetFlashEnabled(bool enabled)
@@ -696,7 +700,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the zoom factor for the camera used in barcode scanning.
+    /// Sets the zoom factor for the device's camera, adjusting the level of zoom during barcode scanning.
     /// </summary>
     /// <param name="zoomFactor">The zoom factor to set.</param>
     public void SetZoomFactor(float zoomFactor)
@@ -705,7 +709,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables pinch-to-zoom functionality for the camera used in barcode scanning.
+    /// Enables or disables the pinch-to-zoom feature for adjusting the zoom level during barcode scanning.
     /// </summary>
     /// <param name="enabled">True to enable pinch-to-zoom, false to disable it.</param>
     public void SetPinchToZoomEnabled(bool enabled)
@@ -714,7 +718,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the visibility of the region of interest (ROI) overlay for barcode scanning.
+    /// Sets the visibility of the Region of Interest (ROI) on the camera preview.
     /// </summary>
     /// <param name="visible">True to make the ROI visible, false to hide it.</param>
     public void SetRegionOfInterestVisible(bool visible)
@@ -723,7 +727,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets whether the session should be closed upon detecting a result during barcode scanning.
+    /// Enables or disables the automatic closing of the scanning session upon detecting a barcode result.
     /// </summary>
     /// <param name="enabled">True to close the session on result detection, false otherwise.</param>
     public void SetCloseSessionOnResultEnabled(bool enabled)
@@ -732,7 +736,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the display of image results during barcode scanning.
+    /// Enables or disables the capturing and processing of image data when a barcode is successfully detected.
     /// </summary>
     /// <param name="enabled">True to enable image result display, false to disable it.</param>
     public void SetImageResultEnabled(bool enabled)
@@ -741,7 +745,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables displaying the barcode location in the camera preview.
+    /// Enables or disables the display of barcode location information on the camera preview.
     /// </summary>
     /// <param name="enabled">True to display the location, false to hide it.</param>
     public void SetLocationInPreviewEnabled(bool enabled)
@@ -750,7 +754,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables displaying the barcode location in the image result.
+    /// Enables or disables the inclusion of barcode location information within the image data result.
     /// </summary>
     /// <param name="enabled">True to display the location, false to hide it.</param>
     public void SetLocationInImageResultEnabled(bool enabled)
@@ -759,7 +763,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the beep sound on successful barcode scanning.
+    /// Enables or disables the audible beep sound upon successfully decoding a barcode.
     /// </summary>
     /// <param name="enabled">True to enable beep sound, false to disable it.</param>
     public void SetBeepOnSuccessEnabled(bool enabled)
@@ -768,7 +772,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the vibration on successful barcode scanning.
+    /// Retrieves or sets the value indicating whether vibration is enabled on successful barcode scanning.
     /// </summary>
     /// <param name="enabled">True to enable vibration, false to disable it.</param>
     public void SetVibrateOnSuccessEnabled(bool enabled)
@@ -777,7 +781,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the color of the line indicating the barcode location in the camera preview.
+    /// Sets the color of the lines used to indicate the location of detected barcodes on the camera feed.
     /// </summary>
     /// <param name="hexColor">The hexadecimal representation of the color.</param>
     public void SetLocationLineColor(string hexColor)
@@ -786,7 +790,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the color of the line indicating the region of interest (ROI) in the camera preview.
+    /// Sets the color of the lines outlining the Region of Interest (ROI) for barcode scanning on the camera feed.
     /// </summary>
     /// <param name="hexColor">The hexadecimal representation of the color.</param>
     public void SetRoiLineColor(string hexColor)
@@ -795,7 +799,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the background color of the region of interest (ROI) overlay in the camera preview.
+    /// Sets the background color of the overlay within the Region of Interest (ROI) for barcode scanning on the camera feed.
     /// </summary>
     /// <param name="hexColor">The hexadecimal representation of the color.</param>
     public void SetRoiOverlayBackgroundColor(string hexColor)
@@ -804,7 +808,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the region of interest (ROI) for barcode scanning within the camera preview.
+    /// Defines the Region of Interest (ROI) on the camera preview for barcode scanning, specifying an area where the application focuses on detecting barcodes.
     /// </summary>
     /// <param name="left">The left coordinate of the ROI.</param>
     /// <param name="top">The top coordinate of the ROI.</param>
@@ -843,7 +847,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the checksum type for MSI barcodes.
+    /// Sets the MSI checksum type.
     /// </summary>
     /// <param name="msiChecksumType">The MSI checksum type to be set.</param>
     public void SetMsiChecksumType(MsiChecksumType msiChecksumType)
@@ -852,7 +856,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the checksum type for Code 11 barcodes.
+    /// Sets the Code11 checksum type.
     /// </summary>
     /// <param name="code11ChecksumType">The Code 11 checksum type to be set.</param>
     public void SetCode11ChecksumType(Code11ChecksumType code11ChecksumType)
@@ -861,7 +865,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the checksum type for Code 39 barcodes.
+    /// Sets the Code39 checksum type.
     /// </summary>
     /// <param name="code39ChecksumType">The Code 39 checksum type to be set.</param>
     public void SetCode39ChecksumType(Code39ChecksumType code39ChecksumType)
@@ -879,7 +883,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the (DPM) mode for Datamatrix barcodes.
+    /// Sets whether the Direct Part Marking (DPM) mode for Datamatrix barcodes is enabled.
     /// </summary>
     /// <param name="enabled">True to enable DPM mode, false to disable it.</param>
     public void SetDatamatrixDpmModeEnabled(bool enabled)
@@ -888,7 +892,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables deblurring for UPC/EAN barcodes.
+    /// Sets whether the deblurring feature for UPC/EAN barcodes is enabled.
     /// </summary>
     /// <param name="enabled">True to enable deblurring, false to disable it.</param>
     public void SetUpcEanDeblurEnabled(bool enabled)
@@ -897,7 +901,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the decoding of misshaped 1D barcodes.
+    /// Sets whether the detection of misshaped 1D barcodes is enabled.
     /// </summary>
     /// <param name="enabled">True to enable decoding, false to disable it.</param>
     public void SetEnableMisshaped1DEnabled(bool enabled)
@@ -906,7 +910,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the display of barcode thumbnails in the scan results.
+    /// Sets whether to enable barcode thumbnail on result.
     /// </summary>
     /// <param name="enabled">True to enable barcode thumbnails, false to disable them.</param>
     public void SetBarcodeThumbnailOnResultEnabled(bool enabled)
@@ -933,7 +937,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Enables or disables the specified barcode type for scanning.
+    /// Sets whether a specific barcode type is enabled.
     /// </summary>
     /// <param name="barcodeType">The barcode type to enable or disable.</param>
     /// <param name="enabled">True to enable the barcode type, false to disable it.</param>
@@ -951,7 +955,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets whether Vehicle Identification Number (VIN) restrictions are enabled for scanning.
+    /// Sets whether Vehicle Identification Number (VIN) restrictions are enabled.
     /// </summary>
     /// <param name="enabled">True to enable VIN restrictions, false to disable them.</param>
     public void SetEnableVINRestrictions(bool enabled)
@@ -960,7 +964,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the threshold between duplicate scans in milliseconds.
+    /// Sets the threshold between duplicate scans.
     /// </summary>
     /// <param name="thresholdBetweenDuplicatesScans">The threshold between duplicate scans in milliseconds.</param>
     public void SetThresholdBetweenDuplicatesScans(int thresholdBetweenDuplicatesScans)
@@ -987,7 +991,7 @@ public class BarkoderView : View
     }
 
     /// <summary>
-    /// Sets the length range for a specified barcode type.
+    /// Sets the length range for the specified barcode type.
     /// </summary>
     /// <param name="barcodeType">The type of barcode.</param>
     /// <param name="min">The minimum length of the barcode.</param>
