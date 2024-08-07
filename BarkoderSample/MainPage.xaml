@@ -9,6 +9,11 @@
             Padding="30,0"
             Spacing="25">
 
+            <Label
+                x:Name="TitleLabel"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand" />
+
             <barkoder:BarkoderView
                 x:Name="BKDView"
                 barkoder:LicenseKey="KEY"
@@ -16,31 +21,14 @@
                 HeightRequest="200"/>
 
             <Button
-                x:Name="CounterBtn"
+                x:Name="StartScanningBtn"
                 Text="Start Scanning" 
                 Clicked="OnStartScanningBtnClicked"
                 HorizontalOptions="Fill" />
 
-            <Button
-                x:Name="SecondBtn"
-                Text="Barkoder action" 
-                Clicked="OnSecondBtnClicked"
-                HorizontalOptions="Fill" />
-
-             <Button
-                x:Name="ThirdBtn"
-                Text="Barkoder second action" 
-                Clicked="OnThirdBtnClicked"
-                HorizontalOptions="Fill" />
-
             <Label
-                x:Name="SubtitleLbl"
+                x:Name="TextualDataLbl"
                 HorizontalOptions="Fill" />
-
-            <Image
-                x:Name="ResultImage"
-                HeightRequest="200"
-                />
 
         </VerticalStackLayout>
     </ScrollView>
