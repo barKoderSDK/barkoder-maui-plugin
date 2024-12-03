@@ -16,7 +16,7 @@
 
             <barkoder:BarkoderView
                 x:Name="BKDView"
-                barkoder:LicenseKey="KEY"
+                barkoder:LicenseKey="LICENSE_KEY"
                 BackgroundColor="Yellow"
                 HeightRequest="200"/>
 
@@ -26,6 +26,42 @@
                 Clicked="OnStartScanningBtnClicked"
                 HorizontalOptions="Fill" />
 
+            <Button 
+                Text="Pick an Image from Gallery"
+                Clicked="OnPickImageButtonClicked"
+                HorizontalOptions="Fill" />
+
+            <!-- Use a Grid layout to achieve 25% width for each image -->
+            <Grid ColumnDefinitions="*,*,*,*" HorizontalOptions="Fill">
+                <Image
+                    x:Name="ScannedImage"
+                    Grid.Column="0"
+                    HeightRequest="100"
+                    Aspect="AspectFit"
+                    VerticalOptions="CenterAndExpand" />
+                
+                <Image
+                    x:Name="ScannedImage2"
+                    Grid.Column="1"
+                    HeightRequest="100"
+                    Aspect="AspectFit"
+                    VerticalOptions="CenterAndExpand" />
+
+                <Image
+                    x:Name="ScannedImage3"
+                    Grid.Column="2"
+                    HeightRequest="100"
+                    Aspect="AspectFit"
+                    VerticalOptions="CenterAndExpand" />
+
+                <Image
+                    x:Name="ScannedImage4"
+                    Grid.Column="3"
+                    HeightRequest="100"
+                    Aspect="AspectFit"
+                    VerticalOptions="CenterAndExpand" />
+            </Grid>
+
             <Label
                 x:Name="TextualDataLbl"
                 HorizontalOptions="Fill" />
@@ -34,4 +70,3 @@
     </ScrollView>
 
 </ContentPage>
-

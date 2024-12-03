@@ -24,9 +24,12 @@ using iOSCode11ChecksumType = Barkoder.Xamarin.Code11ChecksumType;
 
 using CommonCode39ChecksumType = Plugin.Maui.Barkoder.Enums.Code39ChecksumType;
 using iOSCode39ChecksumType = Barkoder.Xamarin.Code39ChecksumType;
+using ImageData = Plugin.Maui.Barkoder.Handlers.ImageData;
 
 using CommonBarcodeType = Plugin.Maui.Barkoder.Enums.BarcodeType;
 using BarcodeType = Barkoder.Xamarin.BarcodeType;
+using Foundation;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
@@ -312,6 +315,14 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapIdDocumentMasterChecksumEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.IdDocumentMasterCheckSumEnabled = handler.BKDView.DatamatrixDpmModeEnabled;
+        }
+    }
+
     private static void MapDatamatrixDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
@@ -319,6 +330,24 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             view.DatamatrixDpmModeEnabled = handler.BKDView.DatamatrixDpmModeEnabled;
         }
     }
+
+    private static void MapQRDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.QRDpmModeEnabled = handler.BKDView.QRDpmModeEnabled;
+        }
+    }
+
+    private static void MapQRMicroDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            // Correctly use the accessible property here
+            view.QRMIcroDpmModeEnabled = handler.BKDView.QRMicroDpmModeEnabled;
+        }
+    }
+
 
     private static void MapUpcEanDeblurEnabled(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -415,12 +444,127 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                 // Converting from SDK results -> Maui wrapper results
                 for (int i = 0; i < results.Length; i++)
                 {
-                    BarcodeResult barcodeResult = new BarcodeResult(results[i].TextualData, results[i].BarcodeTypeName, "");
+                    List<ImageData> mrzImages = new List<ImageData>();
+
+                    // Assuming you have a similar structure to access images
+                    if (results[i].Images != null)
+                    {
+                        foreach (var image in results[i].Images)
+                        {
+                            ImageSource? imageSource = UIImageToImageSource(image.Image);
+                            if (imageSource != null)
+                            {
+                                mrzImages.Add(new ImageData(image.Name, imageSource));
+                            }
+                        }
+                    }
+
+                    // Create BarcodeResult for each scanned result and convert UIImage to ImageSource
+                    BarcodeResult barcodeResult = new BarcodeResult(
+                        results[i].TextualData,
+                        results[i].BarcodeTypeName,
+                        "", // Provide the CharacterSet
+                        mrzImages
+                    );
+
                     barcodeResults[i] = barcodeResult;
                 }
 
+                // Pass results back to the delegate
                 barkoderDelegate?.DidFinishScanning(barcodeResults, Base64ToImageSource(completion.ImageInBase64));
             });
+        }
+    }
+
+
+
+
+
+    private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        // Ensure `arg3` is cast to `dynamic` to access its properties.
+        try
+        {
+            dynamic arguments = arg3;
+
+            if (arguments.barkoderDelegate is IBarkoderDelegate barkoderDelegate)
+            {
+                Console.WriteLine("MapScanImage called with base64Image.");
+
+                string base64Image = arguments.base64Image;
+
+                // Create UIImage from base64 string
+                UIImage image = ConvertBase64ToUIImage(base64Image);
+
+                // Call the scanImage method, just like startScanning, and use the completion handler
+                handler.BKDView?.ScanImage(image, handler.BKDView?.Config, (completion) =>
+                {
+                    // SDK Results
+                    DecoderResult[] results = completion.Results;
+
+                    // Maui wrapper results
+                    BarcodeResult[] barcodeResults = new BarcodeResult[results.Length];
+
+                    // Converting from SDK results -> Maui wrapper results
+                    for (int i = 0; i < results.Length; i++)
+                    {
+                        List<ImageData> mrzImages = new List<ImageData>();
+
+                        // Assuming you have a similar structure to access images
+                        if (results[i].Images != null)
+                        {
+                            foreach (var image in results[i].Images)
+                            {
+                                ImageSource? imageSource = UIImageToImageSource(image.Image);
+                                if (imageSource != null)
+                                {
+                                    mrzImages.Add(new ImageData(image.Name, imageSource));
+                                }
+                            }
+                        }
+
+                        // Create BarcodeResult for each scanned result and convert UIImage to ImageSource
+                        BarcodeResult barcodeResult = new BarcodeResult(
+                            results[i].TextualData,
+                            results[i].BarcodeTypeName,
+                            "", // Provide the CharacterSet
+                            mrzImages
+                        );
+
+                        barcodeResults[i] = barcodeResult;
+                    }
+
+                    // Pass results back to the delegate
+                    barkoderDelegate?.DidFinishScanning(barcodeResults, Base64ToImageSource(completion.ImageInBase64));
+                });
+            }
+        }
+        catch (RuntimeBinderException e)
+        {
+            Console.WriteLine("MapScanImage: Argument type is incorrect or missing required properties.");
+            Console.WriteLine(e.Message);
+        }
+    }
+
+
+
+    private static UIImage ConvertBase64ToUIImage(string base64Image)
+    {
+        try
+        {
+            // Decode base64 string to byte array
+            byte[] imageData = Convert.FromBase64String(base64Image);
+
+            // Create NSData from byte array
+            NSData data = NSData.FromArray(imageData);
+
+            // Create UIImage from NSData
+            return UIImage.LoadFromData(data);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error converting base64 string to UIImage: {ex.Message}");
+            return null;
         }
     }
 
@@ -748,11 +892,39 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapSetIdDocumentMasterChecksumEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetIdDocumentMasterChecksumEnabledWithArg(enabled);
+            view.IsIdDocumentMasterChecksumEnabled = enabled;
+        }
+    }
+
     private static void MapSetDatamatrixDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is bool enabled) && (handler.BKDView != null))
         {
             handler.BKDView.SetDatamatrixDpmModeEnabledWithArg(enabled);
+            view.IsDatamatrixDpmModeEnabled = enabled;
+        }
+    }
+
+    private static void MapSetQRDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetQRDpmModeEnabledWithArg(enabled);
+            view.IsQRDpmModeEnabled = enabled;
+        }
+    }
+
+    private static void MapSetQRMicroDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetQRMicroDpmModeEnabledWithArg(enabled);
+            view.IsQRMicroDpmModeEnabled = enabled;
         }
     }
 
@@ -882,6 +1054,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                 case Enums.BarcodeType.Dotcode:
                     handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.dotcode, barcodeTypeEventArgs.Enabled);
                     break;
+                case Enums.BarcodeType.IDDocument:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.idDocument, barcodeTypeEventArgs.Enabled);
+                    break;
             }
         }
     }
@@ -963,6 +1138,14 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         ImageSource imageSource = ImageSource.FromStream(() => stream);
 
         return imageSource;
+    }
+
+    public static ImageSource UIImageToImageSource(UIImage image)
+    {
+        if (image == null)
+            return null;
+
+        return ImageSource.FromStream(() => image.AsPNG().AsStream());
     }
 
 }

@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+                <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 		<TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
 		<AndroidErrorOnCustomJavaObject>false</AndroidErrorOnCustomJavaObject>
 		<AndroidLinkResources>false</AndroidLinkResources>
@@ -38,7 +39,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	  <CodesignProvision>Automatic</CodesignProvision>
-	  <CodesignKey>Apple Development: Slobodan Marinkovik (ZST9RCLBL8)</CodesignKey>
+	  <CodesignKey>Apple Development: Viktor Krstev (UB7LGRFA8Y)</CodesignKey>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
@@ -65,10 +66,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.92" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Plugin.Maui.Barkoder" Version="1.3.1" />
+		<PackageReference Include="Xam.Plugin.Media" Version="6.0.2" />
+		<PackageReference Include="Plugin.Maui.Barkoder" Version="1.5.6" />
 	</ItemGroup>
 </Project>

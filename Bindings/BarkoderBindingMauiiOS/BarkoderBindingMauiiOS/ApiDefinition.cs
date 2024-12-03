@@ -21,6 +21,9 @@ namespace Barkoder.Xamarin
         [Export("startScanningWithCompletion:")]
         void StartScanning(Action<DecoderPayload> completion);
 
+        [Export("scanImageWithCompletion:bkdConfig:completion:")]
+        void ScanImage(UIImage image, BarkoderConfig bkdConfig, Action<DecoderPayload> completion);
+
         // -(void)startCamera;
         [Export("startCamera")]
         void StartCamera();
@@ -253,6 +256,15 @@ namespace Barkoder.Xamarin
         [Export("setDatamatrixDpmModeEnabledWithArg:")]
         void SetDatamatrixDpmModeEnabledWithArg(bool arg);
 
+        [Export("setIdDocumentMasterChecksumEnabledWithArg:")]
+        void SetIdDocumentMasterChecksumEnabledWithArg(bool arg);
+
+        [Export("setQRDpmModeEnabledWithArg:")]
+        void SetQRDpmModeEnabledWithArg(bool arg);
+
+        [Export("setQRMicroDpmModeEnabledWithArg:")]
+        void SetQRMicroDpmModeEnabledWithArg(bool arg);
+
         // -(void)setUpcEanDeblurEnabledWithArg:(BOOL)arg;
         [Export("setUpcEanDeblurEnabledWithArg:")]
         void SetUpcEanDeblurEnabledWithArg(bool arg);
@@ -280,6 +292,15 @@ namespace Barkoder.Xamarin
         // @property (readonly, nonatomic) BOOL datamatrixDpmModeEnabled;
         [Export("datamatrixDpmModeEnabled")]
         bool DatamatrixDpmModeEnabled { get; }
+
+        [Export("idDocumentMasterChecksumEnabled")]
+        bool IdDocumentMasterChecksumEnabled { get; }
+
+        [Export("qrDpmModeEnabled")]
+        bool QRDpmModeEnabled { get; }
+
+        [Export("qrMicroDpmModeEnabled")]
+        bool QRMicroDpmModeEnabled { get; }
 
         // @property (readonly, nonatomic) BOOL upcEanDeblurEnabled;
         [Export("upcEanDeblurEnabled")]

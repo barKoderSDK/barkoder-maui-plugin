@@ -62,9 +62,9 @@ namespace Barkoder
         [JsonProperty("Aztec Compact")]
         public BarcodeConfig aztecCompact;
         [JsonProperty("QR")]
-        public BarcodeConfig qr;
+        public DatamatrixBarcodeConfig qr;
         [JsonProperty("QR Micro")]
-        public BarcodeConfig qrMicro;
+        public DatamatrixBarcodeConfig qrMicro;
         [JsonProperty("Code 128")]
         public BarcodeConfigWithLength code128;
         [JsonProperty("Code 93")]
@@ -113,14 +113,16 @@ namespace Barkoder
         public BarcodeConfig telepen;
         [JsonProperty("Dotcode")]
         public BarcodeConfig dotcode;
+        [JsonProperty("ID Document")]
+        public BarcodeConfig idDocument;
         [JsonProperty("general")]
         public GeneralSettings general;
 
         public DekoderConfig(
             BarcodeConfig? aztec = null,
             BarcodeConfig? aztecCompact = null,
-            BarcodeConfig? qr = null,
-            BarcodeConfig? qrMicro = null,
+            DatamatrixBarcodeConfig? qr = null,
+            DatamatrixBarcodeConfig? qrMicro = null,
             BarcodeConfigWithLength? code128 = null,
             BarcodeConfigWithLength? code93 = null,
             Code39BarcodeConfig? code39 = null,
@@ -145,12 +147,13 @@ namespace Barkoder
             BarcodeConfig? code32 = null,
             BarcodeConfig? telepen = null,
             BarcodeConfig? dotcode = null,
+             BarcodeConfig? idDocument = null,
             GeneralSettings? general = null)
         {
             this.aztec = aztec ?? new BarcodeConfig();
             this.aztecCompact = aztecCompact ?? new BarcodeConfig();
-            this.qr = qr ?? new BarcodeConfig();
-            this.qrMicro = qrMicro ?? new BarcodeConfig();
+            this.qr = qr ?? new DatamatrixBarcodeConfig();
+            this.qrMicro = qrMicro ?? new DatamatrixBarcodeConfig();
             this.code128 = code128 ?? new BarcodeConfigWithLength();
             this.code93 = code93 ?? new BarcodeConfigWithLength();
             this.code39 = code39 ?? new Code39BarcodeConfig();
@@ -175,6 +178,7 @@ namespace Barkoder
             this.code32 = code32 ?? new BarcodeConfig();
             this.telepen = telepen ?? new BarcodeConfig();
             this.dotcode = dotcode ?? new BarcodeConfig();
+            this.idDocument = dotcode ?? new BarcodeConfig();
             this.general = general ?? new GeneralSettings();
         }
     }

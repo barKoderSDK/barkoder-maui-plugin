@@ -1,7 +1,7 @@
 # Builds a fat library for a given xcode project (framework)
 
 echo "Define parameters"
-IOS_SDK_VERSION="17.2"
+IOS_SDK_VERSION="18.0"
 SWIFT_PROJECT_NAME="BarkoderFrameworkProxy"
 SWIFT_PROJECT_PATH="$SWIFT_PROJECT_NAME/$SWIFT_PROJECT_NAME.xcodeproj"
 SWIFT_BUILD_PATH="$SWIFT_PROJECT_NAME/build"

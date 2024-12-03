@@ -9,33 +9,38 @@ using CommonBarkoderResolution = Plugin.Maui.Barkoder.Enums.BarkoderResolution;
 using AndroidBarkoderResolution = Com.Barkoder.Enums.BarkoderResolution;
 
 using CommonDecodingSpeed = Plugin.Maui.Barkoder.Enums.DecodingSpeed;
-using AndroidDecodingSpeed = Com.Barkoder.BKD.DecodingSpeed;
+using AndroidDecodingSpeed = Com.Barkoder.Barkoder.DecodingSpeed;
 
 using CommonFormattingType = Plugin.Maui.Barkoder.Enums.FormattingType;
-using AndroidFormattingType = Com.Barkoder.BKD.FormattingType;
+using AndroidFormattingType = Com.Barkoder.Barkoder.FormattingType;
 
 using CommonMsiChecksumType = Plugin.Maui.Barkoder.Enums.MsiChecksumType;
-using AndroidMsiChecksumType = Com.Barkoder.BKD.MsiChecksumType;
+using AndroidMsiChecksumType = Com.Barkoder.Barkoder.MsiChecksumType;
 
 using CommonCode11ChecksumType = Plugin.Maui.Barkoder.Enums.Code11ChecksumType;
-using AndroidCode11ChecksumType = Com.Barkoder.BKD.Code11ChecksumType;
+using AndroidCode11ChecksumType = Com.Barkoder.Barkoder.Code11ChecksumType;
 
 using BarcodeResult = Plugin.Maui.Barkoder.Handlers.BarcodeResult;
+using ImageData = Plugin.Maui.Barkoder.Handlers.ImageData;
 
 using CommonCode39ChecksumType = Plugin.Maui.Barkoder.Enums.Code39ChecksumType;
-using AndroidCode39ChecksumType = Com.Barkoder.BKD.Code39ChecksumType;
+using AndroidCode39ChecksumType = Com.Barkoder.Barkoder.Code39ChecksumType;
 
 using AndroidX.AppCompat.App;
 using Plugin.Maui.Barkoder.Interfaces;
 using Org.Json;
 using Java.IO;
 using Android.Util;
+using Com.Barkoder.Interfaces;
+using static Android.Service.Carrier.CarrierMessagingService;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
 //Implement handler for Android platform here
 public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Views.View>
 {
+
+
     private Com.Barkoder.BarkoderView? BKDView;
 
     protected override Android.Views.View CreatePlatformView()
@@ -181,7 +186,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
     {
         if (handler.BKDView != null)
         {
-            view.Version = BKD.Version;
+            view.Version = Com.Barkoder.Barkoder.Version;
         }
     }
 
@@ -324,11 +329,43 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapIdDocumentMasterChecksumEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            if (handler.BKDView.Config.DecoderConfig.IDDocument.MasterChecksumType == Com.Barkoder.Barkoder.StandardChecksumType.Enabled)
+            {
+                view.IdDocumentMasterCheckSumEnabled = true;
+            }
+            else
+            {
+                view.IdDocumentMasterCheckSumEnabled = false;
+            }
+        }
+    }
+
+
     private static void MapDatamatrixDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
         {
             view.DatamatrixDpmModeEnabled = handler.BKDView.Config.DecoderConfig.Datamatrix.DpmMode;
+        }
+    }
+
+    private static void MapQRDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.QRDpmModeEnabled = handler.BKDView.Config.DecoderConfig.Qr.DpmMode;
+        }
+    }
+
+    private static void MapQRMicroDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.QRMIcroDpmModeEnabled = handler.BKDView.Config.DecoderConfig.QRMicro.DpmMode;
         }
     }
 
@@ -376,7 +413,8 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
         {
-            view.DuplicatesDelayMs = BKD.Config.GlobalOptionMulticodeCachingDuration;
+            view.DuplicatesDelayMs = Com.Barkoder.
+                Barkoder.Config.GlobalOptionMulticodeCachingDuration;
         }
     }
 
@@ -400,7 +438,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
         {
-            BKD.BKRect Rect = handler.BKDView.Config.RegionOfInterest;
+            Com.Barkoder.Barkoder.BKRect Rect = handler.BKDView.Config.RegionOfInterest;
 
             view.RegionOfInterest = (
                 (int)Rect.Left,
@@ -425,6 +463,38 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
 
     }
+
+    private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view, object? arg)
+    {
+        // Extract base64Image and barkoderDelegate from the anonymous object
+        var arguments = (dynamic)arg;
+        string base64Image = arguments.base64Image;
+        IBarkoderDelegate barkoderDelegate = arguments.barkoderDelegate;
+
+        if (handler.BKDView != null && !string.IsNullOrEmpty(base64Image))
+        {
+            // Decode base64 string to Bitmap
+            byte[] imageBytes = Convert.FromBase64String(base64Image);
+            Bitmap bitmap;
+
+            using (MemoryStream ms = new MemoryStream(imageBytes))
+            {
+                bitmap = BitmapFactory.DecodeStream(ms);  // Convert base64 string to Bitmap
+            }
+
+            Context context = handler.Context;
+
+            AndroidBarkoderView AndroidBarkoderView = new AndroidBarkoderView(barkoderDelegate, handler.BKDView);
+            AndroidBarkoderView.ScanImage(bitmap,handler.BKDView.Config, context);
+
+        }
+        else
+        {
+      
+        }
+    }
+
+
 
     private static void MapStopScanning(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
@@ -766,13 +836,54 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapSetIdDocumentMasterChecksumEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            if(enabled)
+            {
+                handler.BKDView.Config.DecoderConfig.IDDocument.MasterChecksumType = Com.Barkoder.Barkoder.StandardChecksumType.Enabled;
+            } else
+            {
+                handler.BKDView.Config.DecoderConfig.IDDocument.MasterChecksumType = Com.Barkoder.Barkoder.StandardChecksumType.Disabled;
+            }
+         
+            view.IsIdDocumentMasterChecksumEnabled = enabled;
+        }
+    }
+
     private static void MapSetDatamatrixDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is bool enabled) && (handler.BKDView != null))
         {
             handler.BKDView.Config.DecoderConfig.Datamatrix.DpmMode = enabled;
+            view.IsDatamatrixDpmModeEnabled = enabled;
+
         }
     }
+
+    private static void MapSetQRDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.DecoderConfig.Qr.DpmMode = enabled;
+            view.IsQRDpmModeEnabled = enabled;
+
+
+        }
+    }
+
+    private static void MapSetQRMicroDpmModeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.DecoderConfig.QRMicro.DpmMode = enabled;
+           
+            view.IsQRMicroDpmModeEnabled = enabled;
+
+        }
+    }
+
 
     private static void MapSetUpcEanDeblurEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
@@ -909,6 +1020,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                 case Enums.BarcodeType.Dotcode:
                     handler.BKDView.Config.DecoderConfig.Dotcode.Enabled = barcodeTypeEventArgs.Enabled;
                     break;
+                case Enums.BarcodeType.IDDocument:
+                    handler.BKDView.Config.DecoderConfig.IDDocument.Enabled = barcodeTypeEventArgs.Enabled;
+                    break;
             }
         }
     }
@@ -1026,21 +1140,62 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
         BkdView = bkdView;
     }
 
+    public void ScanImage(Bitmap bitmap, BarkoderConfig config, Context context)
+    {
+        BarkoderHelper.ScanImage(bitmap, config, this, context);
+    }
+
     public void StartScanning()
     {
         BkdView.StartScanning(this);
     }
 
-    public void ScanningFinished(BKD.Result[] result, Bitmap[] bitpams, Bitmap originalImage)
+    public void ScanningFinished(Com.Barkoder.Barkoder.Result[] result, Bitmap[] bitmaps, Bitmap originalImage)
     {
         BarcodeResult[] barcodeResults = new BarcodeResult[result.Length];
 
         for (int i = 0; i < result.Length; i++)
         {
-            BarcodeResult barcodeResult = new BarcodeResult(result[i].TextualData, result[i].BarcodeTypeName, result[i].CharacterSet);
+            List<ImageData> mrzImages = new List<ImageData>(); // Create a new list for each result
+
+            var res = result[i];
+
+            if (res.Images != null)
+            {
+                foreach (var image in res.Images)
+                {
+                    if (image.Image != null)
+                    {
+                        ImageSource? imageSource = BitmapToImageSource(image.Image);
+
+                        if (imageSource != null)
+                        {
+                            mrzImages.Add(new ImageData( image.Name, imageSource));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Failed to convert Bitmap to ImageSource for image name: {image.Name}");
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Image is null for name: {image.Name}");
+                    }
+                }
+            }
+
+            // Create BarcodeResult for each scanned result
+            BarcodeResult barcodeResult = new BarcodeResult(
+                res.TextualData,
+                res.BarcodeTypeName,
+                "", // CharacterSet
+                mrzImages
+            );
+
             barcodeResults[i] = barcodeResult;
         }
 
+        // Delegate call with the results
         BarkoderDelegate?.DidFinishScanning(barcodeResults, BitmapToImageSource(originalImage));
     }
 
@@ -1093,6 +1248,10 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
         return imageSource;
     }
 
+
+
 }
+
+
 
 #endif

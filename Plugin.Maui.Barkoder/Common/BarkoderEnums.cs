@@ -29,7 +29,8 @@ public enum BarcodeType
     Coop25,
     Code32,
     Telepen,
-    Dotcode
+    Dotcode,
+    IDDocument
 }
 
 public enum BarkoderResolution
@@ -70,7 +71,8 @@ public enum DecoderType
     Ean8,
     PDF417,
     PDF417Micro,
-    Datamatrix
+    Datamatrix,
+    IDDocument
 }
 
 public enum DecodingSpeed

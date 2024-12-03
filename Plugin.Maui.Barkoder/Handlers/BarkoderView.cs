@@ -30,6 +30,7 @@ public class BarkoderView : View
 
     public event EventHandler? StartCameraRequested;
     public event EventHandler<IBarkoderDelegate>? StartScanningRequested;
+    public event EventHandler<IBarkoderDelegate>? ScanImageRequest;
     public event EventHandler? StopScanningRequested;
     public event EventHandler? PauseScanningRequested;
     public event EventHandler<bool>? FlashEnableRequested;
@@ -54,8 +55,11 @@ public class BarkoderView : View
     public event EventHandler<MsiChecksumType>? SetMsiChecksumTypeRequested;
     public event EventHandler<MsiChecksumType>? SetCode11ChecksumTypeRequested;
     public event EventHandler<MsiChecksumType>? SetCode39ChecksumTypeRequested;
+    public event EventHandler<bool>? SetIdDocumentMasterChecksumEnabledRequested;
     public event EventHandler<string>? SetEncodingCharacterSetRequested;
     public event EventHandler<bool>? SetDatamatrixDpmModeEnabledRequested;
+    public event EventHandler<bool>? SetQRDpmModeEnabledRequested;
+    public event EventHandler<bool>? SetQRMicroDpmModeEnabledRequested;
     public event EventHandler<bool>? SetUpcEanDeblurEnabledRequested;
     public event EventHandler<bool>? SetEnableMisshaped1DEnabledRequested;
     public event EventHandler<bool>? SetBarcodeThumbnailOnResultEnabledRequested;
@@ -69,7 +73,11 @@ public class BarkoderView : View
 
     // Bindable properties
 
-    public static BindableProperty RegionOfInterestVisibleProperty = BindableProperty.Create(nameof(RegionOfInterestVisible)
+
+   
+  
+
+public static BindableProperty RegionOfInterestVisibleProperty = BindableProperty.Create(nameof(RegionOfInterestVisible)
     , typeof(bool)
     , typeof(BarkoderView)
     , true
@@ -190,10 +198,25 @@ public class BarkoderView : View
     , typeof(BarkoderView)
     , Code39ChecksumType.Disabled);
 
+    public static BindableProperty IdDocumentMasterChecksumEnabledProperty = BindableProperty.Create(nameof(IdDocumentMasterCheckSumEnabled)
+   , typeof(bool)
+   , typeof(BarkoderView)
+   , false);
+
     public static BindableProperty DatamatrixDpmModeEnabledProperty = BindableProperty.Create(nameof(DatamatrixDpmModeEnabled)
     , typeof(bool)
     , typeof(BarkoderView)
     , false);
+
+    public static BindableProperty QRDpmModeEnabledProperty = BindableProperty.Create(nameof(QRDpmModeEnabled)
+   , typeof(bool)
+   , typeof(BarkoderView)
+   , false);
+
+    public static BindableProperty QRMicroDpmModeEnabledProperty = BindableProperty.Create(nameof(QRMIcroDpmModeEnabled)
+   , typeof(bool)
+   , typeof(BarkoderView)
+   , false);
 
     public static BindableProperty UpcEanDeblurEnabledProperty = BindableProperty.Create(nameof(UpcEanDeblurEnabled)
     , typeof(bool)
@@ -235,6 +258,19 @@ public class BarkoderView : View
     , typeof(BarkoderView)
     , (0, 0, 0, 0),
     defaultBindingMode: BindingMode.TwoWay);
+
+    public static readonly BindableProperty IsIdDocumentMasterChecksumEnabledProperty =
+   BindableProperty.Create(nameof(IsIdDocumentMasterChecksumEnabled), typeof(bool), typeof(BarkoderView), false);
+
+    public static readonly BindableProperty IsDatamatrixDpmModeEnabledProperty =
+    BindableProperty.Create(nameof(IsDatamatrixDpmModeEnabled), typeof(bool), typeof(BarkoderView), false);
+
+    public static readonly BindableProperty IsQRDpmModeEnabledProperty =
+        BindableProperty.Create(nameof(IsQRDpmModeEnabled), typeof(bool), typeof(BarkoderView), false);
+
+    public static readonly BindableProperty IsQRMicroDpmModeEnabledProperty =
+        BindableProperty.Create(nameof(IsQRMicroDpmModeEnabled), typeof(bool), typeof(BarkoderView), false);
+
 
     // Properties
 
@@ -376,7 +412,7 @@ public class BarkoderView : View
         set
         {
             SetValue(ImageResultEnabledProperty, value);
-            Handler?.Invoke(nameof(BarkoderView.SetImageResultEnabled), value);
+            Handler?.Invoke(nameof(BarkoderView.SetImageResultEnabledRequested), value);
         }
     }
 
@@ -441,7 +477,7 @@ public class BarkoderView : View
         set
         {
             SetValue(VibrateOnSuccessEnabledProperty, value);
-            Handler?.Invoke(nameof(BarkoderView.SetImageResultEnabled), value);
+            Handler?.Invoke(nameof(BarkoderView.SetVibrateOnSuccessEnabledRequested), value);
         }
     }
 
@@ -536,6 +572,17 @@ public class BarkoderView : View
         }
     }
 
+
+    public bool IdDocumentMasterCheckSumEnabled
+    {
+        get => (bool)GetValue(IdDocumentMasterChecksumEnabledProperty);
+        set
+        {
+            SetValue(IdDocumentMasterChecksumEnabledProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetIdDocumentMasterChecksumEnabledRequested), value);
+        }
+    }
+
     /// <summary>
     /// Gets or sets a value indicating whether Direct Part Marking (DPM) mode is enabled for Datamatrix barcodes.
     /// </summary>
@@ -549,10 +596,55 @@ public class BarkoderView : View
         }
     }
 
-    /// <summary>
-    /// Sets or retrieves the value indicating whether deblurring is enabled for UPC/EAN barcodes.
-    /// </summary>
-    public bool UpcEanDeblurEnabled
+    public bool QRDpmModeEnabled
+    {
+        get => (bool)GetValue(QRDpmModeEnabledProperty);
+        set
+        {
+            SetValue(QRDpmModeEnabledProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetQRDpmModeEnabledRequested), value);
+        }
+    }
+
+    public bool QRMIcroDpmModeEnabled
+    {
+        get => (bool)GetValue(QRMicroDpmModeEnabledProperty);
+        set
+        {
+            SetValue(QRMicroDpmModeEnabledProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetQRMicroDpmModeEnabledRequested), value);
+        }
+    }
+
+    public bool IsIdDocumentMasterChecksumEnabled
+    {
+        get => (bool)GetValue(IsIdDocumentMasterChecksumEnabledProperty);
+        set => SetValue(IsIdDocumentMasterChecksumEnabledProperty, value);
+    }
+
+    public bool IsDatamatrixDpmModeEnabled
+    {
+        get => (bool)GetValue(IsDatamatrixDpmModeEnabledProperty);
+        set => SetValue(IsDatamatrixDpmModeEnabledProperty, value);
+    }
+
+    public bool IsQRDpmModeEnabled
+    {
+        get => (bool)GetValue(IsQRDpmModeEnabledProperty);
+        set => SetValue(IsQRDpmModeEnabledProperty, value);
+    }
+
+    public bool IsQRMicroDpmModeEnabled
+    {
+        get => (bool)GetValue(IsQRMicroDpmModeEnabledProperty);
+        set => SetValue(IsQRMicroDpmModeEnabledProperty, value);
+    }
+
+
+/// <summary>
+/// Sets or retrieves the value indicating whether deblurring is enabled for UPC/EAN barcodes.
+/// </summary>
+public bool UpcEanDeblurEnabled
     {
         get => (bool)GetValue(UpcEanDeblurEnabledProperty);
         set
@@ -672,6 +764,12 @@ public class BarkoderView : View
     public void StartScanning(IBarkoderDelegate barkoderDelegate)
     {
         Handler?.Invoke(nameof(BarkoderView.StartScanningRequested), barkoderDelegate);
+    }
+
+    public void ScanImage(string base64Image, IBarkoderDelegate barkoderDelegate)
+    {
+        // Pass both the delegate and the base64 string to the handler
+        Handler?.Invoke(nameof(BarkoderView.ScanImageRequest), new { base64Image , barkoderDelegate });
     }
 
     /// <summary>
@@ -882,6 +980,11 @@ public class BarkoderView : View
         EncodingCharacterSet = encodingCharacterSet;
     }
 
+    public void SetIdDocumentMasterChecksumEnabled(bool enabled)
+    {
+        IdDocumentMasterCheckSumEnabled = enabled;
+    }
+
     /// <summary>
     /// Sets whether the Direct Part Marking (DPM) mode for Datamatrix barcodes is enabled.
     /// </summary>
@@ -889,6 +992,16 @@ public class BarkoderView : View
     public void SetDatamatrixDpmModeEnabled(bool enabled)
     {
         DatamatrixDpmModeEnabled = enabled;
+    }
+
+    public void SetQRDpmModeEnabled(bool enabled)
+    {
+        QRDpmModeEnabled = enabled;
+    }
+
+    public void SetQRMicroDpmModeEnabled(bool enabled)
+    {
+        QRMIcroDpmModeEnabled = enabled;
     }
 
     /// <summary>

@@ -87,6 +87,10 @@ namespace Barkoder.Xamarin
         // @property (copy, nonatomic) NSString * _Nonnull imageInBase64;
         [Export("imageInBase64")]
         string ImageInBase64 { get; set; }
+
+        [Export("mainImageInBase64")]
+        string MainImageInBase64 { get; set; }
+
     }
 
     // @interface DecoderResult : NSObject
@@ -100,6 +104,11 @@ namespace Barkoder.Xamarin
         // @property (readwrite, retain, nonatomic) NSString * textualData;
         [Export("textualData", ArgumentSemantic.Retain)]
         string TextualData { get; set; }
+
+    //         // New property for images (array of BKImageDescriptor)
+    // // @property (readwrite, retain, nonatomic) BKImageDescriptor[] *images;
+        [Export("images", ArgumentSemantic.Retain)]
+        BKImageDescriptor[] Images { get; set; }
     }
 
     // @interface DecoderConfig : NSObject
@@ -230,6 +239,12 @@ namespace Barkoder.Xamarin
         [Export("dotcode", ArgumentSemantic.Strong)]
         SymbologyConfig Dotcode { get; set; }
 
+        [Export("idDocument", ArgumentSemantic.Strong)]
+        SymbologyConfig IDDocument { get; set; }
+
+     
+
+
         // -(void)setEnabledDecodersWithSymbologies:(NSArray<NSNumber *> * _Nonnull)symbologies;
         [Export("setEnabledDecodersWithSymbologies:")]
         void SetEnabledDecoders(NSNumber[] symbologies);
@@ -243,6 +258,7 @@ namespace Barkoder.Xamarin
         [Export("enabled")]
         bool Enabled { get; set; }
     }
+    
 
     // @interface DatamatrixConfig : NSObject
     [BaseType(typeof(NSObject))]
@@ -311,7 +327,8 @@ namespace Barkoder.Xamarin
         coop25,
         code32,
         telepen,
-        dotcode
+        dotcode,
+        idDocument
     }
 
     [BaseType(typeof(int))]
@@ -344,7 +361,8 @@ namespace Barkoder.Xamarin
         Coop25 = 24,
         Code32 = 25,
         Telepen = 26,
-        Dotcode = 27
+        Dotcode = 27,
+        IDDocument = 28
     }
 
     [BaseType(typeof(nint))]
@@ -373,5 +391,17 @@ namespace Barkoder.Xamarin
         single,
         //@double
     }
+
+        [BaseType(typeof(NSObject))]
+public interface BKImageDescriptor
+{
+    // @property (readwrite, retain, nonatomic) NSString *name;
+    [Export("name", ArgumentSemantic.Retain)]
+    string Name { get; set; }
+    // @property (readwrite, retain, nonatomic) UIImage *image;
+    [Export("image", ArgumentSemantic.Retain)]
+    UIImage Image { get; set; }
+    
+}
 
 }

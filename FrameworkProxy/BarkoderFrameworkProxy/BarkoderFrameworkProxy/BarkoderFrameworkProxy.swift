@@ -80,6 +80,8 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.pdf417Micro.enabled = config.decoderConfig?.pdf417Micro.enabled ?? false
                 barkoderView.config?.decoderConfig?.datamatrix.enabled = config.decoderConfig?.datamatrix.enabled ?? false
                 barkoderView.config?.decoderConfig?.datamatrix.dpmMode = Int32(config.decoderConfig?.datamatrix.dpmMode ?? 0)
+                barkoderView.config?.decoderConfig?.qr.dpmMode = Int32(config.decoderConfig?.qr.dpmMode ?? 0)
+                barkoderView.config?.decoderConfig?.qrMicro.dpmMode = Int32(config.decoderConfig?.qrMicro.dpmMode ?? 0)
                 barkoderView.config?.decoderConfig?.code25.enabled = config.decoderConfig?.code25.enabled ?? false
                 barkoderView.config?.decoderConfig?.interleaved25.enabled = config.decoderConfig?.interleaved25.enabled ?? false
                 barkoderView.config?.decoderConfig?.itf14.enabled = config.decoderConfig?.itf14.enabled ?? false
@@ -90,6 +92,7 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.code32.enabled = config.decoderConfig?.code32.enabled ?? false
                 barkoderView.config?.decoderConfig?.telepen.enabled = config.decoderConfig?.telepen.enabled ?? false
 				barkoderView.config?.decoderConfig?.dotcode.enabled = config.decoderConfig?.dotcode.enabled ?? false
+                barkoderView.config?.decoderConfig?.idDocument.enabled = config.decoderConfig?.idDocument.enabled ?? false
 
                 config.setModelDidChangeCallback {
                     // Forcing to enter 'didSet' again
@@ -114,6 +117,19 @@ public class BarkoderProxy: NSObject {
         } catch {
             // TODO: - Handle error
         }
+    }
+    
+    @objc(scanImageWithCompletion:bkdConfig:completion:)
+    public func scanImage(image: UIImage, config: BKDConfig, completion: @escaping (DecoderPayload) -> Void) {
+        // Ensure `barkoderView` exists and is properly configured
+        guard let viewConfig = barkoderView?.config else {
+            return
+        }
+        // Assign the provided completion handler to the class-level variable
+        self.resultCallbackDecoderResult = completion
+
+        // Use BarkoderSDK to start scanning
+        BarkoderHelper.scanImage(image, bkdConfig: viewConfig, resultDelegate: self)
     }
     
     @objc
@@ -425,11 +441,26 @@ public class BarkoderProxy: NSObject {
     public func setMulticodeCachingEnabled(arg: Bool) {
         barkoderView.config?.setMulticodeCachingEnabled(arg)
     }
+    
+    @objc
+    public func setIdDocumentMasterChecksumEnabled(arg: Bool) {
+        barkoderView.config?.decoderConfig?.idDocument.masterChecksum = arg ? StandardChecksum(1) : StandardChecksum(0)
+    }
 	
 	@objc
 	public func setDatamatrixDpmModeEnabled(arg: Bool) {
 		barkoderView.config?.decoderConfig?.datamatrix.dpmMode = arg ? 1 : 0
 	}
+    
+    @objc
+    public func setQRDpmModeEnabled(arg: Bool) {
+        barkoderView.config?.decoderConfig?.qr.dpmMode = arg ? 1 : 0
+    }
+    
+    @objc(setQRMicroDpmModeEnabledWithArg:)
+    public func setQRMicroDpmModeEnabled(arg: Bool) {
+        barkoderView.config?.decoderConfig?.qrMicro.dpmMode = arg ? 1 : 0
+    }
 	
 	@objc
 	public func setUpcEanDeblurEnabled(arg: Bool) {
@@ -464,6 +495,21 @@ public class BarkoderProxy: NSObject {
     @objc
     public var datamatrixDpmModeEnabled: Bool {
         return (barkoderView.config?.decoderConfig?.datamatrix.dpmMode == 1)
+    }
+    
+    @objc
+    public var idDocumentMasterChecksumEnabled: Bool {
+        return (barkoderView.config?.decoderConfig?.idDocument.masterChecksum == StandardChecksum(1))
+    }
+    
+    @objc
+    public var qrDpmModeEnabled: Bool {
+        return (barkoderView.config?.decoderConfig?.qr.dpmMode == 1)
+    }
+    
+    @objc
+    public var qrMicroDpmModeEnabled: Bool {
+        return (barkoderView.config?.decoderConfig?.qrMicro.dpmMode == 1)
     }
     
     @objc
@@ -571,6 +617,8 @@ public class BarkoderProxy: NSObject {
             return decoderConfig.telepen.enabled
 		case Dotcode:
 			return decoderConfig.dotcode.enabled
+        case IDDocument:
+            return decoderConfig.idDocument.enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             return false
@@ -642,6 +690,8 @@ public class BarkoderProxy: NSObject {
             decoderConfig.telepen.enabled = enabled
 		case Dotcode:
 			decoderConfig.dotcode.enabled = enabled
+        case IDDocument:
+            decoderConfig.idDocument.enabled = enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             break
@@ -920,7 +970,7 @@ public class BKDDecoderConfig: NSObject {
     }
     
     @objc
-    public var qr: SymbologyConfig  {
+    public var qr: DatamatrixConfig  {
         didSet {
             qr.setModelDidChangeCallback {
                 self.modelDidChange?()
@@ -929,7 +979,7 @@ public class BKDDecoderConfig: NSObject {
     }
     
     @objc
-    public var qrMicro: SymbologyConfig  {
+    public var qrMicro: DatamatrixConfig  {
         didSet {
             qrMicro.setModelDidChangeCallback {
                 self.modelDidChange?()
@@ -1153,11 +1203,20 @@ public class BKDDecoderConfig: NSObject {
 		}
 	}
     
+    @objc
+    public var idDocument: SymbologyConfig  {
+        didSet {
+            idDocument.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
     override public init() {
         aztec = SymbologyConfig()
         aztecCompact = SymbologyConfig()
-        qr = SymbologyConfig()
-        qrMicro = SymbologyConfig()
+        qr = DatamatrixConfig()
+        qrMicro = DatamatrixConfig()
         code128 = SymbologyConfig()
         code93 = SymbologyConfig()
         code39 = SymbologyConfig()
@@ -1182,6 +1241,7 @@ public class BKDDecoderConfig: NSObject {
         code32 = SymbologyConfig()
         telepen = SymbologyConfig()
 		dotcode = SymbologyConfig()
+        idDocument = SymbologyConfig()
         
         super.init()
     }
@@ -1305,6 +1365,18 @@ public class DecoderPayload: NSObject {
     
     @objc
     public var imageInBase64: String = ""
+    
+    @objc
+    public var mainImageInBase64: String = ""
+    
+    @objc
+    public var documentImageInBase64: String = ""
+    
+    @objc
+    public var signatureImageInBase64: String = ""
+    
+    @objc
+    public var pictureImageInBase64: String = ""
 }
 
 @objc(DecoderResult)
@@ -1319,6 +1391,31 @@ extension BarkoderProxy: BarkoderResultDelegate {
         if let imageData = image?.jpegData(compressionQuality: 1.0) {
             let base64String = imageData.base64EncodedString()
             decoderPayload.imageInBase64 = base64String
+        }
+        
+        if let images = decoderPayload.results[0].images {
+            for image in images {
+                switch image.name {
+                case "main":
+                    if let imageData = image.image.pngData() {
+                        decoderPayload.mainImageInBase64 = imageData.base64EncodedString()
+                    }
+                case "document":
+                    if let imageData = image.image.pngData() {
+                        decoderPayload.documentImageInBase64 = imageData.base64EncodedString()
+                    }
+                case "signature":
+                    if let imageData = image.image.pngData() {
+                        decoderPayload.signatureImageInBase64 = imageData.base64EncodedString()
+                    }
+                case "picture":
+                    if let imageData = image.image.pngData() {
+                        decoderPayload.pictureImageInBase64 = imageData.base64EncodedString()
+                    }
+                default:
+                    break
+                }
+            }
         }
         
         DispatchQueue.main.async {

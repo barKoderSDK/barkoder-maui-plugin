@@ -34,6 +34,9 @@ namespace Plugin.Maui.Barkoder.Controls
                 [nameof(BarkoderView.Code11ChecksumTypeProperty)] = MapCode11ChecksumType,
                 [nameof(BarkoderView.Code39ChecksumTypeProperty)] = MapCode39ChecksumType,
                 [nameof(BarkoderView.DatamatrixDpmModeEnabledProperty)] = MapDatamatrixDpmModeEnabled,
+                [nameof(BarkoderView.IdDocumentMasterChecksumEnabledProperty)] = MapIdDocumentMasterChecksumEnabled,
+                [nameof(BarkoderView.QRDpmModeEnabledProperty)] = MapQRDpmModeEnabled,
+                [nameof(BarkoderView.QRMicroDpmModeEnabledProperty)] = MapQRMicroDpmModeEnabled,
                 [nameof(BarkoderView.UpcEanDeblurEnabledProperty)] = MapUpcEanDeblurEnabled,
                 [nameof(BarkoderView.EnableMisshaped1DEnabledProperty)] = MapEnableMisshaped1DEnabled,
                 [nameof(BarkoderView.BarcodeThumbnailOnResultEnabledProperty)] = MapBarcodeThumbnailOnResultEnabledProperty,
@@ -42,12 +45,14 @@ namespace Plugin.Maui.Barkoder.Controls
                 [nameof(BarkoderView.VINRestrictionsEnabledProperty)] = MapVINRestrictionsEnabled,
                 [nameof(BarkoderView.ThresholdBetweenDuplicatesScansProperty)] = MapThresholdBetweenDuplicatesScans,
                 [nameof(BarkoderView.RegionOfInterestProperty)] = MapRegionOfInterest,
+
             };
 
         public static CommandMapper<BarkoderView, BarkoderViewHandler> CommandMapper = new(ViewCommandMapper)
         {
             [nameof(BarkoderView.StartCameraRequested)] = MapStartCamera,
             [nameof(BarkoderView.StartScanningRequested)] = MapStartScanning,
+            [nameof(BarkoderView.ScanImageRequest)] = MapScanImage,
             [nameof(BarkoderView.StopScanningRequested)] = MapStopScanning,
             [nameof(BarkoderView.PauseScanningRequested)] = MapPauseScanning,
             [nameof(BarkoderView.FlashEnableRequested)] = MapFlashEnable,
@@ -74,6 +79,9 @@ namespace Plugin.Maui.Barkoder.Controls
             [nameof(BarkoderView.SetCode39ChecksumTypeRequested)] = MapSetCode39ChecksumType,
             [nameof(BarkoderView.SetEncodingCharacterSetRequested)] = MapSetEncodingCharacterSet,
             [nameof(BarkoderView.SetDatamatrixDpmModeEnabledRequested)] = MapSetDatamatrixDpmModeEnabled,
+            [nameof(BarkoderView.SetIdDocumentMasterChecksumEnabledRequested)] = MapSetIdDocumentMasterChecksumEnabled,
+            [nameof(BarkoderView.SetQRDpmModeEnabledRequested)] = MapSetQRDpmModeEnabled,
+            [nameof(BarkoderView.SetQRMicroDpmModeEnabledRequested)] = MapSetQRMicroDpmModeEnabled,
             [nameof(BarkoderView.SetUpcEanDeblurEnabledRequested)] = MapSetUpcEanDeblurEnabled,
             [nameof(BarkoderView.SetEnableMisshaped1DEnabledRequested)] = MapSetEnableMisshaped1DEnabled,
             [nameof(BarkoderView.SetBarcodeThumbnailOnResultEnabledRequested)] = MapSetBarcodeThumbnailOnResultEnabled,
