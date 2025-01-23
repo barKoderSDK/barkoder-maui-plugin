@@ -47,10 +47,13 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.pinchToZoomEnabled = config.pinchToZoomEnabled
                 barkoderView.config?.closeSessionOnResultEnabled = config.closeSessionOnResultEnabled
                 barkoderView.config?.beepOnSuccessEnabled = config.beepOnSuccessEnabled
+                barkoderView.config?.scanningIndicatorAlwaysVisible = config.scanningIndicatorAlwaysVisible
                 barkoderView.config?.vibrateOnSuccessEnabled = config.vibrateOnSuccessEnabled
                 barkoderView.config?.locationInPreviewEnabled = config.locationInPreviewEnabled
                 barkoderView.config?.roiLineColor = config.roiLineColor
+                barkoderView.config?.scanningIndicatorColor = config.scanningIndicatorColor
                 barkoderView.config?.roiLineWidth = config.roiLineWidth
+                barkoderView.config?.scanningIndicatorWidth = config.scanningIndicatorWidth
                 barkoderView.config?.roiOverlayBackgroundColor = config.roiOverlayBackgroundColor
                 barkoderView.config?.regionOfInterestVisible = config.regionOfInterestVisible
                 barkoderView.config?.locationLineColor = config.locationLineColor
@@ -58,6 +61,8 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.imageResultEnabled = config.imageResultEnabled
                 barkoderView.config?.locationInImageResultEnabled = config.locationInImageResultEnabled
                 barkoderView.config?.thresholdBetweenDuplicatesScans = config.thresholdBetweenDuplicatesScans
+                barkoderView.config?.scanningIndicatorAnimation = config.scanningIndicatorAnimationMode
+                barkoderView.config?.decoderConfig?.enableComposite = Int32(config.decoderConfig?.enableComposite ?? 0)
                 barkoderView.config?.decoderConfig?.enableMisshaped1D = config.decoderConfig?.enableMisshaped1D ?? false
                 barkoderView.config?.decoderConfig?.upcEanDeblur = config.decoderConfig?.upcEanDeblur ?? false
                 barkoderView.config?.decoderConfig?.enableVINRestrictions = config.decoderConfig?.enableVINRestrictions ?? false
@@ -93,6 +98,9 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.telepen.enabled = config.decoderConfig?.telepen.enabled ?? false
 				barkoderView.config?.decoderConfig?.dotcode.enabled = config.decoderConfig?.dotcode.enabled ?? false
                 barkoderView.config?.decoderConfig?.idDocument.enabled = config.decoderConfig?.idDocument.enabled ?? false
+                barkoderView.config?.decoderConfig?.databar14.enabled = config.decoderConfig?.databar14.enabled ?? false
+                barkoderView.config?.decoderConfig?.databarLimited.enabled = config.decoderConfig?.databarLimited.enabled ?? false
+                barkoderView.config?.decoderConfig?.databarExpanded.enabled = config.decoderConfig?.databarExpanded.enabled ?? false
 
                 config.setModelDidChangeCallback {
                     // Forcing to enter 'didSet' again
@@ -288,8 +296,18 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public func getScanningIndicatorColorHex() -> String {
+        return barkoderView.config?.scanningIndicatorColor.toHex() ?? ""
+    }
+    
+    @objc
     public var roiLineWidth: Int {
         return Int(barkoderView.config?.roiLineWidth ?? 0)
+    }
+    
+    @objc
+    public var scanningIndicatorWidth: Int {
+        return Int(barkoderView.config?.scanningIndicatorWidth ?? 0)
     }
     
     @objc
@@ -426,6 +444,15 @@ public class BarkoderProxy: NSObject {
     public func setMaximumResultsCount(arg: Int) {
         barkoderView.config?.decoderConfig?.maximumResultsCount = Int32(arg)
     }
+    
+    @objc
+    public func setDynamicExposure(arg: Int) {
+        barkoderView.setDynamicExposure(arg);
+    }
+    @objc
+    public func setCentricFocusAndExposure(arg: Bool) {
+        barkoderView.setCentricFocusAndExposure(arg);
+    }
 
     @objc
     public func setDuplicatesDelayMs(arg: Int) {
@@ -446,7 +473,43 @@ public class BarkoderProxy: NSObject {
     public func setIdDocumentMasterChecksumEnabled(arg: Bool) {
         barkoderView.config?.decoderConfig?.idDocument.masterChecksum = arg ? StandardChecksum(1) : StandardChecksum(0)
     }
+    
+    @objc
+    public func setCustomOption(option: String, value: Int32) {
+        guard let decoderConfig = barkoderView.config?.decoderConfig else {
+            print("DecoderConfig is not initialized.")
+            return
+        }
+        decoderConfig.setcustomOption(option, value: value)
+        print("Custom option set: \(option) = \(value)")
+    }
 	
+    
+    @objc
+    public func setScanningIndicatorAnimationMode(arg: Int) {
+        barkoderView.config?.scanningIndicatorAnimation = arg;
+    }
+    
+    @objc
+    public func setEnableComposite(arg: Int) {
+        barkoderView.config?.decoderConfig?.enableComposite = Int32(arg)
+    }
+    
+    @objc
+    public func setScanningIndicatorColorHex(arg: String) {
+        barkoderView.config?.scanningIndicatorColor = Util.initColorWith(hexString: arg)
+    }
+    
+    @objc
+    public func setScanningIndicatorWidth(arg: Float) {
+        barkoderView.config?.scanningIndicatorWidth = arg
+    }
+    
+    @objc
+    public func setScanningIndicatorAlwaysVisible(arg: Bool) {
+        barkoderView.config?.scanningIndicatorAlwaysVisible = arg
+    }
+  
 	@objc
 	public func setDatamatrixDpmModeEnabled(arg: Bool) {
 		barkoderView.config?.decoderConfig?.datamatrix.dpmMode = arg ? 1 : 0
@@ -619,6 +682,13 @@ public class BarkoderProxy: NSObject {
 			return decoderConfig.dotcode.enabled
         case IDDocument:
             return decoderConfig.idDocument.enabled
+        case Databar14:
+            return decoderConfig.databar14.enabled
+        case DatabarLimited:
+            return decoderConfig.databarLimited.enabled
+        case DatabarExpanded:
+            return decoderConfig.databarExpanded.enabled
+            
         default:
             // TODO: - Handle error for invalid barkoder config
             return false
@@ -692,6 +762,12 @@ public class BarkoderProxy: NSObject {
 			decoderConfig.dotcode.enabled = enabled
         case IDDocument:
             decoderConfig.idDocument.enabled = enabled
+        case Databar14:
+            decoderConfig.databar14.enabled = enabled
+        case DatabarLimited:
+            decoderConfig.databarLimited.enabled = enabled
+        case DatabarExpanded:
+            decoderConfig.databarExpanded.enabled = enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             break
@@ -783,6 +859,10 @@ public class BarkoderProxy: NSObject {
                 barkoderConfigAsDictionary?["roiOverlayBackgroundColor"] = Util.parseColor(hexColor: colorHexCode)
             }
             
+            if let colorHexCode = barkoderConfigAsDictionary?["scanningIndicatorColor"] as? String {
+                barkoderConfigAsDictionary?["scanningIndicatorColor"] = Util.parseColor(hexColor: colorHexCode)
+            }
+            
             let jsonData = try JSONSerialization.data(withJSONObject: barkoderConfigAsDictionary as Any, options: .prettyPrinted)
             
             let convertedBarkoderConfigAsString = String(data: jsonData, encoding: .utf8) ?? ""
@@ -833,6 +913,13 @@ public class BKDConfig: NSObject {
             modelDidChange?()
         }
     }
+    
+    @objc
+    public var scanningIndicatorAlwaysVisible: Bool = false {
+        didSet {
+            modelDidChange?()
+        }
+    }
 
     @objc
     public var pinchToZoomEnabled: Bool = false {
@@ -852,8 +939,20 @@ public class BKDConfig: NSObject {
             modelDidChange?()
         }
     }
+    
+    @objc public var scanningIndicatorColor: UIColor = BarkoderConfigDefaults.scanningIndicatorColor {
+        didSet {
+            modelDidChange?()
+        }
+    }
 
     @objc public var roiLineWidth: Float = BarkoderConfigDefaults.roiLineWidth {
+        didSet {
+            modelDidChange?()
+        }
+    }
+    
+    @objc public var scanningIndicatorWidth: Float = BarkoderConfigDefaults.scanningIndicatorWidth {
         didSet {
             modelDidChange?()
         }
@@ -900,6 +999,13 @@ public class BKDConfig: NSObject {
             modelDidChange?()
         }
     }
+    
+    @objc public var scanningIndicatorAnimationMode: Int = BarkoderConfigDefaults.scanningIndicatorAnimationMode {
+        didSet {
+            modelDidChange?()
+        }
+    }
+    
         
     @objc public var decoderConfig: BKDDecoderConfig? = nil {
         didSet {
@@ -934,6 +1040,12 @@ public class BKDDecoderConfig: NSObject {
     var enabledDecodersCallback: (([Int]) -> Void)?
 
     @objc public var enableMisshaped1D: Bool = BarkoderConfigDefaults.enableMisshaped1D {
+        didSet {
+            modelDidChange?()
+        }
+    }
+    
+    @objc public var enableComposite: Int = BarkoderConfigDefaults.enableComposite {
         didSet {
             modelDidChange?()
         }
@@ -1212,6 +1324,33 @@ public class BKDDecoderConfig: NSObject {
         }
     }
     
+    @objc
+    public var databar14: SymbologyConfig  {
+        didSet {
+            databar14.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var databarLimited: SymbologyConfig  {
+        didSet {
+            databarLimited.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var databarExpanded: SymbologyConfig  {
+        didSet {
+            databarExpanded.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
     override public init() {
         aztec = SymbologyConfig()
         aztecCompact = SymbologyConfig()
@@ -1242,6 +1381,9 @@ public class BKDDecoderConfig: NSObject {
         telepen = SymbologyConfig()
 		dotcode = SymbologyConfig()
         idDocument = SymbologyConfig()
+        databar14 = SymbologyConfig()
+        databarLimited = SymbologyConfig()
+        databarExpanded = SymbologyConfig()
         
         super.init()
     }
@@ -1379,7 +1521,7 @@ public class DecoderPayload: NSObject {
     public var pictureImageInBase64: String = ""
 }
 
-@objc(DecoderResult)
+@objc(BKDecoderResult)
 public extension DecoderResult {}
 
 extension BarkoderProxy: BarkoderResultDelegate {
@@ -1435,17 +1577,22 @@ class BarkoderConfigDefaults {
     static let regionOfInterest: CGRect = CGRect(x: 3, y: 30, width: 94, height: 40)
     static let pinchToZoomEnabled: Bool = false
     static let beepOnSuccessEnabled: Bool = true
+    static let scanningIndicatorAlwaysVisible: Bool = false
     static let vibrateOnSuccessEnabled: Bool = true
     static let regionOfInterestVisible: Bool = true
     static let barcodeThumbnailOnResult: Bool = true
     static let enableVINRestrictions: Bool = false
     static let thresholdBetweenDuplicatesScans: Int = 5
+    static let scanningIndicatorAnimationMode: Int = 0
+    static let enableComposite: Int = 0
     static let enableMisshaped1D: Bool = false
     static let upcEanDeblur: Bool = false
     static let locationLineColor: UIColor = #colorLiteral(red: 0.8, green: 0.003921568627, blue: 0.09803921569, alpha: 1)
     static let locationLineWidth: Float = 2
     static let roiLineColor: UIColor = #colorLiteral(red: 0.8, green: 0.003921568627, blue: 0.09803921569, alpha: 1)
+    static let scanningIndicatorColor: UIColor = #colorLiteral(red: 0.8, green: 0.003921568627, blue: 0.09803921569, alpha: 1)
     static let roiLineWidth: Float = 2
+    static let scanningIndicatorWidth: Float = 2
     static let roiOverlayBackgroundColor: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.3950227649)
 	static let barcodeThumbnailOnResultEnabled: Bool = true
 	static let multicodeCachingEnabled: Bool = false

@@ -26,6 +26,22 @@ public class BarkoderView : View
         }
     }
 
+    public void SetCustomOption(string optionName, int optionValue)
+    {
+        Handler?.Invoke(nameof(SetCustomOption), (optionName, optionValue));
+    }
+
+    public void SetDynamicExposure(int dynamicExposure)
+    {
+        Handler?.Invoke(nameof(SetDynamicExposure), dynamicExposure);
+    }
+
+    public void SetCentricFocusAndExposure(bool enabled)
+    {
+        Handler?.Invoke(nameof(SetCentricFocusAndExposure), enabled);
+    }
+
+
     // Event Handlers
 
     public event EventHandler? StartCameraRequested;
@@ -43,11 +59,14 @@ public class BarkoderView : View
     public event EventHandler<bool>? SetLocationInPreviewEnabledRequested;
     public event EventHandler<bool>? SetLocationInImageResultEnabledRequested;
     public event EventHandler<bool>? SetBeepOnSuccessEnabledRequested;
+    public event EventHandler<bool>? SetScanningIndicatorAlwaysVisibleRequested;
     public event EventHandler<bool>? SetVibrateOnSuccessEnabledRequested;
     public event EventHandler<string>? SetLocationLineColorRequested;
     public event EventHandler<string>? SetRoiLineColorRequested;
     public event EventHandler<string>? SetRoiOverlayBackgroundColorRequested;
+    public event EventHandler<string>? SetScanningIndicatorColorHexRequested;
     public event EventHandler<double>? SetLocationLineWidthRequested;
+    public event EventHandler<double>? SetScanningIndicatorLineWidthRequested;
     public event EventHandler<int[]>? SetRegionOfInterestRequested;
     public event EventHandler<BarkoderResolution>? SetBarkoderResolutionRequested;
     public event EventHandler<DecodingSpeed>? SetDecodingSpeedRequested;
@@ -64,10 +83,12 @@ public class BarkoderView : View
     public event EventHandler<bool>? SetEnableMisshaped1DEnabledRequested;
     public event EventHandler<bool>? SetBarcodeThumbnailOnResultEnabledRequested;
     public event EventHandler<int>? SetMaximumResultsCountRequested;
+    public event EventHandler<int>? SetScanningIndicatorAnimationModeRequested;
     public event EventHandler<int>? SetDuplicatesDelayMsRequested;
     public event EventHandler<BarcodeTypeEventArgs>? SetBarcodeTypeEnabledRequested;
     public event EventHandler<bool>? SetEnableVINRestrictionsRequested;
     public event EventHandler<int>? SetThresholdBetweenDuplicatesScansRequested;
+    public event EventHandler<int>? SetEnableCompositeRequested;
     public event EventHandler<BarcodeRangeEventArg>? SetBarcodeTypeLengthRangeRequested;
     public event EventHandler<string>? ConfigureBarkoderRequested;
 
@@ -113,6 +134,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , "#000000");
 
+    public static BindableProperty ScanningIndicatorColorHexProperty = BindableProperty.Create(nameof(ScanningIndicatorLineColorHex)
+   , typeof(string)
+   , typeof(BarkoderView)
+   , "#000000");
+
     public static BindableProperty RoiOverlayBackgroundColorHexProperty = BindableProperty.Create(nameof(RoiOverlayBackgroundColorHex)
     , typeof(string)
     , typeof(BarkoderView)
@@ -124,6 +150,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , "N/A");
 
     public static BindableProperty LocationLineWidthProperty = BindableProperty.Create(nameof(LocationLineWidth)
+    , typeof(double)
+    , typeof(BarkoderView)
+    , 0.0);
+
+    public static BindableProperty ScanningIndicatorLineWidthProperty = BindableProperty.Create(nameof(ScanningIndicatorLineWidth)
     , typeof(double)
     , typeof(BarkoderView)
     , 0.0);
@@ -158,6 +189,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , false);
 
+    public static BindableProperty ScanningIndicatorAlwaysVisibleProperty = BindableProperty.Create(nameof(ScanningIndicatorAlwaysVisibleEnabled)
+    , typeof(bool)
+    , typeof(BarkoderView)
+    , false);
+
     public static BindableProperty VibrateOnSuccessEnabledProperty = BindableProperty.Create(nameof(VibrateOnSuccessEnabled)
     , typeof(bool)
     , typeof(BarkoderView)
@@ -171,7 +207,7 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     public static BindableProperty BarkoderResolutionProperty = BindableProperty.Create(nameof(BarkoderResolution)
     , typeof(BarkoderResolution)
     , typeof(BarkoderView)
-    , BarkoderResolution.Normal);
+    , BarkoderResolution.HD);
 
     public static BindableProperty DecodingSpeedProperty = BindableProperty.Create(nameof(DecodingSpeed)
     , typeof(DecodingSpeed)
@@ -238,6 +274,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , 0);
 
+    public static BindableProperty ScanningIndicatorAnimationModeProperty = BindableProperty.Create(nameof(ScanningIndicatorAnimationMode)
+    , typeof(int)
+    , typeof(BarkoderView)
+    , 0);
+
     public static BindableProperty DuplicatesDelayMsProperty = BindableProperty.Create(nameof(DuplicatesDelayMs)
     , typeof(int)
     , typeof(BarkoderView)
@@ -252,6 +293,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(int)
     , typeof(BarkoderView)
     , 0);
+
+    public static BindableProperty EnableCompositeProperty = BindableProperty.Create(nameof(ThresholdBetweenDuplicatesScans)
+   , typeof(int)
+   , typeof(BarkoderView)
+   , 0);
 
     public static BindableProperty RegionOfInterestProperty = BindableProperty.Create(nameof(RegionOfInterest)
     , typeof((int, int, int, int))
@@ -351,6 +397,16 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         }
     }
 
+    public string ScanningIndicatorLineColorHex
+    {
+        get => (string)GetValue(ScanningIndicatorColorHexProperty);
+        set
+        {
+            SetValue(ScanningIndicatorColorHexProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetScanningIndicatorColorHexRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves or sets the hexadecimal color code representing the background color of the overlay within the Region of Interest (ROI) on the camera preview.
     /// </summary>
@@ -387,6 +443,16 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         {
             SetValue(LocationLineWidthProperty, value);
             Handler?.Invoke(nameof(BarkoderView.SetLocationLineWidthRequested), value);
+        }
+    }
+
+    public double ScanningIndicatorLineWidth
+    {
+        get => (double)GetValue(ScanningIndicatorLineWidthProperty);
+        set
+        {
+            SetValue(ScanningIndicatorLineWidthProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetScanningIndicatorLineWidthRequested), value);
         }
     }
 
@@ -465,6 +531,16 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         {
             SetValue(BeepOnSuccessEnabledProperty, value);
             Handler?.Invoke(nameof(BarkoderView.SetBeepOnSuccessEnabledRequested), value);
+        }
+    }
+
+    public bool ScanningIndicatorAlwaysVisibleEnabled
+    {
+        get => (bool)GetValue(ScanningIndicatorAlwaysVisibleProperty);
+        set
+        {
+            SetValue(ScanningIndicatorAlwaysVisibleProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetScanningIndicatorAlwaysVisibleRequested), value);
         }
     }
 
@@ -693,6 +769,16 @@ public bool UpcEanDeblurEnabled
         }
     }
 
+    public int ScanningIndicatorAnimationMode
+    {
+        get => (int)GetValue(ScanningIndicatorAnimationModeProperty);
+        set
+        {
+            SetValue(ScanningIndicatorAnimationModeProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetScanningIndicatorAnimationModeRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves or sets the delay in milliseconds for considering duplicate barcodes during scanning.
     /// </summary>
@@ -729,6 +815,16 @@ public bool UpcEanDeblurEnabled
         {
             SetValue(ThresholdBetweenDuplicatesScansProperty, value);
             Handler?.Invoke(nameof(BarkoderView.SetThresholdBetweenDuplicatesScansRequested), value);
+        }
+    }
+
+    public int EnableComposite
+    {
+        get => (int)GetValue(EnableCompositeProperty);
+        set
+        {
+            SetValue(EnableCompositeProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetEnableCompositeRequested), value);
         }
     }
 
@@ -869,6 +965,11 @@ public bool UpcEanDeblurEnabled
         BeepOnSuccessEnabled = enabled;
     }
 
+    public void SetScanningIndicatorAlwaysVisibleEnabled(bool enabled)
+    {
+        ScanningIndicatorAlwaysVisibleEnabled = enabled;
+    }
+
     /// <summary>
     /// Retrieves or sets the value indicating whether vibration is enabled on successful barcode scanning.
     /// </summary>
@@ -894,6 +995,11 @@ public bool UpcEanDeblurEnabled
     public void SetRoiLineColor(string hexColor)
     {
         RoiLineColorHex = hexColor;
+    }
+
+    public void SetScanningIndicatorColor(string hexColor)
+    {
+        ScanningIndicatorLineColorHex = hexColor;
     }
 
     /// <summary>
@@ -1040,6 +1146,11 @@ public bool UpcEanDeblurEnabled
         MaximumResultsCount = maximumResultsCount;
     }
 
+    public void SetScanningIndicatorAnimationMode(int animationMode)
+    {
+        ScanningIndicatorAnimationMode = animationMode;
+    }
+
     /// <summary>
     /// Sets the delay in milliseconds for considering duplicate barcodes during scanning.
     /// </summary>
@@ -1083,6 +1194,12 @@ public bool UpcEanDeblurEnabled
     public void SetThresholdBetweenDuplicatesScans(int thresholdBetweenDuplicatesScans)
     {
         ThresholdBetweenDuplicatesScans = thresholdBetweenDuplicatesScans;
+    }
+
+
+    public void SetEnableComposite(int enableComposite)
+    {
+        EnableComposite = enableComposite;
     }
 
     /// <summary>

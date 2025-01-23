@@ -75,6 +75,43 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+      private static void MapScanningIndicatorAlwaysVisibleEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        //if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        //{
+        //    view.ScanningIndicatorAlwaysVisibleEnabled = handler.BKDView.ScanningIndicatorAlwaysVisible;
+        //}
+    }
+
+    private static void MapScanningIndicatorAnimationMode(BarkoderViewHandler handler, BarkoderView view)
+    {
+        //if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        //{
+        //    view.ScanningIndicatorAnimationMode = (int)handler.BKDView.ScanningIndicatorAnimationMode;
+        //}
+    }
+
+    private static void MapScanningIndicatorColor(BarkoderViewHandler handler, BarkoderView view)
+    {
+        //if (handler.BKDView != null)
+        //{
+        //    view.ScanningIndicatorLineColorHex = handler.BKDView.ScanningIndicatorColorHex;
+        //}
+    }
+
+    private static void MapScanningIndicatorWidth(BarkoderViewHandler handler, BarkoderView view)
+    {
+        //if (handler.BKDView != null)
+        //{
+        //    view.ScanningIndicatorLineWidth = handler.BKDView.ScanningIndicatorWidth;
+        //}
+    }
+
+    private static void MapEnableComposite(BarkoderViewHandler handler, BarkoderView view)
+    {
+        
+    }
+
     private static void MapRoiLineColorHex(BarkoderViewHandler handler, BarkoderView view)
     {
         if (handler.BKDView != null)
@@ -185,13 +222,17 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         {
             iOSBarkoderResolution barkoderResolution = handler.BKDView.BarkoderResolution;
 
-            if (barkoderResolution == iOSBarkoderResolution.High)
+            if (barkoderResolution == iOSBarkoderResolution.FHD)
             {
-                view.BarkoderResolution = Enums.BarkoderResolution.High;
+                view.BarkoderResolution = Enums.BarkoderResolution.FHD;
             }
-            else if (barkoderResolution == iOSBarkoderResolution.Normal)
+            else if (barkoderResolution == iOSBarkoderResolution.HD)
             {
-                view.BarkoderResolution = Enums.BarkoderResolution.Normal;
+                view.BarkoderResolution = Enums.BarkoderResolution.HD;
+            }
+            else if (barkoderResolution == iOSBarkoderResolution.UHD)
+            {
+                view.BarkoderResolution = Enums.BarkoderResolution.UHD;
             }
         }
 
@@ -436,17 +477,48 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             handler.BKDView?.StartScanning((completion) =>
             {
                 // SDK Results
-                DecoderResult[] results = completion.Results;
+                BKDecoderResult[] results = completion.Results;
 
                 // Maui wrapper results
                 BarcodeResult[] barcodeResults = new BarcodeResult[results.Length];
 
-                // Converting from SDK results -> Maui wrapper results
                 for (int i = 0; i < results.Length; i++)
                 {
                     List<ImageData> mrzImages = new List<ImageData>();
 
-                    // Assuming you have a similar structure to access images
+                    // Convert NSDictionary to Dictionary<string, object>
+                    NSDictionary extra = results[i].Extra;
+                    Dictionary<string, object>? extraDict = null;
+
+                    if (extra != null && extra.Count > 0)
+                    {
+                        extraDict = new Dictionary<string, object>();
+                        foreach (var key in extra.Keys)
+                        {
+                            if (key is NSString nsKey)
+                            {
+                                NSObject? value = extra.ObjectForKey(nsKey);
+                                if (value != null)
+                                {
+                                    // Handle value types accordingly
+                                    if (value is NSString stringValue)
+                                    {
+                                        extraDict[nsKey.ToString()] = stringValue.ToString();
+                                    }
+                                    else if (value is NSNumber numberValue)
+                                    {
+                                        extraDict[nsKey.ToString()] = numberValue.ToString(); // Convert number to string
+                                    }
+                                    else
+                                    {
+                                        extraDict[nsKey.ToString()] = value.ToString(); // Fallback for unknown types
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Convert Images
                     if (results[i].Images != null)
                     {
                         foreach (var image in results[i].Images)
@@ -459,10 +531,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                         }
                     }
 
-                    // Create BarcodeResult for each scanned result and convert UIImage to ImageSource
+                    // Create BarcodeResult for each scanned result
                     BarcodeResult barcodeResult = new BarcodeResult(
                         results[i].TextualData,
                         results[i].BarcodeTypeName,
+                        extraDict, // Pass the converted dictionary here
                         "", // Provide the CharacterSet
                         mrzImages
                     );
@@ -475,6 +548,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             });
         }
     }
+
 
 
 
@@ -500,7 +574,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                 handler.BKDView?.ScanImage(image, handler.BKDView?.Config, (completion) =>
                 {
                     // SDK Results
-                    DecoderResult[] results = completion.Results;
+                    BKDecoderResult[] results = completion.Results;
 
                     // Maui wrapper results
                     BarcodeResult[] barcodeResults = new BarcodeResult[results.Length];
@@ -509,6 +583,37 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                     for (int i = 0; i < results.Length; i++)
                     {
                         List<ImageData> mrzImages = new List<ImageData>();
+                        // Convert NSDictionary to Dictionary<string, object>
+                        NSDictionary extra = results[i].Extra;
+                        Dictionary<string, object>? extraDict = null;
+
+                        if (extra != null && extra.Count > 0)
+                        {
+                            extraDict = new Dictionary<string, object>();
+                            foreach (var key in extra.Keys)
+                            {
+                                if (key is NSString nsKey)
+                                {
+                                    NSObject? value = extra.ObjectForKey(nsKey);
+                                    if (value != null)
+                                    {
+                                        // Handle value types accordingly
+                                        if (value is NSString stringValue)
+                                        {
+                                            extraDict[nsKey.ToString()] = stringValue.ToString();
+                                        }
+                                        else if (value is NSNumber numberValue)
+                                        {
+                                            extraDict[nsKey.ToString()] = numberValue.ToString(); // Convert number to string
+                                        }
+                                        else
+                                        {
+                                            extraDict[nsKey.ToString()] = value.ToString(); // Fallback for unknown types
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         // Assuming you have a similar structure to access images
                         if (results[i].Images != null)
@@ -527,6 +632,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                         BarcodeResult barcodeResult = new BarcodeResult(
                             results[i].TextualData,
                             results[i].BarcodeTypeName,
+                            extraDict,
                             "", // Provide the CharacterSet
                             mrzImages
                         );
@@ -596,6 +702,64 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         if (arg3 is float zoomFactor)
         {
             handler.BKDView?.SetZoomFactorWithArg(zoomFactor);
+        }
+    }
+
+    private static void MapSetScanningIndicatorAlwaysVisibleEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if (arg3 is bool enabled)
+        {
+            handler.BKDView?.SetScanningIndicatorAlwaysVisible(enabled);
+        }
+
+    }
+
+    private static void MapSetScanningIndicatorAnimationMode(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int animationMode) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetScanningIndicatorAnimationMode(animationMode);
+        }
+
+    }
+
+    private static void MapSetScanningIndicatorColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if (arg3 is string hexColor)
+        {
+            handler.BKDView?.SetScanningIndicatorColorHex(hexColor);
+        }
+    }
+
+    private static void MapSetScanningIndicatorWidth(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int indicatorWidth) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetScanningIndicatorWidth(indicatorWidth);
+        }
+    }
+
+    private static void MapSetEnableComposite(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int enableComposite) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetEnableComposite(enableComposite);
+        }
+    }
+
+    public static void MapSetCustomOption(BarkoderViewHandler handler, BarkoderView view, object? argument)
+    {
+        if (handler.BKDView != null && handler.BKDView.Config != null && argument is ValueTuple<string, int> customOption)
+        {
+            var (optionName, optionValue) = customOption; // Deconstruct the tuple
+            Console.WriteLine($"Setting custom option: {optionName} = {optionValue}");
+            handler.BKDView.SetCustomOption(optionName, optionValue);
+            // Assuming BKDView has a method to handle custom options
+           
+        }
+        else
+        {
+            Console.WriteLine("MapSetCustomOption: BKDView or Config is null, or argument is invalid.");
         }
     }
 
@@ -724,14 +888,19 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         {
             switch (barkoderResolution)
             {
-                case CommonBarkoderResolution.High:
+                case CommonBarkoderResolution.FHD:
                     {
-                        handler.BKDView.SetBarkoderResolutionWithArg(iOSBarkoderResolution.High);
+                        handler.BKDView.SetBarkoderResolutionWithArg(iOSBarkoderResolution.FHD);
                         break;
                     }
-                case CommonBarkoderResolution.Normal:
+                case CommonBarkoderResolution.HD:
                     {
-                        handler.BKDView.SetBarkoderResolutionWithArg(iOSBarkoderResolution.Normal);
+                        handler.BKDView.SetBarkoderResolutionWithArg(iOSBarkoderResolution.HD);
+                        break;
+                    }
+                case CommonBarkoderResolution.UHD:
+                    {
+                        handler.BKDView.SetBarkoderResolutionWithArg(iOSBarkoderResolution.UHD);
                         break;
                     }
             }
@@ -1057,6 +1226,15 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                 case Enums.BarcodeType.IDDocument:
                     handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.idDocument, barcodeTypeEventArgs.Enabled);
                     break;
+                case Enums.BarcodeType.Databar14:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.databar14, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.DatabarLimited:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.databarLimited, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.DatabarExpanded:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.databarExpanded, barcodeTypeEventArgs.Enabled);
+                    break;
             }
         }
     }
@@ -1066,6 +1244,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         if ((arg3 is bool enabled) && (handler.BKDView != null) && (handler.BKDView.Config?.DecoderConfig != null))
         {
             handler.BKDView.SetEnableVINRestrictionsWithArg(enabled);
+        }
+    }
+
+    private static void MapSetDynamicExposure(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int dynamicExposure) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetDynamicExposure(dynamicExposure);
+        }
+    }
+
+    private static void MapSetCentricFocusAndExposure(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool centricFocus) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetCentricFocusAndExposure(centricFocus);
         }
     }
 

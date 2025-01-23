@@ -34,6 +34,11 @@ namespace Plugin.Maui.Barkoder.Controls
                 [nameof(BarkoderView.Code11ChecksumTypeProperty)] = MapCode11ChecksumType,
                 [nameof(BarkoderView.Code39ChecksumTypeProperty)] = MapCode39ChecksumType,
                 [nameof(BarkoderView.DatamatrixDpmModeEnabledProperty)] = MapDatamatrixDpmModeEnabled,
+                [nameof(BarkoderView.ScanningIndicatorAlwaysVisibleProperty)] = MapScanningIndicatorAlwaysVisibleEnabled,
+                [nameof(BarkoderView.ScanningIndicatorAnimationModeProperty)] = MapScanningIndicatorAnimationMode,
+                [nameof(BarkoderView.ScanningIndicatorColorHexProperty)] = MapScanningIndicatorColor,
+                [nameof(BarkoderView.ScanningIndicatorLineWidthProperty)] = MapScanningIndicatorWidth,
+                [nameof(BarkoderView.DatamatrixDpmModeEnabledProperty)] = MapDatamatrixDpmModeEnabled,
                 [nameof(BarkoderView.IdDocumentMasterChecksumEnabledProperty)] = MapIdDocumentMasterChecksumEnabled,
                 [nameof(BarkoderView.QRDpmModeEnabledProperty)] = MapQRDpmModeEnabled,
                 [nameof(BarkoderView.QRMicroDpmModeEnabledProperty)] = MapQRMicroDpmModeEnabled,
@@ -44,12 +49,17 @@ namespace Plugin.Maui.Barkoder.Controls
                 [nameof(BarkoderView.DuplicatesDelayMsProperty)] = MapDuplicatesDelayMs,
                 [nameof(BarkoderView.VINRestrictionsEnabledProperty)] = MapVINRestrictionsEnabled,
                 [nameof(BarkoderView.ThresholdBetweenDuplicatesScansProperty)] = MapThresholdBetweenDuplicatesScans,
+                [nameof(BarkoderView.EnableCompositeProperty)] = MapEnableComposite,
                 [nameof(BarkoderView.RegionOfInterestProperty)] = MapRegionOfInterest,
 
             };
 
         public static CommandMapper<BarkoderView, BarkoderViewHandler> CommandMapper = new(ViewCommandMapper)
         {
+
+            [nameof(BarkoderView.SetCustomOption)] = MapSetCustomOption,
+            [nameof(BarkoderView.SetDynamicExposure)] = MapSetDynamicExposure,
+            [nameof(BarkoderView.SetCentricFocusAndExposure)] = MapSetCentricFocusAndExposure,
             [nameof(BarkoderView.StartCameraRequested)] = MapStartCamera,
             [nameof(BarkoderView.StartScanningRequested)] = MapStartScanning,
             [nameof(BarkoderView.ScanImageRequest)] = MapScanImage,
@@ -82,6 +92,10 @@ namespace Plugin.Maui.Barkoder.Controls
             [nameof(BarkoderView.SetIdDocumentMasterChecksumEnabledRequested)] = MapSetIdDocumentMasterChecksumEnabled,
             [nameof(BarkoderView.SetQRDpmModeEnabledRequested)] = MapSetQRDpmModeEnabled,
             [nameof(BarkoderView.SetQRMicroDpmModeEnabledRequested)] = MapSetQRMicroDpmModeEnabled,
+            [nameof(BarkoderView.SetScanningIndicatorAlwaysVisibleRequested)] = MapSetScanningIndicatorAlwaysVisibleEnabled,
+            [nameof(BarkoderView.SetScanningIndicatorLineWidthRequested)] = MapSetScanningIndicatorWidth,
+            [nameof(BarkoderView.SetScanningIndicatorColorHexRequested)] = MapSetScanningIndicatorColor,
+            [nameof(BarkoderView.SetScanningIndicatorAnimationModeRequested)] = MapSetScanningIndicatorAnimationMode,
             [nameof(BarkoderView.SetUpcEanDeblurEnabledRequested)] = MapSetUpcEanDeblurEnabled,
             [nameof(BarkoderView.SetEnableMisshaped1DEnabledRequested)] = MapSetEnableMisshaped1DEnabled,
             [nameof(BarkoderView.SetBarcodeThumbnailOnResultEnabledRequested)] = MapSetBarcodeThumbnailOnResultEnabled,
@@ -90,6 +104,7 @@ namespace Plugin.Maui.Barkoder.Controls
             [nameof(BarkoderView.SetBarcodeTypeEnabledRequested)] = MapSetBarcodeTypeEnabled,
             [nameof(BarkoderView.SetEnableVINRestrictionsRequested)] = MapSetEnableVINRestrictions,
             [nameof(BarkoderView.SetThresholdBetweenDuplicatesScansRequested)] = MapSetThresholdBetweenDuplicatesScans,
+            [nameof(BarkoderView.SetEnableCompositeRequested)] = MapSetEnableComposite,
             [nameof(BarkoderView.SetBarcodeTypeLengthRangeRequested)] = MapSetBarcodeTypeLengthRange,
             [nameof(BarkoderView.ConfigureBarkoderRequested)] = MapConfigureBarkoder,
         };

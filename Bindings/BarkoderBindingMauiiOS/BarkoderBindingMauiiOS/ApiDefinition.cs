@@ -136,9 +136,18 @@ namespace Barkoder.Xamarin
         [Export("getRoiLineColorHex")]
         string RoiLineColorHex { get; }
 
+         [Export("getScanningIndicatorColorHex")]
+        string ScanningIndicatorColorHex { get; }
+
         // @property (readonly, nonatomic) NSInteger roiLineWidth;
         [Export("roiLineWidth")]
         nint RoiLineWidth { get; }
+
+        [Export("scanningIndicatorWidth")]
+        nint ScanningIndicatorWidth { get; }
+
+         [Export("scanningIndicatorAnimationMode")]
+        nint ScanningIndicatorAnimationMode { get; }
 
         // -(NSString * _Nonnull)getRoiOverlayBackgroundColorHex __attribute__((warn_unused_result("")));
         [Export("getRoiOverlayBackgroundColorHex")]
@@ -147,6 +156,9 @@ namespace Barkoder.Xamarin
         // @property (readonly, nonatomic) BOOL closeSessionOnResultEnabled;
         [Export("closeSessionOnResultEnabled")]
         bool CloseSessionOnResultEnabled { get; }
+
+        [Export("scanningIndicatorAlwaysVisible")]
+        bool ScanningIndicatorAlwaysVisible { get; }
 
         // @property (readonly, nonatomic) BOOL imageResultEnabled;
         [Export("imageResultEnabled")]
@@ -353,7 +365,89 @@ namespace Barkoder.Xamarin
         // -(void)configureBarkoderWithBarkoderConfigAsJsonString:(NSString * _Nonnull)barkoderConfigAsJsonString;
         [Export("configureBarkoderWithBarkoderConfigAsJsonString:")]
         void ConfigureBarkoder(string barkoderConfigAsJsonString);
+
+        [Export("setCustomOptionWithOption:value:")]
+        void SetCustomOption(string option, int value);
+
+           // Scanning Indicator Animation Mode
+        [Export("setScanningIndicatorAnimationModeWithArg:")]
+        void SetScanningIndicatorAnimationMode(nint arg);
+
+        // Scanning Indicator Color
+        [Export("setScanningIndicatorColorHexWithArg:")]
+        void SetScanningIndicatorColorHex(string arg);
+
+        // Scanning Indicator Width
+        [Export("setScanningIndicatorWidthWithArg:")]
+        void SetScanningIndicatorWidth(float arg);
+
+        // Scanning Indicator Always Visible
+        [Export("setScanningIndicatorAlwaysVisibleWithArg:")]
+        void SetScanningIndicatorAlwaysVisible(bool arg);
+
+        [Export("setEnableCompositeWithArg:")]
+        void SetEnableComposite(nint arg);
+
+        [Export("setDynamicExposureWithArg:")]
+        void SetDynamicExposure(nint arg);
+
+        [Export("setCentricFocusAndExposureWithArg:")]
+        void SetCentricFocusAndExposure(bool arg);
+    
     }
+
+      // @interface DecoderPayload : NSObject
+    [BaseType(typeof(NSObject))]
+    interface DecoderPayload
+    {
+        // @property (copy, nonatomic) NSArray<DecoderResult *> * _Nonnull results;
+        [Export("results", ArgumentSemantic.Copy)]
+        BKDecoderResult[] Results { get; set; }
+
+        // @property (copy, nonatomic) NSString * _Nonnull imageInBase64;
+        [Export("imageInBase64")]
+        string ImageInBase64 { get; set; }
+
+        [Export("mainImageInBase64")]
+        string MainImageInBase64 { get; set; }
+
+    }
+
+
+      [BaseType(typeof(NSObject))]
+    public interface BKDecoderResult
+    {
+        // @property (readwrite, retain, nonatomic) NSString * barcodeTypeName;
+        [Export("barcodeTypeName", ArgumentSemantic.Retain)]
+        string BarcodeTypeName { get; set; }
+
+        // @property (readwrite, retain, nonatomic) NSString * textualData;
+        [Export("textualData", ArgumentSemantic.Retain)]
+        string TextualData { get; set; }
+
+        [Export ("extra", ArgumentSemantic.Retain)]
+		NSDictionary Extra { get; set; }
+
+    //         // New property for images (array of BKImageDescriptor)
+    // // @property (readwrite, retain, nonatomic) BKImageDescriptor[] *images;
+        [Export("images", ArgumentSemantic.Retain)]
+        BKImageDescriptor[] Images { get; set; }
+    }
+    
+    [BaseType(typeof(NSObject))]
+    public interface BKImageDescriptor
+{
+    // @property (readwrite, retain, nonatomic) NSString *name;
+    [Export("name", ArgumentSemantic.Retain)]
+    string Name { get; set; }
+    // @property (readwrite, retain, nonatomic) UIImage *image;
+    [Export("image", ArgumentSemantic.Retain)]
+    UIImage Image { get; set; }
+    
+}
+
+    
+
 
     // @interface BarkoderFrameworkProxy_Swift_376 (BarkoderProxy)
     [Category]
@@ -362,7 +456,7 @@ namespace Barkoder.Xamarin
     {
         // -(void)scanningFinished:(NSArray<DecoderResult *> * _Nonnull)decoderResults image:(UIImage * _Nullable)image;
         [Export("scanningFinished:thumbnails:image:")]
-        void ScanningFinished(DecoderResult[] decoderResults, [NullAllowed] UIImage[] thumbnails, [NullAllowed] UIImage image);
+        void ScanningFinished(BKDecoderResult[] decoderResults, [NullAllowed] UIImage[] thumbnails, [NullAllowed] UIImage image);
     }
 
 }

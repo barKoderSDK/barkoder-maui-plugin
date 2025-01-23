@@ -30,13 +30,17 @@ public enum BarcodeType
     Code32,
     Telepen,
     Dotcode,
-    IDDocument
+    IDDocument,
+    Databar14,
+    DatabarLimited,
+    DatabarExpanded
 }
 
 public enum BarkoderResolution
 {
-    Normal,
-    High
+    HD,
+    FHD,
+    UHD
 }
 
 public enum Code11ChecksumType
@@ -72,7 +76,10 @@ public enum DecoderType
     PDF417,
     PDF417Micro,
     Datamatrix,
-    IDDocument
+    IDDocument,
+    Databar14,
+    DatabarLimited,
+    DatabarExpanded
 }
 
 public enum DecodingSpeed

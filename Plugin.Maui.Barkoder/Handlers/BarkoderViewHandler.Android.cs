@@ -4,6 +4,7 @@ using Com.Barkoder;
 using Android.Content;
 using Android.Graphics;
 using System.Drawing;
+using System.Text.Json;
 
 using CommonBarkoderResolution = Plugin.Maui.Barkoder.Enums.BarkoderResolution;
 using AndroidBarkoderResolution = Com.Barkoder.Enums.BarkoderResolution;
@@ -33,6 +34,7 @@ using Java.IO;
 using Android.Util;
 using Com.Barkoder.Interfaces;
 using static Android.Service.Carrier.CarrierMessagingService;
+using static Com.Barkoder.Barkoder;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
@@ -187,8 +189,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if (handler.BKDView != null)
         {
             view.Version = Com.Barkoder.Barkoder.Version;
+
         }
     }
+
+    public static void MapSetCustomOption(BarkoderViewHandler handler, BarkoderView view, object? argument)
+    {
+        if (handler.BKDView != null && argument is ValueTuple<string, int> customOption)
+        {
+            var (optionName, optionValue) = customOption; // Deconstruct after casting
+            Com.Barkoder.Barkoder.SetCustomOption(handler.BKDView.Config.DecoderConfig, optionName, optionValue);
+        }
+
+    }
+
+
+
 
     private static void MapBarkoderResolution(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -197,13 +213,17 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
             AndroidBarkoderResolution barkoderResolution = handler.BKDView.Config.BarkoderResolution;
 
             // Converting from android BarkoderResolution to CommonBarkoderResolution
-            if (barkoderResolution == AndroidBarkoderResolution.High)
+            if (barkoderResolution == AndroidBarkoderResolution.Hd)
             {
-                view.BarkoderResolution = Enums.BarkoderResolution.High;
+                view.BarkoderResolution = Enums.BarkoderResolution.HD;
             }
-            else if (barkoderResolution == AndroidBarkoderResolution.Normal)
+            else if (barkoderResolution == AndroidBarkoderResolution.Fhd)
             {
-                view.BarkoderResolution = Enums.BarkoderResolution.Normal;
+                view.BarkoderResolution = Enums.BarkoderResolution.FHD;
+            }
+            else if (barkoderResolution == AndroidBarkoderResolution.Uhd)
+            {
+                view.BarkoderResolution = Enums.BarkoderResolution.UHD;
             }
         }
     }
@@ -385,6 +405,8 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+   
+
     private static void MapBarcodeThumbnailOnResultEnabledProperty(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
@@ -407,6 +429,53 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         {
             view.DuplicatesDelayMs = handler.BKDView.Config.DecoderConfig.DuplicatesDelayMs;
         }
+    }
+
+    private static void MapScanningIndicatorAlwaysVisibleEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.ScanningIndicatorAlwaysVisibleEnabled = handler.BKDView.Config.ScanningIndicatorAlwaysVisible;
+        }
+    }
+
+    private static void MapScanningIndicatorAnimationMode(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.ScanningIndicatorAnimationMode = handler.BKDView.Config.ScanningIndicatorAnimation;
+        }
+
+    }
+
+
+    
+
+    private static void MapScanningIndicatorColor(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.ScanningIndicatorLineColorHex = Util.IntColorToHexColor(handler.BKDView.Config.ScanningIndicatorColor);
+        }
+    }
+
+    private static void MapScanningIndicatorWidth(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.ScanningIndicatorLineWidth = handler.BKDView.Config.ScanningIndicatorWidth;
+        
+    }
+   }
+
+
+    private static void MapEnableComposite(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.EnableComposite = handler.BKDView.Config.DecoderConfig.EnableComposite;
+        }
+
     }
 
     private static void MapMulticodeCachingDuration(BarkoderViewHandler handler, BarkoderView view)
@@ -494,6 +563,8 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+
+  
 
 
     private static void MapStopScanning(BarkoderViewHandler handler, BarkoderView view, object? arg3)
@@ -669,14 +740,19 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         {
             switch (barkoderResolution)
             {
-                case CommonBarkoderResolution.High:
+                case CommonBarkoderResolution.FHD:
                     {
-                        handler.BKDView.Config.BarkoderResolution = AndroidBarkoderResolution.High;
+                        handler.BKDView.Config.BarkoderResolution = AndroidBarkoderResolution.Fhd;
                         break;
                     }
-                case CommonBarkoderResolution.Normal:
+                case CommonBarkoderResolution.HD:
                     {
-                        handler.BKDView.Config.BarkoderResolution = AndroidBarkoderResolution.Normal;
+                        handler.BKDView.Config.BarkoderResolution = AndroidBarkoderResolution.Hd;
+                        break;
+                    }
+                case CommonBarkoderResolution.UHD:
+                    {
+                        handler.BKDView.Config.BarkoderResolution = AndroidBarkoderResolution.Hd;
                         break;
                     }
             }
@@ -925,6 +1001,67 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapSetScanningIndicatorAnimationMode(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int scanningIndicatorAnimationMode) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ScanningIndicatorAnimation = scanningIndicatorAnimationMode;
+        }
+
+    }
+
+    private static void MapSetDynamicExposure(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int dynamicExposure) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetDynamicExposure(dynamicExposure);
+        }
+
+    }
+
+    private static void MapSetScanningIndicatorAlwaysVisibleEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ScanningIndicatorAlwaysVisible = enabled;
+        }
+    }
+
+    private static void MapSetCentricFocusAndExposure(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetCentricFocusAndExposure(enabled);
+        }
+    }
+
+    private static void MapSetScanningIndicatorColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string hexColor) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ScanningIndicatorColor = Util.HexColorToIntColor(hexColor);
+        }
+    }
+
+    private static void MapSetScanningIndicatorWidth(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is float width) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ScanningIndicatorWidth = width;
+        }
+    }
+
+    private static void MapSetEnableComposite(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int enableComposite) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.DecoderConfig.EnableComposite = enableComposite;
+        }
+    }
+
+
+
+
     private static void MapSetMulticodeCachingDuration(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is int multicodeCachingDuration) && (handler.BKDView != null))
@@ -1022,6 +1159,15 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                     break;
                 case Enums.BarcodeType.IDDocument:
                     handler.BKDView.Config.DecoderConfig.IDDocument.Enabled = barcodeTypeEventArgs.Enabled;
+                    break;
+                case Enums.BarcodeType.Databar14:
+                    handler.BKDView.Config.DecoderConfig.Databar14.Enabled = barcodeTypeEventArgs.Enabled;
+                    break;
+                case Enums.BarcodeType.DatabarLimited:
+                    handler.BKDView.Config.DecoderConfig.DatabarLimited.Enabled = barcodeTypeEventArgs.Enabled;
+                    break;
+                case Enums.BarcodeType.DatabarExpanded:
+                    handler.BKDView.Config.DecoderConfig.DatabarExpanded.Enabled = barcodeTypeEventArgs.Enabled;
                     break;
             }
         }
@@ -1160,6 +1306,22 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
 
             var res = result[i];
 
+            // Convert IList<BKKeyValue> to Dictionary<string, object>
+            Dictionary<string, object>? extraDict = null;
+
+            if (res.Extra != null && res.Extra.Any())
+            {
+                extraDict = new Dictionary<string, object>();
+                foreach (var kv in res.Extra)
+                {
+                    if (!string.IsNullOrEmpty(kv.Key))
+                    {
+                        extraDict[kv.Key] = kv.Value ?? string.Empty; // Handle null values
+                    }
+                }
+            }
+
+            // Convert Images
             if (res.Images != null)
             {
                 foreach (var image in res.Images)
@@ -1170,7 +1332,7 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
 
                         if (imageSource != null)
                         {
-                            mrzImages.Add(new ImageData( image.Name, imageSource));
+                            mrzImages.Add(new ImageData(image.Name, imageSource));
                         }
                         else
                         {
@@ -1188,6 +1350,7 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
             BarcodeResult barcodeResult = new BarcodeResult(
                 res.TextualData,
                 res.BarcodeTypeName,
+                extraDict, // Pass the dictionary here
                 "", // CharacterSet
                 mrzImages
             );
@@ -1246,6 +1409,12 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
         ImageSource imageSource = ImageSource.FromStream(() => imageSourceStream);
 
         return imageSource;
+    }
+
+    public class SimpleKeyValue
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
     }
 
 

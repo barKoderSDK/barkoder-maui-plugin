@@ -76,40 +76,7 @@ namespace Barkoder.Xamarin
         DecoderConfig DecoderConfig { get; set; }
     }
 
-    // @interface DecoderPayload : NSObject
-    [BaseType(typeof(NSObject))]
-    interface DecoderPayload
-    {
-        // @property (copy, nonatomic) NSArray<DecoderResult *> * _Nonnull results;
-        [Export("results", ArgumentSemantic.Copy)]
-        DecoderResult[] Results { get; set; }
-
-        // @property (copy, nonatomic) NSString * _Nonnull imageInBase64;
-        [Export("imageInBase64")]
-        string ImageInBase64 { get; set; }
-
-        [Export("mainImageInBase64")]
-        string MainImageInBase64 { get; set; }
-
-    }
-
-    // @interface DecoderResult : NSObject
-    [BaseType(typeof(NSObject))]
-    public interface DecoderResult
-    {
-        // @property (readwrite, retain, nonatomic) NSString * barcodeTypeName;
-        [Export("barcodeTypeName", ArgumentSemantic.Retain)]
-        string BarcodeTypeName { get; set; }
-
-        // @property (readwrite, retain, nonatomic) NSString * textualData;
-        [Export("textualData", ArgumentSemantic.Retain)]
-        string TextualData { get; set; }
-
-    //         // New property for images (array of BKImageDescriptor)
-    // // @property (readwrite, retain, nonatomic) BKImageDescriptor[] *images;
-        [Export("images", ArgumentSemantic.Retain)]
-        BKImageDescriptor[] Images { get; set; }
-    }
+  
 
     // @interface DecoderConfig : NSObject
     [BaseType(typeof(NSObject))]
@@ -242,6 +209,15 @@ namespace Barkoder.Xamarin
         [Export("idDocument", ArgumentSemantic.Strong)]
         SymbologyConfig IDDocument { get; set; }
 
+        [Export("databar14", ArgumentSemantic.Strong)]
+        SymbologyConfig Databar14 { get; set; }
+
+        [Export("databarLimited", ArgumentSemantic.Strong)]
+        SymbologyConfig DatabarLimited { get; set; }
+
+        [Export("databarExpanded", ArgumentSemantic.Strong)]
+        SymbologyConfig DatabarExpanded { get; set; }
+
      
 
 
@@ -276,8 +252,9 @@ namespace Barkoder.Xamarin
     [BaseType(typeof(nint))]
     public enum BarkoderResolution
     {
-        Normal,
-        High
+        HD,
+        FHD,
+        UHD
     }
 
     [BaseType(typeof(nint))]
@@ -328,7 +305,10 @@ namespace Barkoder.Xamarin
         code32,
         telepen,
         dotcode,
-        idDocument
+        idDocument,
+        databar14,
+        databarLimited,
+        databarExpanded
     }
 
     [BaseType(typeof(int))]
@@ -362,7 +342,10 @@ namespace Barkoder.Xamarin
         Code32 = 25,
         Telepen = 26,
         Dotcode = 27,
-        IDDocument = 28
+        IDDocument = 28,
+        Databar14 = 29,
+        DatabarLimited = 30,
+        DatabarExpanded = 31
     }
 
     [BaseType(typeof(nint))]
@@ -392,16 +375,7 @@ namespace Barkoder.Xamarin
         //@double
     }
 
-        [BaseType(typeof(NSObject))]
-public interface BKImageDescriptor
-{
-    // @property (readwrite, retain, nonatomic) NSString *name;
-    [Export("name", ArgumentSemantic.Retain)]
-    string Name { get; set; }
-    // @property (readwrite, retain, nonatomic) UIImage *image;
-    [Export("image", ArgumentSemantic.Retain)]
-    UIImage Image { get; set; }
-    
-}
+
+
 
 }

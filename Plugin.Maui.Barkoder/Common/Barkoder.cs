@@ -115,6 +115,12 @@ namespace Barkoder
         public BarcodeConfig dotcode;
         [JsonProperty("ID Document")]
         public BarcodeConfig idDocument;
+        [JsonProperty("Databar 14")]
+        public BarcodeConfig databar14;
+        [JsonProperty("Databar Limited")]
+        public BarcodeConfig databarLimited;
+        [JsonProperty("Databar Expanded")]
+        public BarcodeConfig databarExpanded;
         [JsonProperty("general")]
         public GeneralSettings general;
 
@@ -147,7 +153,11 @@ namespace Barkoder
             BarcodeConfig? code32 = null,
             BarcodeConfig? telepen = null,
             BarcodeConfig? dotcode = null,
-             BarcodeConfig? idDocument = null,
+            BarcodeConfig? idDocument = null,
+            BarcodeConfig? databar14 = null,
+            BarcodeConfig? databarLimited = null,
+            BarcodeConfig? databarExpanded = null,
+
             GeneralSettings? general = null)
         {
             this.aztec = aztec ?? new BarcodeConfig();
@@ -178,7 +188,10 @@ namespace Barkoder
             this.code32 = code32 ?? new BarcodeConfig();
             this.telepen = telepen ?? new BarcodeConfig();
             this.dotcode = dotcode ?? new BarcodeConfig();
-            this.idDocument = dotcode ?? new BarcodeConfig();
+            this.idDocument = idDocument ?? new BarcodeConfig();
+            this.databar14 = databar14 ?? new BarcodeConfig();
+            this.databarLimited = databarLimited ?? new BarcodeConfig();
+            this.databarExpanded = databarExpanded ?? new BarcodeConfig();
             this.general = general ?? new GeneralSettings();
         }
     }
