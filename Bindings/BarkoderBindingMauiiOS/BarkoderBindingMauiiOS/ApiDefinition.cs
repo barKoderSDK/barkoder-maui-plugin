@@ -36,6 +36,12 @@ namespace Barkoder.Xamarin
         [Export("pauseScanning")]
         void PauseScanning();
 
+        [Export("freezeScanning")]
+        void FreezeScanning();
+
+        [Export("unfreezeScanning")]
+        void UnfreezeScanning();
+
         // -(void)isFlashAvailableWithCompletion:(void (^ _Nonnull)(BOOL))completion;
         [Export("isFlashAvailableWithCompletion:")]
         void IsFlashAvailableWithCompletion(Action<bool> completion);
@@ -136,8 +142,55 @@ namespace Barkoder.Xamarin
         [Export("getRoiLineColorHex")]
         string RoiLineColorHex { get; }
 
-         [Export("getScanningIndicatorColorHex")]
+        [Export("getARSelectedLocationLineColor")]
+        string ARSelectedLocationLineColor { get; }
+
+        [Export("getARNonSelectedLocationLineColor")]
+        string ARNonSelectedLocationLineColor { get; }
+
+        [Export("getARHeaderHeight")]
+        float ARHeaderHeight { get; }
+
+        [Export("getARSelectedLocationWidth")]
+        float ARSelectedLocationWidth { get; }
+
+        [Export("getARNonSelectedLocationWidth")]
+        float ARNonSelectedLocationWidth { get; }
+
+        [Export("getScanningIndicatorColorHex")]
         string ScanningIndicatorColorHex { get; }
+
+        [Export("getResultDisappereanceDelayMs")]
+        nint ResultDisapperanceDelayMs { get; }
+
+        [Export("getLocationTransitionSpeed")]
+        float LocationTransitionSpeed { get; }
+
+        [Export("getARDoubleTapToFreeze")]
+        bool ARDoubleTapToFreeze { get; }
+
+        [Export("getARHeaderMaxTextHeight")]
+        float ARHeaderMaxTextHeight { get; }
+
+        [Export("getARHeaderMinTextHeight")]
+        float ARHeaderMinTextHeight { get; }
+
+        [Export("getARSelectedHeaderTextColor")]
+        string ARSelectedHeaderTextColor { get; }
+
+        [Export("getARNonSelectedHeaderTextColor")]
+        string ARNonSelectedHeaderTextColor { get; }
+
+        [Export("getARHeaderHorizontalTextMargin")]
+        float ARHeaderHorizontalTextMargin { get; }
+
+
+        [Export("getARHeaderVerticalTextMargin")]
+        float ARHeaderVerticalTextMargin { get; }
+
+        [Export("getARHeaderTextFormat")]
+        string ARHeaderTextFormat { get; }
+
 
         // @property (readonly, nonatomic) NSInteger roiLineWidth;
         [Export("roiLineWidth")]
@@ -236,6 +289,80 @@ namespace Barkoder.Xamarin
         [Export("barkoderResolution")]
         BarkoderResolution BarkoderResolution { get; }
 
+
+        [Export("setBarkoderARModeWithArg:")]
+        void SetBarkoderARMode(nint arg);
+
+        [Export("setBarkoderARHeaderShowModeWithArg:")]
+        void SetBarkoderARHeaderShowMode(nint arg);
+
+        [Export("setBarkoderARLocationTypeWithArg:")]
+        void SetBarkoderARLocationType(nint arg);
+
+        [Export("setBarkoderARoverlayRefreshWithArg:")]
+        void SetBarkoderARoverlayRefresh(nint arg);
+
+        [Export("setARNonSelectedLocationLineColorWithArg:")]
+        void SetARNonSelectedLocationLineColor(string arg);
+
+        [Export("setARNonSelectedHeaderTextColorWithArg:")]
+        void SetARNonSelectedHeaderTextColor(string arg);
+
+        [Export("setARSelectedHeaderTextColorWithArg:")]
+        void SetARSelectedHeaderTextColor(string arg);
+
+        [Export("setARSelectedLocationLineColorWithArg:")]
+        void SetARSelectedLocationLineColor(string arg);
+
+        [Export("setARSelectedLocationLineWidthWithArg:")]
+        void SetARSelectedLocationLineWidth(float arg);
+
+        [Export("setARNonSelectedLocationLineWidthWithArg:")]
+        void SetARNonSelectedLocationLineWidth(float arg);
+
+        [Export("setARHeaderMaxTextHeightWithArg:")]
+        void SetARHeaderMaxTextHeight(float arg);
+
+        [Export("setARHeaderMinTextHeightWithArg:")]
+        void SetARHeaderMinTextHeight(float arg);
+
+        [Export("setARHeaderHeightWithArg:")]
+        void SetARHeaderHeight(float arg);
+
+        [Export("setARHeaderVerticalTextMarginWithArg:")]
+        void SetARHeaderVerticalTextMargin(float arg);
+
+        [Export("setARHeaderHorizontalTextMarginWithArg:")]
+        void SetARHeaderHorizontalTextMargin(float arg);
+
+        [Export("setARDoubleTapToFreezeEnabledWithArg:")]
+        void SetARDoubleTapToFreezeEnabled(bool arg);
+
+        [Export("setResultDisappearanceDelayMsWithArg:")]
+        void SetResultDisappearanceDelayMs(nint arg);
+
+        [Export("setARLocationTransitionSpeedWithArg:")]
+        void SetARLocationTransitionSpeed(float arg);
+
+        [Export("setARHeaderTextFormatWithArg:")]
+        void SetARHeaderTextFormat(string arg);
+
+
+
+        // @property (readonly, nonatomic) NSInteger barkoderResolution;
+        [Export("barkoderARMode")]
+        BarkoderARMode BarkoderARMode { get; }
+
+        [Export("barkoderARLocationType")]
+        BarkoderARLocationType BarkoderARLocationType { get; }
+
+        [Export("barkoderARHeaderShowMode")]
+        BarkoderARHeaderShowMode BarkoderARHeaderShowMode { get; }
+
+
+        [Export("barkoderAROverlayRefresh")]
+        BarkoderAROverlayRefresh BarkoderAROverlayRefresh { get; }
+
         // -(void)setDecodingSpeedWithArg:(NSInteger)arg;
         [Export("setDecodingSpeedWithArg:")]
         void SetDecodingSpeedWithArg(DecodingSpeed arg);
@@ -276,6 +403,9 @@ namespace Barkoder.Xamarin
 
         [Export("setQRMicroDpmModeEnabledWithArg:")]
         void SetQRMicroDpmModeEnabledWithArg(bool arg);
+
+        [Export("setShowDuplicatesLocationWithArg:")]
+        void SetShowDuplicatesLocation(bool arg);
 
         // -(void)setUpcEanDeblurEnabledWithArg:(BOOL)arg;
         [Export("setUpcEanDeblurEnabledWithArg:")]
@@ -393,7 +523,19 @@ namespace Barkoder.Xamarin
 
         [Export("setCentricFocusAndExposureWithArg:")]
         void SetCentricFocusAndExposure(bool arg);
-    
+
+        [Export("setUPCEexpandToUPCAWithArg:")]
+        void SetUPCEexpandToUPCA(bool arg);
+
+        [Export("setUPCE1expandToUPCAWithArg:")]
+        void SetUPCE1expandToUPCA(bool arg);
+
+        [Export("setVideoStabilizationWithArg:")]
+        void setVideoStabilizationWithArg(bool arg);
+
+        [Export("setCameraWithArg:")]
+        void setCamera(BarkoderCameraPosition arg);
+
     }
 
       // @interface DecoderPayload : NSObject

@@ -33,7 +33,14 @@ public enum BarcodeType
     IDDocument,
     Databar14,
     DatabarLimited,
-    DatabarExpanded
+    DatabarExpanded,
+    PostalIMB,
+    Postnet,
+    Planet,
+    AustralianPost,
+    RoyalMail,
+    KIX,
+    JapanesePost
 }
 
 public enum BarkoderResolution
@@ -43,11 +50,46 @@ public enum BarkoderResolution
     UHD
 }
 
+
+public enum BarkoderARMode
+{
+    OFF,
+    InteractiveDisabled,
+    InteractiveEnabled,
+    NonInteractive
+}
+
+public enum BarkoderARHeaderShowMode
+{
+    NEVER,
+    ALWAYS,
+    ONSELECTED
+}
+
+public enum BarkoderARLocationType
+{
+    NONE,
+    TIGHT,
+    BOUNDINGBOX
+}
+
+public enum BarkoderAROverlayRefresh
+{
+    SMOOTH,
+    NORMAL
+}
+
 public enum Code11ChecksumType
 {
     Disabled,
     Single,
     Double
+}
+
+public enum BarkoderCameraPosition
+{
+    BACK,
+    FRONT
 }
 
 public enum Code39ChecksumType
@@ -79,7 +121,14 @@ public enum DecoderType
     IDDocument,
     Databar14,
     DatabarLimited,
-    DatabarExpanded
+    DatabarExpanded,
+    PostalIMB,
+    Postnet,
+    Planet,
+    AustralianPost,
+    RoyalMail,
+    KIX,
+    JapanesePost
 }
 
 public enum DecodingSpeed

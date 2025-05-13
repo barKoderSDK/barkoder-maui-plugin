@@ -14,13 +14,14 @@
 		<Nullable>enable</Nullable>
 		<AndroidErrorOnCustomJavaObject>false</AndroidErrorOnCustomJavaObject>
 		<AndroidLinkResources>false</AndroidLinkResources>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<Version>1.6.0</Version>
+		<Version>1.6.4</Version>
 		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
@@ -42,6 +43,12 @@
 	<ItemGroup>
 		<None Include="lib\BarkoderBindingMauiAndroid.dll" Pack="true" PackagePath="\lib\net8.0-android34.0" />
 		<None Include="lib\BarkoderBindingMauiiOS.dll" Pack="true" PackagePath="\lib\net8.0-ios18.0" />
+	 <None Include="..\Bindings\BarkoderBindingMauiiOS\BarkoderBindingMauiiOS\bin\$(Configuration)\net8.0-ios\BarkoderBindingMauiiOS.resources\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <Pack>true</Pack>
+        <PackagePath>lib/net8.0-ios18.0/BarkoderBindingMauiiOS.resources/</PackagePath>
+    </None>
 	</ItemGroup>
 
 	<ItemGroup>

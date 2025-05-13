@@ -36,9 +36,40 @@ public class BarkoderView : View
         Handler?.Invoke(nameof(SetDynamicExposure), dynamicExposure);
     }
 
+
+    public void SetCamera(BarkoderCameraPosition position)
+    {
+        Handler?.Invoke(nameof(SetCamera), position);
+    }
+
     public void SetCentricFocusAndExposure(bool enabled)
     {
         Handler?.Invoke(nameof(SetCentricFocusAndExposure), enabled);
+    }
+
+    public void SetUPCE1expandToUPCA(bool enabled)
+    {
+        Handler?.Invoke(nameof(SetUPCE1expandToUPCA), enabled);
+    }
+
+    public void SetUPCEexpandToUPCA(bool enabled)
+    {
+        Handler?.Invoke(nameof(SetUPCEexpandToUPCA), enabled);
+    }
+
+    public void SetVideoStabilization(bool enabled)
+    {
+        Handler?.Invoke(nameof(SetVideoStabilization), enabled);
+    }
+
+    public void InitCameraProperties()
+    {
+        Handler?.Invoke(nameof(InitCameraProperties), null);
+    }
+
+    public void SetShowDuplicatesLocation(bool enabled)
+    {
+        Handler?.Invoke(nameof(SetShowDuplicatesLocation), enabled);
     }
 
 
@@ -49,6 +80,8 @@ public class BarkoderView : View
     public event EventHandler<IBarkoderDelegate>? ScanImageRequest;
     public event EventHandler? StopScanningRequested;
     public event EventHandler? PauseScanningRequested;
+    public event EventHandler? FreezeScanningRequested;
+    public event EventHandler? UnfreezeScanningRequested;
     public event EventHandler<bool>? FlashEnableRequested;
     public event EventHandler<float>? SetZoomFactorRequested;
     public event EventHandler<bool>? SetPinchToZoomEnabledRequested;
@@ -62,13 +95,26 @@ public class BarkoderView : View
     public event EventHandler<bool>? SetScanningIndicatorAlwaysVisibleRequested;
     public event EventHandler<bool>? SetVibrateOnSuccessEnabledRequested;
     public event EventHandler<string>? SetLocationLineColorRequested;
+    public event EventHandler<string>? SetARSelectedLocationLineColorRequested;
+    public event EventHandler<string>? SetARNonSelectedLocationLineColorRequested;
+    public event EventHandler<string>? SetARNonSelectedHeaderTextColorRequested;
+    public event EventHandler<string>? SetARSelectedHeaderTextColorRequested;
+    public event EventHandler<double>? SetARHeaderVerticalTextMarginRequested;
+    public event EventHandler<double>? SetARHeaderHorizontalTextMarginRequested;
     public event EventHandler<string>? SetRoiLineColorRequested;
     public event EventHandler<string>? SetRoiOverlayBackgroundColorRequested;
     public event EventHandler<string>? SetScanningIndicatorColorHexRequested;
     public event EventHandler<double>? SetLocationLineWidthRequested;
+    public event EventHandler<double>? SetARSelectedLocationLineWidthRequested;
+    public event EventHandler<double>? SetARNonSelectedLocationLineWidthRequested;
+    public event EventHandler<double>? SetARLocationTransitionSpeedRequested;
     public event EventHandler<double>? SetScanningIndicatorLineWidthRequested;
     public event EventHandler<int[]>? SetRegionOfInterestRequested;
     public event EventHandler<BarkoderResolution>? SetBarkoderResolutionRequested;
+    public event EventHandler<BarkoderARMode>? SetBarkoderARModeRequested;
+    public event EventHandler<BarkoderARHeaderShowMode>? SetBarkoderARHeaderShowModeRequested;
+    public event EventHandler<BarkoderARLocationType>? SetBarkoderARLocationTypeRequested;
+    public event EventHandler<BarkoderAROverlayRefresh>? SetBarkoderARoverlayRefreshRequested;
     public event EventHandler<DecodingSpeed>? SetDecodingSpeedRequested;
     public event EventHandler<FormattingType>? SetFormattingTypeRequested;
     public event EventHandler<MsiChecksumType>? SetMsiChecksumTypeRequested;
@@ -76,6 +122,7 @@ public class BarkoderView : View
     public event EventHandler<MsiChecksumType>? SetCode39ChecksumTypeRequested;
     public event EventHandler<bool>? SetIdDocumentMasterChecksumEnabledRequested;
     public event EventHandler<string>? SetEncodingCharacterSetRequested;
+    public event EventHandler<string>? SetARHeaderTextFormatRequested;
     public event EventHandler<bool>? SetDatamatrixDpmModeEnabledRequested;
     public event EventHandler<bool>? SetQRDpmModeEnabledRequested;
     public event EventHandler<bool>? SetQRMicroDpmModeEnabledRequested;
@@ -83,10 +130,15 @@ public class BarkoderView : View
     public event EventHandler<bool>? SetEnableMisshaped1DEnabledRequested;
     public event EventHandler<bool>? SetBarcodeThumbnailOnResultEnabledRequested;
     public event EventHandler<int>? SetMaximumResultsCountRequested;
+    public event EventHandler<int>? SetResultDisappearanceDelayMsRequested;
+    public event EventHandler<double>? SetARHeaderHeightRequested;
+    public event EventHandler<double>? SetARHeaderMaxTextHeightRequested;
+    public event EventHandler<double>? SetARHeaderMinTextHeightRequested;
     public event EventHandler<int>? SetScanningIndicatorAnimationModeRequested;
     public event EventHandler<int>? SetDuplicatesDelayMsRequested;
     public event EventHandler<BarcodeTypeEventArgs>? SetBarcodeTypeEnabledRequested;
     public event EventHandler<bool>? SetEnableVINRestrictionsRequested;
+    public event EventHandler<bool>? SetARDoubleTapToFreezeEnabledRequested;
     public event EventHandler<int>? SetThresholdBetweenDuplicatesScansRequested;
     public event EventHandler<int>? SetEnableCompositeRequested;
     public event EventHandler<BarcodeRangeEventArg>? SetBarcodeTypeLengthRangeRequested;
@@ -129,6 +181,26 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , "#000000");
 
+    public static BindableProperty ARNonSelectedLocationLineColorHexProperty = BindableProperty.Create(nameof(ARNonSelectedLocationLineColorHex)
+  , typeof(string)
+  , typeof(BarkoderView)
+  , "#000000");
+
+    public static BindableProperty ARSelectedLocationLineColorHexProperty = BindableProperty.Create(nameof(ARSelectedLocationLineColorHex)
+ , typeof(string)
+ , typeof(BarkoderView)
+ , "#000000");
+
+    public static BindableProperty ARSelectedHeaderTextColorHexProperty = BindableProperty.Create(nameof(ARSelectedHeaderTextColorHex)
+, typeof(string)
+, typeof(BarkoderView)
+, "#000000");
+
+    public static BindableProperty ARNonSelectedHeaderTextColorHexProperty = BindableProperty.Create(nameof(ARNonSelectedHeaderTextColorHex)
+, typeof(string)
+, typeof(BarkoderView)
+, "#000000");
+
     public static BindableProperty RoiLineColorHexProperty = BindableProperty.Create(nameof(RoiLineColorHex)
     , typeof(string)
     , typeof(BarkoderView)
@@ -149,10 +221,30 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , "N/A");
 
+    public static BindableProperty ARHeaderTextFormatProperty = BindableProperty.Create(nameof(ARHeaderTextFormat)
+  , typeof(string)
+  , typeof(BarkoderView)
+  , "N/A");
+
     public static BindableProperty LocationLineWidthProperty = BindableProperty.Create(nameof(LocationLineWidth)
     , typeof(double)
     , typeof(BarkoderView)
     , 0.0);
+
+    public static BindableProperty ARSelectedLocationLineWidthProperty = BindableProperty.Create(nameof(ARSelectedLocationLineWidth)
+   , typeof(double)
+   , typeof(BarkoderView)
+   , 0.0);
+
+    public static BindableProperty ARNonSelectedLocationLineWidthProperty = BindableProperty.Create(nameof(ARNonSelectedLocationLineWidth)
+  , typeof(double)
+  , typeof(BarkoderView)
+  , 0.0);
+
+    public static BindableProperty ARLocationTransitionSpeedProperty = BindableProperty.Create(nameof(ARLocationTransitionSpeed)
+, typeof(double)
+, typeof(BarkoderView)
+, 0.0);
 
     public static BindableProperty ScanningIndicatorLineWidthProperty = BindableProperty.Create(nameof(ScanningIndicatorLineWidth)
     , typeof(double)
@@ -208,6 +300,26 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderResolution)
     , typeof(BarkoderView)
     , BarkoderResolution.HD);
+
+    public static BindableProperty BarkoderARModeProperty = BindableProperty.Create(nameof(BarkoderARMode)
+   , typeof(BarkoderARMode)
+   , typeof(BarkoderView)
+   , BarkoderARMode.OFF);
+
+    public static BindableProperty BarkoderARHeaderShowModeProperty = BindableProperty.Create(nameof(BarkoderARHeaderShowMode)
+, typeof(BarkoderARHeaderShowMode)
+, typeof(BarkoderView)
+, BarkoderARHeaderShowMode.ONSELECTED);
+
+    public static BindableProperty BarkoderARLocationTypeProperty = BindableProperty.Create(nameof(BarkoderARLocationType)
+, typeof(BarkoderARLocationType)
+, typeof(BarkoderView)
+, BarkoderARLocationType.TIGHT);
+
+    public static BindableProperty BarkoderARoverlayRefreshProperty = BindableProperty.Create(nameof(BarkoderAROverlayRefresh)
+, typeof(BarkoderAROverlayRefresh)
+, typeof(BarkoderView)
+, BarkoderAROverlayRefresh.NORMAL);
 
     public static BindableProperty DecodingSpeedProperty = BindableProperty.Create(nameof(DecodingSpeed)
     , typeof(DecodingSpeed)
@@ -274,6 +386,35 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , 0);
 
+    public static BindableProperty ResultDisappearanceDelayMsProperty = BindableProperty.Create(nameof(ResultDisappearanceDelayMs)
+   , typeof(int)
+   , typeof(BarkoderView)
+   , 0);
+
+    public static BindableProperty HeaderARVerticalTextMarginProperty = BindableProperty.Create(nameof(HeaderARVerticalTextMargin)
+  , typeof(double)
+  , typeof(BarkoderView)
+  , 0.0);
+
+    public static BindableProperty HeaderARHorizontalTextMarginProperty = BindableProperty.Create(nameof(HeaderARHorizontalTextMargin)
+  , typeof(double)
+  , typeof(BarkoderView)
+  , 0.0);
+
+    public static BindableProperty ARHeaderHeightProperty = BindableProperty.Create(nameof(ARHeaderHeight)
+ , typeof(double)
+ , typeof(BarkoderView)
+ , 0.0);
+
+    public static BindableProperty ARHeaderMaxTextHeightProperty = BindableProperty.Create(nameof(ARHeaderMaxTextHeight)
+, typeof(double)
+, typeof(BarkoderView)
+, 0.0);
+    public static BindableProperty ARHeaderMinTextHeightProperty = BindableProperty.Create(nameof(ARHeaderMinTextHeight)
+, typeof(double)
+, typeof(BarkoderView)
+, 0.0);
+
     public static BindableProperty ScanningIndicatorAnimationModeProperty = BindableProperty.Create(nameof(ScanningIndicatorAnimationMode)
     , typeof(int)
     , typeof(BarkoderView)
@@ -289,12 +430,17 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , false);
 
+    public static BindableProperty ARDoubleTapToFreezeEnabledProperty = BindableProperty.Create(nameof(ARDoubleTapToFreezeEnabled)
+, typeof(bool)
+, typeof(BarkoderView)
+, false);
+
     public static BindableProperty ThresholdBetweenDuplicatesScansProperty = BindableProperty.Create(nameof(ThresholdBetweenDuplicatesScans)
     , typeof(int)
     , typeof(BarkoderView)
     , 0);
 
-    public static BindableProperty EnableCompositeProperty = BindableProperty.Create(nameof(ThresholdBetweenDuplicatesScans)
+    public static BindableProperty EnableCompositeProperty = BindableProperty.Create(nameof(EnableComposite)
    , typeof(int)
    , typeof(BarkoderView)
    , 0);
@@ -384,6 +530,46 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         }
     }
 
+    public string ARNonSelectedLocationLineColorHex
+    {
+        get => (string)GetValue(ARNonSelectedLocationLineColorHexProperty);
+        set
+        {
+            SetValue(ARNonSelectedLocationLineColorHexProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARNonSelectedLocationLineColorRequested), value);
+        }
+    }
+
+    public string ARSelectedLocationLineColorHex
+    {
+        get => (string)GetValue(ARSelectedLocationLineColorHexProperty);
+        set
+        {
+            SetValue(ARSelectedLocationLineColorHexProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARSelectedLocationLineColorRequested), value);
+        }
+    }
+
+    public string ARSelectedHeaderTextColorHex
+    {
+        get => (string)GetValue(ARSelectedHeaderTextColorHexProperty);
+        set
+        {
+            SetValue(ARSelectedHeaderTextColorHexProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARSelectedHeaderTextColorRequested), value);
+        }
+    }
+
+    public string ARNonSelectedHeaderTextColorHex
+    {
+        get => (string)GetValue(ARNonSelectedHeaderTextColorHexProperty);
+        set
+        {
+            SetValue(ARNonSelectedHeaderTextColorHexProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARNonSelectedHeaderTextColorRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves or sets the hexadecimal color code representing the line color of the Region of Interest (ROI) on the camera preview.
     /// </summary>
@@ -433,6 +619,16 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         }
     }
 
+    public string ARHeaderTextFormat
+    {
+        get => (string)GetValue(ARHeaderTextFormatProperty);
+        set
+        {
+            SetValue(ARHeaderTextFormatProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARHeaderTextFormatRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves or sets the current width setting for the lines indicating the location of detected barcodes on the camera feed.
     /// </summary>
@@ -443,6 +639,36 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         {
             SetValue(LocationLineWidthProperty, value);
             Handler?.Invoke(nameof(BarkoderView.SetLocationLineWidthRequested), value);
+        }
+    }
+
+    public double ARSelectedLocationLineWidth
+    {
+        get => (double)GetValue(ARSelectedLocationLineWidthProperty);
+        set
+        {
+            SetValue(ARSelectedLocationLineWidthProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARSelectedLocationLineWidthRequested), value);
+        }
+    }
+
+    public double ARNonSelectedLocationLineWidth
+    {
+        get => (double)GetValue(ARNonSelectedLocationLineWidthProperty);
+        set
+        {
+            SetValue(ARNonSelectedLocationLineWidthProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARNonSelectedLocationLineWidthRequested), value);
+        }
+    }
+
+    public double ARLocationTransitionSpeed
+    {
+        get => (double)GetValue(ARLocationTransitionSpeedProperty);
+        set
+        {
+            SetValue(ARLocationTransitionSpeedProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARLocationTransitionSpeedRequested), value);
         }
     }
 
@@ -580,6 +806,47 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         {
             SetValue(BarkoderResolutionProperty, value);
             Handler?.Invoke(nameof(BarkoderView.SetBarkoderResolutionRequested), value);
+        }
+    }
+
+    public BarkoderARMode BarkoderARMode
+    {
+        get => (BarkoderARMode)GetValue(BarkoderARModeProperty);
+        set
+        {
+            SetValue(BarkoderARModeProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetBarkoderARModeRequested), value);
+        }
+    }
+
+    public BarkoderARHeaderShowMode BarkoderARHeaderShowMode
+    {
+        get => (BarkoderARHeaderShowMode)GetValue(BarkoderARHeaderShowModeProperty);
+        set
+        {
+            SetValue(BarkoderARHeaderShowModeProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetBarkoderARHeaderShowModeRequested), value);
+        }
+    }
+
+    public BarkoderARLocationType BarkoderARLocationType
+    {
+        get => (BarkoderARLocationType)GetValue(BarkoderARLocationTypeProperty);
+        set
+        {
+            SetValue(BarkoderARLocationTypeProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetBarkoderARLocationTypeRequested), value);
+        }
+    }
+
+
+    public BarkoderAROverlayRefresh BarkoderAROverlayRefresh
+    {
+        get => (BarkoderAROverlayRefresh)GetValue(BarkoderARoverlayRefreshProperty);
+        set
+        {
+            SetValue(BarkoderARoverlayRefreshProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetBarkoderARoverlayRefreshRequested), value);
         }
     }
 
@@ -769,6 +1036,64 @@ public bool UpcEanDeblurEnabled
         }
     }
 
+    public int ResultDisappearanceDelayMs
+    {
+        get => (int)GetValue(ResultDisappearanceDelayMsProperty);
+        set
+        {
+            SetValue(ResultDisappearanceDelayMsProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetResultDisappearanceDelayMsRequested), value);
+        }
+    }
+
+    public double HeaderARVerticalTextMargin
+    {
+        get => (double)GetValue(HeaderARVerticalTextMarginProperty);
+        set
+        {
+            SetValue(HeaderARVerticalTextMarginProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARHeaderVerticalTextMarginRequested), value);
+        }
+    }
+
+    public double HeaderARHorizontalTextMargin
+    {
+        get => (double)GetValue(HeaderARHorizontalTextMarginProperty);
+        set
+        {
+            SetValue(HeaderARHorizontalTextMarginProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARHeaderHorizontalTextMarginRequested), value);
+        }
+    }
+
+    public double ARHeaderHeight
+    {
+        get => (double)GetValue(ARHeaderHeightProperty);
+        set
+        {
+            SetValue(ARHeaderHeightProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARHeaderHeightRequested), value);
+        }
+    }
+    public double ARHeaderMaxTextHeight
+    {
+        get => (double)GetValue(ARHeaderMaxTextHeightProperty);
+        set
+        {
+            SetValue(ARHeaderMaxTextHeightProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARHeaderMaxTextHeightRequested), value);
+        }
+    }
+    public double ARHeaderMinTextHeight
+    {
+        get => (double)GetValue(ARHeaderMinTextHeightProperty);
+        set
+        {
+            SetValue(ARHeaderMinTextHeightProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARHeaderMinTextHeightRequested), value);
+        }
+    }
+
     public int ScanningIndicatorAnimationMode
     {
         get => (int)GetValue(ScanningIndicatorAnimationModeProperty);
@@ -782,7 +1107,7 @@ public bool UpcEanDeblurEnabled
     /// <summary>
     /// Retrieves or sets the delay in milliseconds for considering duplicate barcodes during scanning.
     /// </summary>
-    public int DuplicatesDelayMs
+    private int DuplicatesDelayMs
     {
         get => (int)GetValue(DuplicatesDelayMsProperty);
         set
@@ -802,6 +1127,17 @@ public bool UpcEanDeblurEnabled
         {
             SetValue(VINRestrictionsEnabledProperty, value);
             Handler?.Invoke(nameof(BarkoderView.SetEnableVINRestrictionsRequested), value);
+        }
+    }
+
+
+    public bool ARDoubleTapToFreezeEnabled
+    {
+        get => (bool)GetValue(ARDoubleTapToFreezeEnabledProperty);
+        set
+        {
+            SetValue(ARDoubleTapToFreezeEnabledProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARDoubleTapToFreezeEnabledRequested), value);
         }
     }
 
@@ -882,6 +1218,16 @@ public bool UpcEanDeblurEnabled
     public void PauseScanning()
     {
         Handler?.Invoke(nameof(BarkoderView.PauseScanningRequested));
+    }
+
+    public void UnfreezeScanning()
+    {
+        Handler?.Invoke(nameof(BarkoderView.UnfreezeScanningRequested));
+    }
+
+    public void FreezeScanning()
+    {
+        Handler?.Invoke(nameof(BarkoderView.FreezeScanningRequested));
     }
 
     /// <summary>
@@ -988,6 +1334,26 @@ public bool UpcEanDeblurEnabled
         LocationLineColorHex = hexColor;
     }
 
+    public void SetARSelectedLocationLineColor(string hexColor)
+    {
+        ARSelectedLocationLineColorHex = hexColor;
+    }
+
+    public void SetARSelectedHeaderTextColor(string hexColor)
+    {
+        ARSelectedHeaderTextColorHex = hexColor;
+    }
+
+    public void SetARNonSelectedHeaderTextColor(string hexColor)
+    {
+        ARNonSelectedHeaderTextColorHex = hexColor;
+    }
+
+    public void SetARNonSelectedLocationLineColor(string hexColor)
+    {
+        ARNonSelectedLocationLineColorHex = hexColor;
+    }
+
     /// <summary>
     /// Sets the color of the lines outlining the Region of Interest (ROI) for barcode scanning on the camera feed.
     /// </summary>
@@ -1031,6 +1397,26 @@ public bool UpcEanDeblurEnabled
     {
         BarkoderResolution = resolution;
     }
+
+    public void SetBarkoderARMode(BarkoderARMode arMode)
+    {
+        BarkoderARMode = arMode;
+    }
+    public void SetBarkoderARHeaderShowMode(BarkoderARHeaderShowMode headerShowMode)
+    {
+        BarkoderARHeaderShowMode = headerShowMode;
+    }
+
+    public void SetBarkoderARLocationType(BarkoderARLocationType locationType)
+    {
+        BarkoderARLocationType = locationType;
+    }
+
+    public void SetBarkoderARoverlayRefresh(BarkoderAROverlayRefresh overlayRefresh)
+    {
+        BarkoderAROverlayRefresh = overlayRefresh;
+    }
+
 
     /// <summary>
     /// Sets the decoding speed for barcode scanning.
@@ -1084,6 +1470,11 @@ public bool UpcEanDeblurEnabled
     public void SetEncodingCharacterSet(string encodingCharacterSet)
     {
         EncodingCharacterSet = encodingCharacterSet;
+    }
+
+    public void SetHeaderTextFormatAR(string headerTextformat)
+    {
+        ARHeaderTextFormat = headerTextformat;
     }
 
     public void SetIdDocumentMasterChecksumEnabled(bool enabled)
@@ -1146,6 +1537,58 @@ public bool UpcEanDeblurEnabled
         MaximumResultsCount = maximumResultsCount;
     }
 
+    public void SetResultDisappearanceDelayMs(int resultDisappearanceDelayMs)
+    {
+        ResultDisappearanceDelayMs = resultDisappearanceDelayMs;
+    }
+
+    public void SetARHeaderVerticalTextMargin(double verticalTextMargin)
+    {
+        HeaderARVerticalTextMargin = verticalTextMargin;
+    }
+
+    public void SetARHeaderHorizontalTextMargin(double horizontalTextMargin)
+    {
+        HeaderARHorizontalTextMargin = horizontalTextMargin;
+    }
+
+
+    public void SetARHeaderHeight(double headerHeight)
+    {
+        ARHeaderHeight = headerHeight;
+    }
+
+    public void SetARHeaderTextFormat(string headerTextFormat)
+    {
+        ARHeaderTextFormat = headerTextFormat;
+    }
+
+    public void SetARLocationTransitionSpeed(double transitionSpeed)
+    {
+        ARLocationTransitionSpeed = transitionSpeed;
+    }
+
+    public void SetARSelectedLocationLineWidth(double locationWidth)
+    {
+        ARSelectedLocationLineWidth = locationWidth;
+    }
+
+    public void SetARNonSelectedLocationLineWidth(double locationWidth)
+    {
+        ARNonSelectedLocationLineWidth = locationWidth;
+    }
+
+    public void SetARHeaderMaxTextHeight(double headerHeightMaxText)
+    {
+        ARHeaderMaxTextHeight = headerHeightMaxText;
+    }
+
+    public void SetARHeaderMinTextHeight(double headerHeightMinText)
+    {
+        ARHeaderMinTextHeight = headerHeightMinText;
+    }
+
+
     public void SetScanningIndicatorAnimationMode(int animationMode)
     {
         ScanningIndicatorAnimationMode = animationMode;
@@ -1155,10 +1598,10 @@ public bool UpcEanDeblurEnabled
     /// Sets the delay in milliseconds for considering duplicate barcodes during scanning.
     /// </summary>
     /// <param name="duplicatesDelayMs">The delay in milliseconds for duplicate detection.</param>
-    public void SetDuplicatesDelayMs(int duplicatesDelayMs)
-    {
-        DuplicatesDelayMs = duplicatesDelayMs;
-    }
+    //public void SetDuplicatesDelayMs(int duplicatesDelayMs)
+    //{
+    //    DuplicatesDelayMs = duplicatesDelayMs;
+    //}
 
     /// <summary>
     /// Sets whether a specific barcode type is enabled.
@@ -1185,6 +1628,12 @@ public bool UpcEanDeblurEnabled
     public void SetEnableVINRestrictions(bool enabled)
     {
         VINRestrictionsEnabled = enabled;
+    }
+
+
+    public void SetARDoubleTapToFreezeEnabled(bool enabled)
+    {
+        ARDoubleTapToFreezeEnabled = enabled;
     }
 
     /// <summary>

@@ -80,6 +80,13 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.upcE.enabled = config.decoderConfig?.upcE.enabled ?? false
                 barkoderView.config?.decoderConfig?.upcE1.enabled = config.decoderConfig?.upcE1.enabled ?? false
                 barkoderView.config?.decoderConfig?.ean13.enabled = config.decoderConfig?.ean13.enabled ?? false
+                barkoderView.config?.decoderConfig?.postalIMB.enabled = config.decoderConfig?.postalIMB.enabled ?? false
+                barkoderView.config?.decoderConfig?.postnet.enabled = config.decoderConfig?.postnet.enabled ?? false
+                barkoderView.config?.decoderConfig?.planet.enabled = config.decoderConfig?.planet.enabled ?? false
+                barkoderView.config?.decoderConfig?.australianPost.enabled = config.decoderConfig?.australianPost.enabled ?? false
+                barkoderView.config?.decoderConfig?.royalMail.enabled = config.decoderConfig?.royalMail.enabled ?? false
+                barkoderView.config?.decoderConfig?.kix.enabled = config.decoderConfig?.kix.enabled ?? false
+                barkoderView.config?.decoderConfig?.japanesePost.enabled = config.decoderConfig?.japanesePost.enabled ?? false
                 barkoderView.config?.decoderConfig?.ean8.enabled = config.decoderConfig?.ean8.enabled ?? false
                 barkoderView.config?.decoderConfig?.pdf417.enabled = config.decoderConfig?.pdf417.enabled ?? false
                 barkoderView.config?.decoderConfig?.pdf417Micro.enabled = config.decoderConfig?.pdf417Micro.enabled ?? false
@@ -156,6 +163,16 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public func freezeScanning() {
+        barkoderView.freezeScanning()
+    }
+    
+    @objc
+    public func unfreezeScanning() {
+        barkoderView.unfreezeScanning()
+    }
+    
+    @objc
     public func isFlashAvailable(completion: @escaping (Bool) -> Void) {
         barkoderView.isFlashAvailable({ flashAvailable in
             completion(flashAvailable)
@@ -193,6 +210,87 @@ public class BarkoderProxy: NSObject {
     public func setLocationLineColor(arg: String) {
         barkoderView.config?.locationLineColor = .red
     }
+    
+    @objc
+    public func setARNonSelectedLocationLineColor(arg: String) {
+        barkoderView.config?.arConfig.nonSelectedLocationColor = Util.initColorWith(hexString: arg)
+    }
+    
+    @objc
+    public func setARSelectedLocationLineColor(arg: String) {
+        barkoderView.config?.arConfig.selectedLocationColor = Util.initColorWith(hexString: arg)
+    }
+    
+    @objc
+    public func setARNonSelectedHeaderTextColor(arg: String) {
+        barkoderView.config?.arConfig.headerTextColorNonSelected = Util.initColorWith(hexString: arg)
+    }
+    
+    @objc
+    public func setShowDuplicatesLocation(arg: Bool) {
+        barkoderView.config?.showDuplicatesLocations = arg
+    }
+    
+    @objc
+    public func setARSelectedHeaderTextColor(arg: String) {
+        barkoderView.config?.arConfig.headerTextColorSelected = Util.initColorWith(hexString: arg)
+    }
+    
+    @objc
+    public func setARSelectedLocationLineWidth(arg: Float) {
+        barkoderView.config?.arConfig.selectedLocationLineWidth = arg
+    }
+    
+    @objc
+    public func setARNonSelectedLocationLineWidth(arg: Float) {
+        barkoderView.config?.arConfig.nonSelectedLocationLineWidth = arg
+    }
+    
+    @objc
+    public func setARHeaderMaxTextHeight(arg: Float) {
+        barkoderView.config?.arConfig.headerMaxTextHeight = arg
+    }
+    @objc
+    public func setARHeaderMinTextHeight(arg: Float) {
+        barkoderView.config?.arConfig.headerMinTextHeight = arg
+    }
+    
+    @objc
+    public func setARHeaderHeight(arg: Float) {
+        barkoderView.config?.arConfig.headerHeight = arg
+    }
+    
+    @objc
+    public func setARHeaderVerticalTextMargin(arg: Float) {
+        barkoderView.config?.arConfig.headerVerticalTextMargin = arg
+    }
+    
+    @objc
+    public func setARHeaderHorizontalTextMargin(arg: Float) {
+        barkoderView.config?.arConfig.headerHorizontalTextMargin = arg
+    }
+    
+    @objc
+    public func setARDoubleTapToFreezeEnabled(arg: Bool) {
+        barkoderView.config?.arConfig.doubleTapToFreezeEnabled = arg
+    }
+    
+    @objc
+    public func setResultDisappearanceDelayMs(arg: Int) {
+        barkoderView.config?.arConfig.resultDisappearanceDelayMs = arg
+    }
+    
+    @objc
+    public func setARLocationTransitionSpeed(arg: Float) {
+        barkoderView.config?.arConfig.locationTransitionSpeed = arg
+    }
+    
+    @objc
+    public func setARHeaderTextFormat(arg: String) {
+        barkoderView.config?.arConfig.headerTextFormat = arg
+    }
+    
+
     
     @objc
     public func setRoiLineColor(arg: String) {
@@ -293,6 +391,101 @@ public class BarkoderProxy: NSObject {
     @objc
     public func getRoiLineColorHex() -> String {
         return barkoderView.config?.roiLineColor.toHex() ?? ""
+    }
+    
+    @objc
+    public func getARSelectedLocationLineColor() -> String {
+        return barkoderView.config?.arConfig.selectedLocationColor.toHex() ?? ""
+    }
+    
+    @objc
+    public func getARNonSelectedLocationLineColor() -> String {
+        return barkoderView.config?.arConfig.nonSelectedLocationColor.toHex() ?? ""
+    }
+    
+    @objc
+    public func getARHeaderHeight() -> Float {
+        return barkoderView.config?.arConfig.headerHeight ?? 0.0
+    }
+    
+    @objc
+    public func getARSelectedLocationWidth() -> Float {
+        return barkoderView.config?.arConfig.selectedLocationLineWidth ?? 0.0
+    }
+    
+    @objc
+    public func getARNonSelectedLocationWidth() -> Float {
+        return barkoderView.config?.arConfig.nonSelectedLocationLineWidth ?? 0.0
+    }
+    
+    @objc
+    public func getARMode() -> BarkoderARMode {
+        return barkoderView.config?.arConfig.arMode ?? BarkoderARMode.off
+    }
+    
+    @objc
+    public func getARLocationType() -> BarkoderARLocationType {
+        return barkoderView.config?.arConfig.locationType ?? BarkoderARLocationType.tight
+    }
+    
+    @objc
+    public func getARHeaderShowMode() -> BarkoderARHeaderShowMode {
+        return barkoderView.config?.arConfig.headerShowMode ?? BarkoderARHeaderShowMode.onSelected
+    }
+    
+    @objc
+    public func getResultDisappereanceDelayMs() -> Int {
+        return barkoderView.config?.arConfig.resultDisappearanceDelayMs ?? 0
+    }
+    
+    @objc
+    public func getLocationTransitionSpeed() -> Float {
+        return barkoderView.config?.arConfig.locationTransitionSpeed ?? 0.0
+    }
+    
+    @objc
+    public func getAROverlayRefresh() -> BarkoderAROverlayRefresh {
+        return barkoderView.config?.arConfig.overlayRefresh ?? BarkoderAROverlayRefresh.smooth
+    }
+    
+    @objc
+    public func getARDoubleTapToFreeze() -> Bool {
+        return barkoderView.config?.arConfig.doubleTapToFreezeEnabled ?? true
+    }
+    
+    @objc
+    public func getARHeaderMaxTextHeight() -> Float {
+        return barkoderView.config?.arConfig.headerMaxTextHeight ?? 0.0
+    }
+    
+    @objc
+    public func getARHeaderMinTextHeight() -> Float {
+        return barkoderView.config?.arConfig.headerMinTextHeight ?? 0.0
+    }
+    
+    @objc
+    public func getARSelectedHeaderTextColor() -> String {
+        return barkoderView.config?.arConfig.headerTextColorSelected.toHex() ?? ""
+    }
+    
+    @objc
+    public func getARNonSelectedHeaderTextColor() -> String {
+        return barkoderView.config?.arConfig.headerTextColorNonSelected.toHex() ?? ""
+    }
+    
+    @objc
+    public func getARHeaderHorizontalTextMargin() -> Float {
+        return barkoderView.config?.arConfig.headerHorizontalTextMargin ?? 0.0
+    }
+    
+    @objc
+    public func getARHeaderVerticalTextMargin() -> Float {
+        return barkoderView.config?.arConfig.headerVerticalTextMargin ?? 0.0
+    }
+    
+    @objc
+    public func getARHeaderTextFormat() -> String {
+        return barkoderView.config?.arConfig.headerTextFormat ?? ""
     }
     
     @objc
@@ -421,8 +614,63 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+      public func setBarkoderARMode(arg: Int) {
+        if let barkoderARMode = BarkoderARMode.init(rawValue: arg) {
+          barkoderView.config?.arConfig.arMode = barkoderARMode
+        }
+      }
+    
+    @objc
+      public func setBarkoderARLocationType(arg: Int) {
+          if let barkoderARLocationType = BarkoderARLocationType.init(rawValue: arg) {
+              barkoderView.config?.arConfig.locationType = barkoderARLocationType
+        }
+      }
+    
+    @objc
+      public func setBarkoderARoverlayRefresh(arg: Int) {
+          if let barkoderAROverlayRefresh = BarkoderAROverlayRefresh.init(rawValue: arg) {
+              barkoderView.config?.arConfig.overlayRefresh = barkoderAROverlayRefresh
+        }
+      }
+    
+    @objc
+      public func setBarkoderARHeaderShowMode(arg: Int) {
+          if let barkoderHeaderShowMode = BarkoderARHeaderShowMode.init(rawValue: arg) {
+              barkoderView.config?.arConfig.headerShowMode = barkoderHeaderShowMode
+        }
+      }
+    
+    @objc
+    public var barkoderARMode: Int {
+        return barkoderView.config?.arConfig.arMode.rawValue ?? 0
+    }
+    
+    @objc
+    public var barkoderARLocationType: Int {
+        return barkoderView.config?.arConfig.locationType.rawValue ?? 0
+    }
+    
+    @objc
+    public var barkoderARHeaderShowMode: Int {
+        return barkoderView.config?.arConfig.headerShowMode.rawValue ?? 0
+    }
+    
+    @objc
+    public var barkoderAROverlayRefresh: Int {
+        return barkoderView.config?.arConfig.overlayRefresh.rawValue ?? 0
+    }
+    
+    
+    @objc
     public var barkoderResolution: Int {
         return barkoderView.config?.barkoderResolution.rawValue ?? 0
+    }
+    
+    @objc
+    public func setCamera(arg: BarkoderView.BarkoderCameraPosition) {
+        barkoderView.setCamera(arg)
+        
     }
     
     @objc
@@ -452,6 +700,21 @@ public class BarkoderProxy: NSObject {
     @objc
     public func setCentricFocusAndExposure(arg: Bool) {
         barkoderView.setCentricFocusAndExposure(arg);
+    }
+    
+    @objc
+    public func setUPCEexpandToUPCA(arg: Bool) {
+        barkoderView.config?.decoderConfig?.upcE.expandToUPCA = arg;
+    }
+    
+    @objc
+    public func setUPCE1expandToUPCA(arg: Bool) {
+        barkoderView.config?.decoderConfig?.upcE1.expandToUPCA = arg;
+    }
+    
+    @objc
+    public func setVideoStabilization(arg: Bool) {
+        barkoderView.setVideoStabilization(arg);
     }
 
     @objc
@@ -688,7 +951,20 @@ public class BarkoderProxy: NSObject {
             return decoderConfig.databarLimited.enabled
         case DatabarExpanded:
             return decoderConfig.databarExpanded.enabled
-            
+        case PostalIMB:
+            return decoderConfig.postalIMB.enabled
+        case Postnet:
+            return decoderConfig.postnet.enabled
+        case Planet:
+            return decoderConfig.planet.enabled
+        case AustralianPost:
+            return decoderConfig.australianPost.enabled
+        case RoyalMail:
+            return decoderConfig.royalMail.enabled
+        case KIX:
+            return decoderConfig.kix.enabled
+        case JapanesePost:
+            return decoderConfig.japanesePost.enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             return false
@@ -768,6 +1044,20 @@ public class BarkoderProxy: NSObject {
             decoderConfig.databarLimited.enabled = enabled
         case DatabarExpanded:
             decoderConfig.databarExpanded.enabled = enabled
+        case PostalIMB:
+            decoderConfig.postalIMB.enabled = enabled
+        case Postnet:
+            decoderConfig.postnet.enabled = enabled
+        case Planet:
+            decoderConfig.planet.enabled = enabled
+        case AustralianPost:
+            decoderConfig.australianPost.enabled = enabled
+        case RoyalMail:
+            decoderConfig.royalMail.enabled = enabled
+        case KIX:
+            decoderConfig.kix.enabled = enabled
+        case JapanesePost:
+            decoderConfig.japanesePost.enabled = enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             break
@@ -1199,6 +1489,69 @@ public class BKDDecoderConfig: NSObject {
     }
     
     @objc
+    public var postalIMB: SymbologyConfig  {
+        didSet {
+            postalIMB.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var postnet: SymbologyConfig  {
+        didSet {
+            postnet.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var planet: SymbologyConfig  {
+        didSet {
+            planet.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var australianPost: SymbologyConfig  {
+        didSet {
+            australianPost.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var royalMail: SymbologyConfig  {
+        didSet {
+            royalMail.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var kix: SymbologyConfig  {
+        didSet {
+            kix.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
+    public var japanesePost: SymbologyConfig  {
+        didSet {
+            japanesePost.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
     public var pdf417: SymbologyConfig  {
         didSet {
             pdf417.setModelDidChangeCallback {
@@ -1384,6 +1737,13 @@ public class BKDDecoderConfig: NSObject {
         databar14 = SymbologyConfig()
         databarLimited = SymbologyConfig()
         databarExpanded = SymbologyConfig()
+        postalIMB = SymbologyConfig()
+        postnet = SymbologyConfig()
+        planet = SymbologyConfig()
+        australianPost = SymbologyConfig()
+        royalMail = SymbologyConfig()
+        kix = SymbologyConfig()
+        japanesePost = SymbologyConfig()
         
         super.init()
     }
@@ -1535,7 +1895,8 @@ extension BarkoderProxy: BarkoderResultDelegate {
             decoderPayload.imageInBase64 = base64String
         }
         
-        if let images = decoderPayload.results[0].images {
+        // Safely check for at least one result
+        if let firstResult = decoderPayload.results.first, let images = firstResult.images {
             for image in images {
                 switch image.name {
                 case "main":
@@ -1564,7 +1925,6 @@ extension BarkoderProxy: BarkoderResultDelegate {
             self.resultCallbackDecoderResult?(decoderPayload)
         }
     }
-    
 }
 
 class BarkoderConfigDefaults {

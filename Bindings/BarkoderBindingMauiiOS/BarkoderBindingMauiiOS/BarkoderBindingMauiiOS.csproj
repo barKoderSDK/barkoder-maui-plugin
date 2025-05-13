@@ -2,12 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-ios</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
-    <IsBindingProject>true</IsBindingProject>
-    <!--This part isn't included in the new binding template yet -->
+     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoBindingEmbedding>false</NoBindingEmbedding>
+    <IsBindingProject>true</IsBindingProject>
+    <NoBindingEmbedding>true</NoBindingEmbedding>
+
+     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-ios'">12.2</SupportedOSPlatformVersion>
     <!-- End addition -->
   </PropertyGroup>
   <ItemGroup>
@@ -15,18 +15,23 @@
     <ObjcBindingApiDefinition Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\..\..\FrameworkProxy\BarkoderFrameworkProxy\build\Release-fat\Barkoder.framework">
-      <Kind>Framework</Kind>
+    <NativeReference Include="..\..\..\FrameworkProxy\BarkoderFrameworkProxy\build\Release-fat\Barkoder.xcframework">
+  <Kind>Framework</Kind>
       <SmartLink>False</SmartLink>
+      <Frameworks>CoreImage ImageIO CoreFoundation UIKit ExternalAccessory Foundation AVFoundation SystemConfiguration CoreGraphics CoreMedia CoreVideo MediaPlayer Security AudioToolbox</Frameworks>
+      <LinkerFlags>-ObjC</LinkerFlags>
     </NativeReference>
-    <NativeReference Include="..\..\..\FrameworkProxy\BarkoderFrameworkProxy\build\Release-fat\BarkoderSDK.framework">
-      <Kind>Framework</Kind>
+    <NativeReference Include="..\..\..\FrameworkProxy\BarkoderFrameworkProxy\build\Release-fat\BarkoderFrameworkProxy.xcframework">
+   <Kind>Framework</Kind>
       <SmartLink>False</SmartLink>
+      <Frameworks>CoreImage ImageIO CoreFoundation UIKit ExternalAccessory Foundation AVFoundation SystemConfiguration CoreGraphics CoreMedia CoreVideo MediaPlayer Security AudioToolbox</Frameworks>
+      <LinkerFlags>-ObjC</LinkerFlags>
     </NativeReference>
-    <NativeReference Include="..\..\..\FrameworkProxy\BarkoderFrameworkProxy\build\output_framworks\BarkoderFrameworkProxy.framework">
-      <Kind>Framework</Kind>
+    <NativeReference Include="..\..\..\FrameworkProxy\BarkoderFrameworkProxy\build\Release-fat\BarkoderSDK.xcframework">
+   <Kind>Framework</Kind>
       <SmartLink>False</SmartLink>
+      <Frameworks>CoreImage ImageIO CoreFoundation UIKit ExternalAccessory Foundation AVFoundation SystemConfiguration CoreGraphics CoreMedia CoreVideo MediaPlayer Security AudioToolbox</Frameworks>
+      <LinkerFlags>-ObjC</LinkerFlags>
     </NativeReference>
   </ItemGroup>
 </Project>
-

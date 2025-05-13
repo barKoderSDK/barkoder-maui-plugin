@@ -154,6 +154,34 @@ namespace Barkoder.Xamarin
         [Export("ean13", ArgumentSemantic.Strong)]
         SymbologyConfig Ean13 { get; set; }
 
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("postalIMB", ArgumentSemantic.Strong)]
+        SymbologyConfig PostalIMB { get; set; }
+
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("postnet", ArgumentSemantic.Strong)]
+        SymbologyConfig Postnet { get; set; }
+
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("planet", ArgumentSemantic.Strong)]
+        SymbologyConfig Planet { get; set; }
+
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("australianPost", ArgumentSemantic.Strong)]
+        SymbologyConfig AustralianPost { get; set; }
+
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("royalMail", ArgumentSemantic.Strong)]
+        SymbologyConfig RoyalMail { get; set; }
+
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("kix", ArgumentSemantic.Strong)]
+        SymbologyConfig KIX { get; set; }
+
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
+        [Export("japanesePost", ArgumentSemantic.Strong)]
+        SymbologyConfig JapanesePost { get; set; }
+
         // @property (nonatomic, strong) SymbologyConfig * _Nonnull pdf417;
         [Export("pdf417", ArgumentSemantic.Strong)]
         SymbologyConfig Pdf417 { get; set; }
@@ -258,6 +286,46 @@ namespace Barkoder.Xamarin
     }
 
     [BaseType(typeof(nint))]
+    public enum BarkoderARMode
+    {
+        OFF,
+        INTERACTIVEDISABLED,
+        INTERACTIVEENABLED,
+        NONINTERACTIVE
+    }
+
+    [BaseType(typeof(nint))]
+    public enum BarkoderARLocationType
+    {
+        NONE,
+        TIGHT,
+        BOUNDINGBOX
+    }
+
+    [BaseType(typeof(nint))]
+    public enum BarkoderARHeaderShowMode
+    {
+        NEVER,
+        ALWAYS,
+        ONSELECTED
+    }
+
+    [BaseType(typeof(nint))]
+    public enum BarkoderAROverlayRefresh
+    {
+        SMOOTH,
+        NORMAL
+    }
+
+    [BaseType(typeof(nint))]
+    public enum BarkoderCameraPosition
+    {
+        BACK,
+        FRONT
+    }
+
+
+    [BaseType(typeof(nint))]
     public enum DecodingSpeed
     {
         Fast,
@@ -308,7 +376,14 @@ namespace Barkoder.Xamarin
         idDocument,
         databar14,
         databarLimited,
-        databarExpanded
+        databarExpanded,
+        postalIMB,
+        postnet,
+        planet,
+        australianPost,
+        royalMail,
+        kix,
+        japanesePost
     }
 
     [BaseType(typeof(int))]
@@ -345,7 +420,14 @@ namespace Barkoder.Xamarin
         IDDocument = 28,
         Databar14 = 29,
         DatabarLimited = 30,
-        DatabarExpanded = 31
+        DatabarExpanded = 31,
+        PostalIMB = 32,
+        Postnet = 33,
+        Planet = 34,
+        AustralianPost = 35,
+        RoyalMail = 36,
+        KIX = 37,
+        JapanesePost
     }
 
     [BaseType(typeof(nint))]

@@ -7,8 +7,27 @@ using Plugin.Maui.Barkoder.Interfaces;
 
 using BarcodeResult = Plugin.Maui.Barkoder.Handlers.BarcodeResult;
 
+using CommonBarkoderARMode = Plugin.Maui.Barkoder.Enums.BarkoderARMode;
+using iOSBarkoderARMode = Barkoder.Xamarin.BarkoderARMode;
+
 using CommonBarkoderResolution = Plugin.Maui.Barkoder.Enums.BarkoderResolution;
 using iOSBarkoderResolution = Barkoder.Xamarin.BarkoderResolution;
+
+using CommonBarkoderCameraPosition = Plugin.Maui.Barkoder.Enums.BarkoderCameraPosition;
+using iOSBarkoderCameraPosition = Barkoder.Xamarin.BarkoderCameraPosition;
+
+using CommonBarkoderLocationType = Plugin.Maui.Barkoder.Enums.BarkoderARLocationType;
+
+using CommonBarkoderARHeaderShowMode = Plugin.Maui.Barkoder.Enums.BarkoderARHeaderShowMode;
+
+using CommonBarkoderAROverlayRefresh = Plugin.Maui.Barkoder.Enums.BarkoderAROverlayRefresh;
+
+using iOSBarkoderARLocationType = Barkoder.Xamarin.BarkoderARLocationType;
+
+using iOSBarkoderARHeaderShowMode = Barkoder.Xamarin.BarkoderARHeaderShowMode;
+
+using iOSBarkoderAROverlayRefresh = Barkoder.Xamarin.BarkoderAROverlayRefresh;
+
 
 using CommonDecodingSpeed = Plugin.Maui.Barkoder.Enums.DecodingSpeed;
 using iOSDecodingSpeed = Barkoder.Xamarin.DecodingSpeed;
@@ -55,19 +74,35 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
 
     private static void MapIsFlashAvailable(BarkoderViewHandler handler, BarkoderView view)
     {
+        //if (handler.BKDView != null)
+        //{
+        //    handler.BKDView.IsFlashAvailableWithCompletion((isAvailable) =>
+        //    {
+        //        view.IsFlashAvailable = isAvailable;
+        //    });
+        //}
+    }
+
+    private static void MapMaxZoomFactor(BarkoderViewHandler handler, BarkoderView view)
+    {
+        //if (handler.BKDView != null)
+        //{
+        //    handler.BKDView.GetMaxZoomFactorWithCompletion((MaxZoomFactor) =>
+        //    {
+        //        view.MaxZoomFactor = MaxZoomFactor;
+        //    });
+        //}
+    }
+
+    private static void MapInitCameraProperties(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
         if (handler.BKDView != null)
         {
             handler.BKDView.IsFlashAvailableWithCompletion((isAvailable) =>
             {
                 view.IsFlashAvailable = isAvailable;
             });
-        }
-    }
 
-    private static void MapMaxZoomFactor(BarkoderViewHandler handler, BarkoderView view)
-    {
-        if (handler.BKDView != null)
-        {
             handler.BKDView.GetMaxZoomFactorWithCompletion((MaxZoomFactor) =>
             {
                 view.MaxZoomFactor = MaxZoomFactor;
@@ -124,9 +159,60 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
     {
         if (handler.BKDView != null)
         {
-            view.LocationLineColorHex = handler.BKDView.RoiLineColorHex;
+            view.LocationLineColorHex = handler.BKDView.LocationLineColorHex;
         }
     }
+
+     private static void MapARNonSelectedLocationLineColorHex(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARNonSelectedLocationLineColorHex = handler.BKDView.ARNonSelectedLocationLineColor;
+        }
+
+    }
+
+     private static void MapARSelectedLocationLineColorHex(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARSelectedLocationLineColorHex = handler.BKDView.ARSelectedLocationLineColor;
+        }
+
+    }
+
+       private static void MapResultDisappearanceDelayMs(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ResultDisappearanceDelayMs = (int)handler.BKDView.ResultDisapperanceDelayMs;
+        }
+    }
+
+         private static void MapARLocationTransitionSpeed(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARLocationTransitionSpeed = handler.BKDView.LocationTransitionSpeed;
+        }
+    }
+
+    private static void MapARHeaderTextFormat(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARHeaderTextFormat = handler.BKDView.ARHeaderTextFormat;
+        }
+    }
+
+    private static void MapARDoubleTapToFreezeEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARDoubleTapToFreezeEnabled = handler.BKDView.ARDoubleTapToFreeze;
+        }
+    }
+
 
     private static void MapRoiOverlayBackgroundColorHex(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -149,6 +235,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         if (handler.BKDView != null)
         {
             view.LocationLineWidth = handler.BKDView.LocationLineWidth;
+        }
+    }
+
+      private static void MapARSelectedLocationLineWidth(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARSelectedLocationLineWidth = handler.BKDView.ARSelectedLocationWidth;
+        }
+    }
+
+      private static void MapARNonSelectedLocationLineWidth(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARNonSelectedLocationLineWidth = handler.BKDView.ARNonSelectedLocationWidth;
         }
     }
 
@@ -233,6 +335,76 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             else if (barkoderResolution == iOSBarkoderResolution.UHD)
             {
                 view.BarkoderResolution = Enums.BarkoderResolution.UHD;
+            }
+        }
+
+    }
+
+    private static void MapBarkoderARMode(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            iOSBarkoderARMode barkoderARMode = handler.BKDView.BarkoderARMode;
+
+            if (barkoderARMode == iOSBarkoderARMode.OFF)
+            {
+                view.BarkoderARMode = Enums.BarkoderARMode.OFF;
+            }
+            else if (barkoderARMode == iOSBarkoderARMode.INTERACTIVEDISABLED)
+            {
+                view.BarkoderARMode = Enums.BarkoderARMode.InteractiveDisabled;
+            }
+            else if (barkoderARMode == iOSBarkoderARMode.INTERACTIVEENABLED)
+            {
+                view.BarkoderARMode = Enums.BarkoderARMode.InteractiveEnabled;
+            }
+            else if (barkoderARMode == iOSBarkoderARMode.NONINTERACTIVE)
+            {
+                view.BarkoderARMode = Enums.BarkoderARMode.NonInteractive;
+            }
+        }
+
+    }
+
+      private static void MapBarkoderARHeaderShowMode(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            iOSBarkoderARHeaderShowMode barkoderHeaderShowMode = handler.BKDView.BarkoderARHeaderShowMode;
+
+            if (barkoderHeaderShowMode == iOSBarkoderARHeaderShowMode.NEVER)
+            {
+                view.BarkoderARHeaderShowMode = Enums.BarkoderARHeaderShowMode.NEVER;
+            }
+            else if (barkoderHeaderShowMode == iOSBarkoderARHeaderShowMode.ALWAYS)
+            {
+                view.BarkoderARHeaderShowMode = Enums.BarkoderARHeaderShowMode.ALWAYS;
+            }
+            else if (barkoderHeaderShowMode == iOSBarkoderARHeaderShowMode.ONSELECTED)
+            {
+                view.BarkoderARHeaderShowMode = Enums.BarkoderARHeaderShowMode.ONSELECTED;
+            }        
+        }
+
+    }
+
+    private static void MapBarkoderARLocationType(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            iOSBarkoderARLocationType barkoderLocationType = handler.BKDView.BarkoderARLocationType;
+
+            if (barkoderLocationType == iOSBarkoderARLocationType.NONE)
+            {
+                view.BarkoderARLocationType = Enums.BarkoderARLocationType.NONE;
+            }
+            else if (barkoderLocationType == iOSBarkoderARLocationType.TIGHT)
+            {
+                view.BarkoderARLocationType = Enums.BarkoderARLocationType.TIGHT;
+            }
+            else if (barkoderLocationType == iOSBarkoderARLocationType.BOUNDINGBOX)
+            {
+                view.BarkoderARLocationType = Enums.BarkoderARLocationType.BOUNDINGBOX;
             }
         }
 
@@ -422,12 +594,72 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+     private static void MapARHeaderHeight(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARHeaderHeight = handler.BKDView.ARHeaderHeight;
+        }
+
+    }
+
+      private static void MapARHeaderMaxTextHeight(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARHeaderMaxTextHeight = handler.BKDView.ARHeaderMaxTextHeight;
+        }
+    }
+
+      private static void MapARHeaderMinTextHeight(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARHeaderMinTextHeight = handler.BKDView.ARHeaderMinTextHeight;
+        }
+    }
+
+        private static void MapARSelectedHeaderTextColorHex(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARSelectedHeaderTextColorHex = handler.BKDView.ARSelectedHeaderTextColor;
+        }
+    }
+
+
+        private static void MapARNonSelectedHeaderTextColorHex(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARNonSelectedHeaderTextColorHex = handler.BKDView.ARNonSelectedHeaderTextColor;
+        }
+    }
+
+           private static void MapARHeaderVerticalTextMargin(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.HeaderARVerticalTextMargin = handler.BKDView.ARHeaderVerticalTextMargin;
+        }
+    }
+
+           private static void MapARHeaderHorizontalTextMargin(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.HeaderARHorizontalTextMargin = handler.BKDView.ARHeaderHorizontalTextMargin;
+        }
+
+    }
+
+
     private static void MapDuplicatesDelayMs(BarkoderViewHandler handler, BarkoderView view)
     {
-        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
-        {
-            view.DuplicatesDelayMs = (int)handler.BKDView.DuplicatesDelayMs;
-        }
+        //if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        //{
+        //    view.DuplicatesDelayMs = (int)handler.BKDView.DuplicatesDelayMs;
+        //}
     }
 
     private static void MapVINRestrictionsEnabled(BarkoderViewHandler handler, BarkoderView view)
@@ -684,6 +916,18 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         handler.BKDView?.PauseScanning();
     }
 
+    private static void MapFreezeScanning(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        handler.BKDView?.FreezeScanning();
+    }
+
+
+    private static void MapUnfreezeScanning(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        handler.BKDView?.UnfreezeScanning();
+    }
+
+
     private static void MapRegionOfInterestVisible(BarkoderViewHandler handler, BarkoderView view)
     {
         handler.BKDView?.SetRegionOfInterestVisibleWithArg(view.RegionOfInterestVisible);
@@ -710,6 +954,15 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         if (arg3 is bool enabled)
         {
             handler.BKDView?.SetScanningIndicatorAlwaysVisible(enabled);
+        }
+
+    }
+
+    private static void MapSetShowDuplicatesLocation(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if (arg3 is bool enabled)
+        {
+            handler.BKDView?.SetShowDuplicatesLocation(enabled);
         }
 
     }
@@ -850,6 +1103,46 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             handler.BKDView?.SetLocationLineColorWithArg(hexColor);
         }
     }
+     private static void MapSetARSelectedLocationColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string color) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARSelectedLocationLineColor(color);
+        }
+    }
+
+      private static void MapSetARNonSelectedLocationColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string color) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARNonSelectedLocationLineColor(color);
+        }
+
+    }
+
+         private static void MapSetARLocationTransitionSpeed(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double transitionSpeed) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARLocationTransitionSpeed((float)transitionSpeed);
+        }
+    }
+
+    private static void MapSetDoubleTapToFreezeEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool doubleTapToFreez) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARDoubleTapToFreezeEnabled(doubleTapToFreez);
+        }
+    }
+
+    private static void MapSetARHeaderTextFormat(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string headerFormatText) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARHeaderTextFormat(headerFormatText);
+        }
+    }
 
     private static void MapSetRoiOverlayBackgroundColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
@@ -867,6 +1160,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+     private static void MapSetARSelectedLocationLineWidth(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double locationWidth) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARSelectedLocationLineWidth((float)locationWidth);
+        }
+    }
+
+     private static void MapSetARNonSelectedLocationLineWidth(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double locationWidth) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARNonSelectedLocationLineWidth((float)locationWidth);
+        }
+
+    }
     private static void MapSetRegionOfInterest(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is int[] roi) && (handler.BKDView != null))
@@ -907,6 +1216,112 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapSetBarkoderARMode(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonBarkoderARMode barkoderARMode) && (handler.BKDView != null))
+        {
+            switch (barkoderARMode)
+            {
+                case CommonBarkoderARMode.OFF:
+                    {
+                        handler.BKDView.SetBarkoderARMode(0);
+                        break;
+                    }
+                case CommonBarkoderARMode.InteractiveDisabled:
+                    {
+                        handler.BKDView.SetBarkoderARMode(1);
+                        break;
+                    }
+                case CommonBarkoderARMode.InteractiveEnabled:
+                    {
+                        handler.BKDView.SetBarkoderARMode(2);
+                        break;
+                    }
+                case CommonBarkoderARMode.NonInteractive:
+                    {
+                        handler.BKDView.SetBarkoderARMode(3);
+                        break;
+                    }
+            }
+        }
+
+    }
+
+     private static void MapSetBarkoderARHeaderShowMode(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonBarkoderARHeaderShowMode barkoderARHeaderShowMode) && (handler.BKDView != null))
+        {
+            switch (barkoderARHeaderShowMode)
+            {
+                case CommonBarkoderARHeaderShowMode.NEVER:
+                    {
+                        handler.BKDView.SetBarkoderARHeaderShowMode(0);
+                        break;
+                    }
+                case CommonBarkoderARHeaderShowMode.ONSELECTED:
+                    {
+                        handler.BKDView.SetBarkoderARHeaderShowMode(2);
+                        break;
+                    }
+                case CommonBarkoderARHeaderShowMode.ALWAYS:
+                    {
+                        handler.BKDView.SetBarkoderARHeaderShowMode(1);
+                        break;
+                    }
+
+            }
+        }
+    }
+
+      private static void MapSetBarkoderARLocationType(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonBarkoderLocationType barkoderARLocationType) && (handler.BKDView != null))
+        {
+            switch (barkoderARLocationType)
+            {
+                case CommonBarkoderLocationType.NONE:
+                    {
+                        handler.BKDView.SetBarkoderARLocationType(0);
+                        break;
+                    }
+                case CommonBarkoderLocationType.TIGHT:
+                    {
+                        handler.BKDView.SetBarkoderARLocationType(1);
+                        break;
+                    }
+                case CommonBarkoderLocationType.BOUNDINGBOX:
+                    {
+                        handler.BKDView.SetBarkoderARLocationType(2);
+                        break;
+                    }
+            
+            }
+        }
+
+    }
+
+    private static void MapSetBarkoderARoverlayRefresh(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonBarkoderAROverlayRefresh barkoderAROverlayRefresh) && (handler.BKDView != null))
+        {
+            switch (barkoderAROverlayRefresh)
+            {
+                case CommonBarkoderAROverlayRefresh.NORMAL:
+                    {
+                        handler.BKDView.SetBarkoderARoverlayRefresh(0);
+                        break;
+                    }
+                case CommonBarkoderAROverlayRefresh.SMOOTH:
+                    {
+                        handler.BKDView.SetBarkoderARoverlayRefresh(1);
+                        break;
+                    }
+
+            }
+        }
+
+    }
+
     private static void MapSetDecodingSpeed(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is CommonDecodingSpeed decodingSpeed) && (handler.BKDView != null))
@@ -915,17 +1330,17 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             {
                 case CommonDecodingSpeed.Slow:
                     {
-                        //handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Slow);
+                        handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Slow);
                         break;
                     }
                 case CommonDecodingSpeed.Normal:
                     {
-                        //handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Normal);
+                        handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Normal);
                         break;
                     }
                 case CommonDecodingSpeed.Fast:
                     {
-                        //handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Fast);
+                        handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Fast);
                         break;
                     }
             }
@@ -1128,6 +1543,73 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+     private static void MapSetARHeaderHeight(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double headerHeight) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARHeaderHeight((float)headerHeight);
+        }
+    
+}
+
+     private static void MapSetARHeaderMaxTextHeight(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double maxTextHeight) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARHeaderMaxTextHeight((float)maxTextHeight);
+        }
+    }
+
+
+     private static void MapSetARHeaderMinTextHeight(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double minTextHeight) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARHeaderMinTextHeight((float)minTextHeight);
+        }
+    }
+
+     private static void MapSetARSelectedHeaderTextColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string color) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARSelectedHeaderTextColor(color);
+        }
+    }
+
+     private static void MapSetARNonSelectedHeaderTextColor(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+
+        if ((arg3 is string color) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARNonSelectedHeaderTextColor(color);
+        }
+    }
+
+       private static void MapSetARHeaderVerticalTextMargin(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double verticalTextMargin) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARHeaderVerticalTextMargin((float)verticalTextMargin);
+        }
+    }
+
+       private static void MapSetARHeaderHorizontalTextMargin(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is double horizontalTextMargin) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARHeaderHorizontalTextMargin((float)horizontalTextMargin);
+        }
+    }
+
+         private static void MapSetResultDisappearanceDelayMs(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int disappearanceDelayMs) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetResultDisappearanceDelayMs(disappearanceDelayMs);
+        }
+    }
+
     private static void MapSetDuplicatesDelayMs(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is int duplicatesDelayMs) && (handler.BKDView != null))
@@ -1235,6 +1717,27 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                 case Enums.BarcodeType.DatabarExpanded:
                     handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.databarExpanded, barcodeTypeEventArgs.Enabled);
                     break;
+                case Enums.BarcodeType.PostalIMB:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.postalIMB, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.Postnet:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.postnet, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.Planet:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.planet, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.AustralianPost:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.australianPost, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.RoyalMail:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.royalMail, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.KIX:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.kix, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.JapanesePost:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.japanesePost, barcodeTypeEventArgs.Enabled);
+                    break;
             }
         }
     }
@@ -1255,6 +1758,29 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapSetCamera(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonBarkoderCameraPosition barkoderPosition) && (handler.BKDView != null))
+        {
+            switch (barkoderPosition)
+            {
+                case CommonBarkoderCameraPosition.BACK:
+                    {
+                        handler.BKDView.setCamera(BarkoderCameraPosition.BACK);
+                        break;
+                    }
+                case CommonBarkoderCameraPosition.FRONT:
+                    {
+                        handler.BKDView.setCamera(BarkoderCameraPosition.FRONT);
+                        break;
+                    }
+               
+            }
+        }
+
+
+    }
+
     private static void MapSetCentricFocusAndExposure(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is bool centricFocus) && (handler.BKDView != null))
@@ -1262,6 +1788,31 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             handler.BKDView.SetCentricFocusAndExposure(centricFocus);
         }
     }
+
+    private static void MapSetUPCE1expandToUPCA(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetUPCE1expandToUPCA(enabled);
+        }
+    }
+
+    private static void MapSetUPCEexpandToUPCA(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetUPCEexpandToUPCA(enabled);
+        }
+    }
+
+    private static void MapSetVideoStabilization(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.setVideoStabilizationWithArg(enabled);
+        }
+    }
+
 
     private static void MapSetThresholdBetweenDuplicatesScans(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {

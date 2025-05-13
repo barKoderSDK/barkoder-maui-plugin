@@ -121,6 +121,20 @@ namespace Barkoder
         public BarcodeConfig databarLimited;
         [JsonProperty("Databar Expanded")]
         public BarcodeConfig databarExpanded;
+        [JsonProperty("Postal IMB")]
+        public BarcodeConfig postalIMB;
+        [JsonProperty("Postnet")]
+        public BarcodeConfig postnet;
+        [JsonProperty("Planet")]
+        public BarcodeConfig planet;
+        [JsonProperty("Australian Post")]
+        public BarcodeConfig australianPost;
+        [JsonProperty("Royal Mail")]
+        public BarcodeConfig royalMail;
+        [JsonProperty("KIX")]
+        public BarcodeConfig kix;
+        [JsonProperty("Japanese Post")]
+        public BarcodeConfig japanesePost;
         [JsonProperty("general")]
         public GeneralSettings general;
 
@@ -157,6 +171,13 @@ namespace Barkoder
             BarcodeConfig? databar14 = null,
             BarcodeConfig? databarLimited = null,
             BarcodeConfig? databarExpanded = null,
+            BarcodeConfig? postalIMB = null,
+            BarcodeConfig? postnet = null,
+            BarcodeConfig? planet = null,
+            BarcodeConfig? australianPost = null,
+            BarcodeConfig? royalMail = null,
+            BarcodeConfig? kix = null,
+            BarcodeConfig? japanesePost = null,
 
             GeneralSettings? general = null)
         {
@@ -192,6 +213,13 @@ namespace Barkoder
             this.databar14 = databar14 ?? new BarcodeConfig();
             this.databarLimited = databarLimited ?? new BarcodeConfig();
             this.databarExpanded = databarExpanded ?? new BarcodeConfig();
+            this.postalIMB = postalIMB ?? new BarcodeConfig();
+            this.postnet = postnet ?? new BarcodeConfig();
+            this.planet = databarExpanded ?? new BarcodeConfig();
+            this.australianPost = australianPost ?? new BarcodeConfig();
+            this.royalMail = royalMail ?? new BarcodeConfig();
+            this.kix = kix ?? new BarcodeConfig();
+            this.japanesePost = japanesePost ?? new BarcodeConfig();
             this.general = general ?? new GeneralSettings();
         }
     }
