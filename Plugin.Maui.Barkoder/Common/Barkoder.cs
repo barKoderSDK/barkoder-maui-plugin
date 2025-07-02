@@ -135,6 +135,8 @@ namespace Barkoder
         public BarcodeConfig kix;
         [JsonProperty("Japanese Post")]
         public BarcodeConfig japanesePost;
+        [JsonProperty("MaxiCode")]
+        public BarcodeConfig maxicode;
         [JsonProperty("general")]
         public GeneralSettings general;
 
@@ -167,6 +169,7 @@ namespace Barkoder
             BarcodeConfig? code32 = null,
             BarcodeConfig? telepen = null,
             BarcodeConfig? dotcode = null,
+            BarcodeConfig? maxicode = null,
             BarcodeConfig? idDocument = null,
             BarcodeConfig? databar14 = null,
             BarcodeConfig? databarLimited = null,
@@ -209,6 +212,7 @@ namespace Barkoder
             this.code32 = code32 ?? new BarcodeConfig();
             this.telepen = telepen ?? new BarcodeConfig();
             this.dotcode = dotcode ?? new BarcodeConfig();
+            this.maxicode = maxicode ?? new BarcodeConfig();
             this.idDocument = idDocument ?? new BarcodeConfig();
             this.databar14 = databar14 ?? new BarcodeConfig();
             this.databarLimited = databarLimited ?? new BarcodeConfig();

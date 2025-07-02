@@ -63,6 +63,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         return this.BKDView.View;
     }
 
+    public float GetCurrentZoomFactor()
+    {
+        return BKDView?.CurrentZoomFactor ?? -1f;
+    }
+
     private static void MapLicenseKey(BarkoderViewHandler handler, BarkoderView view)
     {
         if (handler.BKDView != null)
@@ -172,7 +177,28 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
 
     }
 
-     private static void MapARSelectedLocationLineColorHex(BarkoderViewHandler handler, BarkoderView view)
+
+    private static void MapARImageResultEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARImageResultEnabled = handler.BKDView.IsARImageResultEnabled;
+        }
+
+    }
+
+ 
+
+    private static void MapARBarcodeThumbnailOnResultEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARBarcodeThumbnailOnResultEnabled = handler.BKDView.IsARBarcodeThumbnailOnResultEnabled;
+        }
+
+    }
+
+    private static void MapARSelectedLocationLineColorHex(BarkoderViewHandler handler, BarkoderView view)
     {
         if (handler.BKDView != null)
         {
@@ -414,20 +440,24 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
         {
-            //iOSDecodingSpeed decodingSpeed = handler.BKDView.DecodingSpeed;
+            iOSDecodingSpeed decodingSpeed = handler.BKDView.DecodingSpeed;
 
-            //if (decodingSpeed == iOSDecodingSpeed.Slow)
-            //{
-            //    view.DecodingSpeed = CommonDecodingSpeed.Slow;
-            //}
-            //else if (decodingSpeed == iOSDecodingSpeed.Normal)
-            //{
-            //    view.DecodingSpeed = CommonDecodingSpeed.Normal;
-            //}
-            //else if (decodingSpeed == iOSDecodingSpeed.Fast)
-            //{
-            //    view.DecodingSpeed = CommonDecodingSpeed.Fast;
-            //}
+            if (decodingSpeed == iOSDecodingSpeed.Slow)
+            {
+                view.DecodingSpeed = CommonDecodingSpeed.Slow;
+            }
+            else if (decodingSpeed == iOSDecodingSpeed.Normal)
+            {
+                view.DecodingSpeed = CommonDecodingSpeed.Normal;
+            }
+            else if (decodingSpeed == iOSDecodingSpeed.Fast)
+            {
+                view.DecodingSpeed = CommonDecodingSpeed.Fast;
+            }
+            else if (decodingSpeed == iOSDecodingSpeed.Rigorous)
+            {
+                view.DecodingSpeed = CommonDecodingSpeed.Rigorous;
+            }
         }
     }
 
@@ -708,6 +738,8 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         {
             handler.BKDView?.StartScanning((completion) =>
             {
+
+                
                 // SDK Results
                 BKDecoderResult[] results = completion.Results;
 
@@ -775,8 +807,20 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                     barcodeResults[i] = barcodeResult;
                 }
 
-                // Pass results back to the delegate
-                barkoderDelegate?.DidFinishScanning(barcodeResults, Base64ToImageSource(completion.ImageInBase64));
+                ImageSource originalImageSource = Base64ToImageSource(completion.ImageInBase64);
+
+                // Convert each thumbnail from `UIImage` to `ImageSource`
+                ImageSource[] thumbnails = completion.Thumbnails != null
+                    ? completion.Thumbnails
+                        .Select(uiImage => UIImageToImageSource(uiImage))
+                        .Where(src => src != null)
+                        .Cast<ImageSource>()
+                        .ToArray()
+                    : Array.Empty<ImageSource>();
+
+                // Call the 3-argument method
+                barkoderDelegate?.DidFinishScanning(barcodeResults, thumbnails, originalImageSource);
+
             });
         }
     }
@@ -1328,19 +1372,24 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         {
             switch (decodingSpeed)
             {
+                case CommonDecodingSpeed.Rigorous:
+                    {
+                        handler.BKDView.SetDecodingSpeedWithArg(3);
+                        break;
+                    }
                 case CommonDecodingSpeed.Slow:
                     {
-                        handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Slow);
+                        handler.BKDView.SetDecodingSpeedWithArg(2);
                         break;
                     }
                 case CommonDecodingSpeed.Normal:
                     {
-                        handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Normal);
+                        handler.BKDView.SetDecodingSpeedWithArg(1);
                         break;
                     }
                 case CommonDecodingSpeed.Fast:
                     {
-                        handler.BKDView.SetDecodingSpeedWithArg(iOSDecodingSpeed.Fast);
+                        handler.BKDView.SetDecodingSpeedWithArg(0);
                         break;
                     }
             }
@@ -1738,6 +1787,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                 case Enums.BarcodeType.JapanesePost:
                     handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.japanesePost, barcodeTypeEventArgs.Enabled);
                     break;
+                case Enums.BarcodeType.Maxicode:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.maxicode, barcodeTypeEventArgs.Enabled);
+                    break;
             }
         }
     }
@@ -1755,6 +1807,23 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         if ((arg3 is int dynamicExposure) && (handler.BKDView != null))
         {
             handler.BKDView.SetDynamicExposure(dynamicExposure);
+        }
+    }
+
+
+    private static void MapSetARImageResultEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARImageResultEnabledWithArg(enabled);
+        }
+    }
+
+    private static void MapSetARBarcodeThumbnailOnResultEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARBarcodeThumbnailOnResultEnabledWithArg(enabled);
         }
     }
 

@@ -234,6 +234,9 @@ namespace Barkoder.Xamarin
         [Export("dotcode", ArgumentSemantic.Strong)]
         SymbologyConfig Dotcode { get; set; }
 
+        [Export("maxicode", ArgumentSemantic.Strong)]
+        SymbologyConfig MaxiCode { get; set; }
+
         [Export("idDocument", ArgumentSemantic.Strong)]
         SymbologyConfig IDDocument { get; set; }
 
@@ -330,7 +333,8 @@ namespace Barkoder.Xamarin
     {
         Fast,
         Normal,
-        Slow
+        Slow,
+        Rigorous
     }
 
     [BaseType(typeof(nint))]
@@ -383,7 +387,8 @@ namespace Barkoder.Xamarin
         australianPost,
         royalMail,
         kix,
-        japanesePost
+        japanesePost,
+        maxicode
     }
 
     [BaseType(typeof(int))]
@@ -427,7 +432,8 @@ namespace Barkoder.Xamarin
         AustralianPost = 35,
         RoyalMail = 36,
         KIX = 37,
-        JapanesePost
+        JapanesePost = 38,
+        Maxicode = 39
     }
 
     [BaseType(typeof(nint))]

@@ -54,6 +54,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
 {
 
 
+   
     private Com.Barkoder.BarkoderView? BKDView;
 
     protected override Android.Views.View CreatePlatformView()
@@ -63,6 +64,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         this.BKDView = new Com.Barkoder.BarkoderView(context);
 
         return BKDView;
+    }
+
+    public float GetCurrentZoomFactor()
+    {
+        return BKDView?.CurrentZoomFactor ?? -1f;
     }
 
     private static void MapLicenseKey(BarkoderViewHandler handler, BarkoderView view)
@@ -141,6 +147,23 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
             view.ARNonSelectedLocationLineColorHex = Util.IntColorToHexColor(handler.BKDView.Config.ArConfig.NonSelectedLocationColor);
         }
     }
+
+    private static void MapARImageResultEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARImageResultEnabled = handler.BKDView.Config.ArConfig.ImageResultEnabled; ;
+        }
+    }
+
+    private static void MapARBarcodeThumbnailOnResultEnabled(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARBarcodeThumbnailOnResultEnabled = handler.BKDView.Config.ArConfig.BarcodeThumbnailOnResult; 
+        }
+    }
+
 
     private static void MapARSelectedLocationLineColorHex(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -298,7 +321,6 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
 
 
 
-
     private static void MapBarkoderResolution(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
@@ -410,6 +432,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
             else if (decodingSpeed == AndroidDecodingSpeed.Fast)
             {
                 view.DecodingSpeed = CommonDecodingSpeed.Fast;
+            }
+            else if (decodingSpeed == AndroidDecodingSpeed.Rigorous)
+            {
+                view.DecodingSpeed = CommonDecodingSpeed.Rigorous;
             }
         }
     }
@@ -831,6 +857,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+
     private static void MapSetPinchToZoomEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if (arg3 is bool enabled)
@@ -932,6 +959,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if ((arg3 is string hexColor) && (handler.BKDView != null))
         {
             handler.BKDView.Config.ArConfig.NonSelectedLocationColor = Util.HexColorToIntColor(hexColor);
+        }
+    }
+
+    private static void MapSetARImageResultEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ArConfig.ImageResultEnabled = enabled;
+        }
+    }
+
+    private static void MapSetARBarcodeThumbnailOnResultEnabled(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ArConfig.BarcodeThumbnailOnResult = enabled;
         }
     }
 
@@ -1166,6 +1209,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                 case CommonDecodingSpeed.Fast:
                     {
                         handler.BKDView.Config.DecoderConfig.DecodingSpeed = AndroidDecodingSpeed.Fast;
+                        break;
+                    }
+                case CommonDecodingSpeed.Rigorous:
+                    {
+                        handler.BKDView.Config.DecoderConfig.DecodingSpeed = AndroidDecodingSpeed.Rigorous;
                         break;
                     }
             }
@@ -1657,6 +1705,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                 case Enums.BarcodeType.Dotcode:
                     handler.BKDView.Config.DecoderConfig.Dotcode.Enabled = barcodeTypeEventArgs.Enabled;
                     break;
+                case Enums.BarcodeType.Maxicode:
+                    handler.BKDView.Config.DecoderConfig.MaxiCode.Enabled = barcodeTypeEventArgs.Enabled;
+                    break;
                 case Enums.BarcodeType.IDDocument:
                     handler.BKDView.Config.DecoderConfig.IDDocument.Enabled = barcodeTypeEventArgs.Enabled;
                     break;
@@ -1889,8 +1940,19 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
             barcodeResults[i] = barcodeResult;
         }
 
-        // Delegate call with the results
-        BarkoderDelegate?.DidFinishScanning(barcodeResults, BitmapToImageSource(originalImage));
+        ImageSource[]? thumbnails = bitmaps?
+              .Where(b => b != null)
+              .Select(b => BitmapToImageSource(b))
+              .Where(src => src != null)
+              .Cast<ImageSource>()
+              .ToArray() ?? Array.Empty<ImageSource>();
+
+        // Convert original image
+        ImageSource originalImageSource = BitmapToImageSource(originalImage);
+
+        // Call the 3-argument version (default impl will redirect if needed)
+        BarkoderDelegate?.DidFinishScanning(barcodeResults, thumbnails, originalImageSource);
+   
     }
 
     public void isFlashAvailable(Action<bool> completion)
@@ -1903,7 +1965,9 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
     {
         maxZoomFactorCompletion = completion;
         BkdView.GetMaxZoomFactor(this);
+      
     }
+
 
     public void OnFlashAvailable(bool flashAvailable)
     {

@@ -104,6 +104,7 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.code32.enabled = config.decoderConfig?.code32.enabled ?? false
                 barkoderView.config?.decoderConfig?.telepen.enabled = config.decoderConfig?.telepen.enabled ?? false
 				barkoderView.config?.decoderConfig?.dotcode.enabled = config.decoderConfig?.dotcode.enabled ?? false
+                barkoderView.config?.decoderConfig?.maxiCode.enabled = config.decoderConfig?.maxicode.enabled ?? false
                 barkoderView.config?.decoderConfig?.idDocument.enabled = config.decoderConfig?.idDocument.enabled ?? false
                 barkoderView.config?.decoderConfig?.databar14.enabled = config.decoderConfig?.databar14.enabled ?? false
                 barkoderView.config?.decoderConfig?.databarLimited.enabled = config.decoderConfig?.databarLimited.enabled ?? false
@@ -807,11 +808,36 @@ public class BarkoderProxy: NSObject {
 	public func setBarcodeThumbnailOnResultEnabled(arg: Bool) {
 		barkoderView.config?.barcodeThumbnailOnResult = arg
 	}
+    
+    @objc
+    public func setARBarcodeThumbnailOnResultEnabled(arg: Bool) {
+        barkoderView.config?.arConfig.barcodeThumbnailOnResult = arg
+    }
+    
+    @objc
+    public func setARImageResultEnabled(arg: Bool) {
+        barkoderView.config?.arConfig.imageResultEnabled = arg
+    }
+    
+    @objc
+    public func getCurrentZoomFactor() -> Float {
+        return barkoderView.getCurrentZoomFactor()
+    }
+    
+    @objc
+    public var barcodeThumbnailOnResultEnabled: Bool {
+        return barkoderView.config?.barcodeThumbnailOnResult ?? false
+    }
 	
 	@objc 
-	public var barcodeThumbnailOnResultEnabled: Bool {
-		return barkoderView.config?.barcodeThumbnailOnResult ?? false
+	public var isARBarcodeThumbnailOnResultEnabled: Bool {
+        return barkoderView.config?.arConfig.barcodeThumbnailOnResult ?? false
 	}
+    
+    @objc
+    public var isARImageResultEnabled: Bool {
+        return barkoderView.config?.arConfig.imageResultEnabled ?? false
+    }
 	
 	@objc 
 	public var multicodeCachingEnabled: Bool {
@@ -965,6 +991,8 @@ public class BarkoderProxy: NSObject {
             return decoderConfig.kix.enabled
         case JapanesePost:
             return decoderConfig.japanesePost.enabled
+        case MaxiCode:
+            return decoderConfig.maxiCode.enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             return false
@@ -1058,6 +1086,8 @@ public class BarkoderProxy: NSObject {
             decoderConfig.kix.enabled = enabled
         case JapanesePost:
             decoderConfig.japanesePost.enabled = enabled
+        case MaxiCode:
+            decoderConfig.maxiCode.enabled = enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             break
@@ -1669,6 +1699,15 @@ public class BKDDecoderConfig: NSObject {
 	}
     
     @objc
+    public var maxicode: SymbologyConfig  {
+        didSet {
+            maxicode.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
     public var idDocument: SymbologyConfig  {
         didSet {
             idDocument.setModelDidChangeCallback {
@@ -1744,6 +1783,7 @@ public class BKDDecoderConfig: NSObject {
         royalMail = SymbologyConfig()
         kix = SymbologyConfig()
         japanesePost = SymbologyConfig()
+        maxicode = SymbologyConfig()
         
         super.init()
     }
@@ -1866,6 +1906,9 @@ public class DecoderPayload: NSObject {
     public var results: [DecoderResult] = []
     
     @objc
+    public var thumbnails: [UIImage] = []
+    
+    @objc
     public var imageInBase64: String = ""
     
     @objc
@@ -1889,6 +1932,7 @@ extension BarkoderProxy: BarkoderResultDelegate {
     public func scanningFinished(_ decoderResults: [DecoderResult], thumbnails: [UIImage]?, image: UIImage?) {
         let decoderPayload = DecoderPayload()
         decoderPayload.results = decoderResults
+        decoderPayload.thumbnails = thumbnails ?? []
         
         if let imageData = image?.jpegData(compressionQuality: 1.0) {
             let base64String = imageData.base64EncodedString()

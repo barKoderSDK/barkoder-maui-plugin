@@ -5,6 +5,7 @@ namespace Plugin.Maui.Barkoder.Controls
 {
     public partial class BarkoderViewHandler
     {
+
         public BarkoderViewHandler() : base(PropertyMapper, CommandMapper) { }
 
         public static IPropertyMapper<BarkoderView, BarkoderViewHandler> PropertyMapper =
@@ -13,6 +14,8 @@ namespace Plugin.Maui.Barkoder.Controls
                 [nameof(BarkoderView.LicenseKey)] = MapLicenseKey,
                 [nameof(BarkoderView.RegionOfInterestVisible)] = MapRegionOfInterestVisible,
                 [nameof(BarkoderView.IsFlashAvailableProperty)] = MapIsFlashAvailable,
+                [nameof(BarkoderView.ARImageResultEnabled)] = MapARImageResultEnabled,
+                [nameof(BarkoderView.ARBarcodeThumbnailOnResultEnabled)] = MapARBarcodeThumbnailOnResultEnabled,
                 //[nameof(BarkoderView.MaxZoomFactorProperty)] = MapMaxZoomFactor,
                 [nameof(BarkoderView.LocationLineColorHexProperty)] = MapLocationLineColorHex,
                 [nameof(BarkoderView.ARNonSelectedLocationLineColorHexProperty)] = MapARNonSelectedLocationLineColorHex,
@@ -77,6 +80,8 @@ namespace Plugin.Maui.Barkoder.Controls
 
             [nameof(BarkoderView.SetCustomOption)] = MapSetCustomOption,
             [nameof(BarkoderView.SetDynamicExposure)] = MapSetDynamicExposure,
+            [nameof(BarkoderView.SetARImageResultEnabledRequested)] = MapSetARImageResultEnabled,
+            [nameof(BarkoderView.SetARBarcodeThumbnailOnResultEnabledRequested)] = MapSetARBarcodeThumbnailOnResultEnabled,
             [nameof(BarkoderView.SetCamera)] = MapSetCamera,
             [nameof(BarkoderView.SetCentricFocusAndExposure)] = MapSetCentricFocusAndExposure,
             [nameof(BarkoderView.SetUPCE1expandToUPCA)] = MapSetUPCE1expandToUPCA,

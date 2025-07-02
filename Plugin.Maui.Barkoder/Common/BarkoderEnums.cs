@@ -40,7 +40,8 @@ public enum BarcodeType
     AustralianPost,
     RoyalMail,
     KIX,
-    JapanesePost
+    JapanesePost,
+    Maxicode
 }
 
 public enum BarkoderResolution
@@ -118,6 +119,16 @@ public enum DecoderType
     PDF417,
     PDF417Micro,
     Datamatrix,
+    Code25,
+    Interleaved25,
+    Itf14,
+    Uata25,
+    Matrix25,
+    Datalogic25,
+    Coop25,
+    Code32,
+    Telepen,
+    Dotcode,
     IDDocument,
     Databar14,
     DatabarLimited,
@@ -128,14 +139,16 @@ public enum DecoderType
     AustralianPost,
     RoyalMail,
     KIX,
-    JapanesePost
+    JapanesePost,
+    Maxicode
 }
 
 public enum DecodingSpeed
 {
     Fast,
     Normal,
-    Slow
+    Slow,
+    Rigorous
 }
 
 public enum FormattingType

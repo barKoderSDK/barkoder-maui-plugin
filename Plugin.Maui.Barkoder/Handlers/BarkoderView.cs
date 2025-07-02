@@ -31,11 +31,11 @@ public class BarkoderView : View
         Handler?.Invoke(nameof(SetCustomOption), (optionName, optionValue));
     }
 
+  
     public void SetDynamicExposure(int dynamicExposure)
     {
         Handler?.Invoke(nameof(SetDynamicExposure), dynamicExposure);
     }
-
 
     public void SetCamera(BarkoderCameraPosition position)
     {
@@ -72,8 +72,13 @@ public class BarkoderView : View
         Handler?.Invoke(nameof(SetShowDuplicatesLocation), enabled);
     }
 
+    public float GetCurrentZoomFactor()
+    {
+        if (Handler is Controls.BarkoderViewHandler handler)
+            return handler.GetCurrentZoomFactor();
 
-    // Event Handlers
+        return -1f;
+    }
 
     public event EventHandler? StartCameraRequested;
     public event EventHandler<IBarkoderDelegate>? StartScanningRequested;
@@ -89,6 +94,7 @@ public class BarkoderView : View
     public event EventHandler<float>? SetRoiLineWidthRequested;
     public event EventHandler<bool>? SetCloseSessionOnResultEnabledRequested;
     public event EventHandler<bool>? SetImageResultEnabledRequested;
+    public event EventHandler<bool>? SetARImageResultEnabledRequested;
     public event EventHandler<bool>? SetLocationInPreviewEnabledRequested;
     public event EventHandler<bool>? SetLocationInImageResultEnabledRequested;
     public event EventHandler<bool>? SetBeepOnSuccessEnabledRequested;
@@ -129,6 +135,7 @@ public class BarkoderView : View
     public event EventHandler<bool>? SetUpcEanDeblurEnabledRequested;
     public event EventHandler<bool>? SetEnableMisshaped1DEnabledRequested;
     public event EventHandler<bool>? SetBarcodeThumbnailOnResultEnabledRequested;
+    public event EventHandler<bool>? SetARBarcodeThumbnailOnResultEnabledRequested;
     public event EventHandler<int>? SetMaximumResultsCountRequested;
     public event EventHandler<int>? SetResultDisappearanceDelayMsRequested;
     public event EventHandler<double>? SetARHeaderHeightRequested;
@@ -261,6 +268,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(BarkoderView)
     , false);
 
+    public static BindableProperty ARImageResultEnabledProperty = BindableProperty.Create(nameof(ARImageResultEnabled)
+   , typeof(bool)
+   , typeof(BarkoderView)
+   , false);
+
     public static BindableProperty LocationInImageResultEnabledProperty = BindableProperty.Create(nameof(LocationInImageResultEnabled)
     , typeof(bool)
     , typeof(BarkoderView)
@@ -380,6 +392,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(bool)
     , typeof(BarkoderView)
     , false);
+
+    public static BindableProperty ARBarcodeThumbnailOnResultEnabledProperty = BindableProperty.Create(nameof(ARBarcodeThumbnailOnResultEnabled)
+  , typeof(bool)
+  , typeof(BarkoderView)
+  , false);
 
     public static BindableProperty MaximumResultsCountProperty = BindableProperty.Create(nameof(MaximumResultsCount)
     , typeof(int)
@@ -708,6 +725,16 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         }
     }
 
+    public bool ARImageResultEnabled
+    {
+        get => (bool)GetValue(ARImageResultEnabledProperty);
+        set
+        {
+            SetValue(ARImageResultEnabledProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARImageResultEnabledRequested), value);
+        }
+    }
+
     /// <summary>
     /// Checks or sets if location in image result is enabled.
     /// </summary>
@@ -1023,6 +1050,16 @@ public bool UpcEanDeblurEnabled
         }
     }
 
+    public bool ARBarcodeThumbnailOnResultEnabled
+    {
+        get => (bool)GetValue(ARBarcodeThumbnailOnResultEnabledProperty);
+        set
+        {
+            SetValue(ARBarcodeThumbnailOnResultEnabledProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARBarcodeThumbnailOnResultEnabledRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves the maximum number of results to be returned from barcode scanning at once.
     /// </summary>
@@ -1284,6 +1321,11 @@ public bool UpcEanDeblurEnabled
         ImageResultEnabled = enabled;
     }
 
+    public void SetARImageResultEnabled(bool enabled)
+    {
+        ARImageResultEnabled = enabled;
+    }
+
     /// <summary>
     /// Enables or disables the display of barcode location information on the camera preview.
     /// </summary>
@@ -1528,6 +1570,10 @@ public bool UpcEanDeblurEnabled
         BarcodeThumbnailOnResultEnabled = enabled;
     }
 
+    public void SetARBarcodeThumbnailOnResultEnabled(bool enabled)
+    {
+        ARBarcodeThumbnailOnResultEnabled = enabled;
+    }
     /// <summary>
     /// Sets the maximum number of results to be returned from barcode scanning.
     /// </summary>
