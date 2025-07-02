@@ -1,0 +1,11 @@
+framework module BarkoderFrameworkProxy {
+  umbrella header "BarkoderFrameworkProxy.h"
+  export *
+
+  module * { export * }
+}
+
+module BarkoderFrameworkProxy.Swift {
+  header "BarkoderFrameworkProxy-Swift.h"
+  requires objc
+}

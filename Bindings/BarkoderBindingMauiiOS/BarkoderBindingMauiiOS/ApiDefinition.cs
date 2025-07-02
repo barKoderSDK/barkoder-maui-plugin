@@ -32,6 +32,9 @@ namespace Barkoder.Xamarin
         [Export("stopScanning")]
         void StopScanning();
 
+        [Export("captureImage")]
+        void CaptureImage();
+
         // -(void)pauseScanning;
         [Export("pauseScanning")]
         void PauseScanning();
@@ -86,9 +89,19 @@ namespace Barkoder.Xamarin
         [Export("setCloseSessionOnResultEnabledWithArg:")]
         void SetCloseSessionOnResultEnabledWithArg(bool arg);
 
+        [Export("setARContinueScanningOnLimitWithArg:")]
+        void SetARContinueScanningOnLimitWithArg(bool arg);
+
+        [Export("setAREmitResultsAtSessionEndOnlyWithArg:")]
+        void SetAREmitResultsAtSessionEndOnlyWithArg(bool arg);
+
         // -(void)setImageResultEnabledWithArg:(BOOL)arg;
         [Export("setImageResultEnabledWithArg:")]
         void SetImageResultEnabledWithArg(bool arg);
+
+        [Export("setARImageResultEnabledWithArg:")]
+        void SetARImageResultEnabledWithArg(bool arg);
+
 
         // -(void)setLocationInImageResultEnabledWithArg:(BOOL)arg;
         [Export("setLocationInImageResultEnabledWithArg:")]
@@ -151,6 +164,9 @@ namespace Barkoder.Xamarin
         [Export("getARHeaderHeight")]
         float ARHeaderHeight { get; }
 
+        [Export("getCurrentZoomFactor")]
+        float CurrentZoomFactor { get; }
+
         [Export("getARSelectedLocationWidth")]
         float ARSelectedLocationWidth { get; }
 
@@ -162,6 +178,9 @@ namespace Barkoder.Xamarin
 
         [Export("getResultDisappereanceDelayMs")]
         nint ResultDisapperanceDelayMs { get; }
+
+        [Export("getARResultLimit")]
+        nint ARResultLimit { get; }
 
         [Export("getLocationTransitionSpeed")]
         float LocationTransitionSpeed { get; }
@@ -209,6 +228,12 @@ namespace Barkoder.Xamarin
         // @property (readonly, nonatomic) BOOL closeSessionOnResultEnabled;
         [Export("closeSessionOnResultEnabled")]
         bool CloseSessionOnResultEnabled { get; }
+
+        [Export("aRContinueScanningOnLimit")]
+        bool ARContinueScanningOnLimit { get; }
+
+        [Export("aREmitResultsAtSessionEndOnly")]
+        bool AREmitResultsAtSessionEndOnly { get; }
 
         [Export("scanningIndicatorAlwaysVisible")]
         bool ScanningIndicatorAlwaysVisible { get; }
@@ -341,6 +366,9 @@ namespace Barkoder.Xamarin
         [Export("setResultDisappearanceDelayMsWithArg:")]
         void SetResultDisappearanceDelayMs(nint arg);
 
+        [Export("setARResultLimitWithArg:")]
+        void SetARResultLimit(nint arg);
+
         [Export("setARLocationTransitionSpeedWithArg:")]
         void SetARLocationTransitionSpeed(float arg);
 
@@ -365,7 +393,7 @@ namespace Barkoder.Xamarin
 
         // -(void)setDecodingSpeedWithArg:(NSInteger)arg;
         [Export("setDecodingSpeedWithArg:")]
-        void SetDecodingSpeedWithArg(DecodingSpeed arg);
+        void SetDecodingSpeedWithArg(nint arg);
 
         // -(void)setEncodingCharacterSetWithArg:(NSString * _Nonnull)arg;
         [Export("setEncodingCharacterSetWithArg:")]
@@ -373,7 +401,7 @@ namespace Barkoder.Xamarin
 
         // -(void)setFormattingTypeWithArg:(NSInteger)arg;
         [Export("setFormattingTypeWithArg:")]
-        void SetFormattingTypeWithArg(FormattingType arg);
+        void SetFormattingTypeWithArg(nint arg);
 
         // -(void)setMaximumResultsCountWithArg:(NSInteger)arg;
         [Export("setMaximumResultsCountWithArg:")]
@@ -423,9 +451,15 @@ namespace Barkoder.Xamarin
         [Export("setBarcodeThumbnailOnResultEnabledWithArg:")]
         void SetBarcodeThumbnailOnResultEnabledWithArg(bool arg);
 
+        [Export("setARBarcodeThumbnailOnResultEnabledWithArg:")]
+        void SetARBarcodeThumbnailOnResultEnabledWithArg(bool arg);
+
         // @property (readonly, nonatomic) BOOL barcodeThumbnailOnResultEnabled;
         [Export("barcodeThumbnailOnResultEnabled")]
         bool BarcodeThumbnailOnResultEnabled { get; }
+
+        [Export("isARBarcodeThumbnailOnResultEnabled")]
+        bool IsARBarcodeThumbnailOnResultEnabled { get; }
 
         // @property (readonly, nonatomic) BOOL multicodeCachingEnabled;
         [Export("multicodeCachingEnabled")]
@@ -467,6 +501,9 @@ namespace Barkoder.Xamarin
         // @property (readonly, nonatomic) BOOL isImageResultEnabled;
         [Export("isImageResultEnabled")]
         bool IsImageResultEnabled { get; }
+
+        [Export("isARImageResultEnabled")]
+        bool IsARImageResultEnabled { get; }
 
         // @property (readonly, nonatomic) BOOL isCloseSessionOnResultEnabled;
         [Export("isCloseSessionOnResultEnabled")]
@@ -545,6 +582,9 @@ namespace Barkoder.Xamarin
         // @property (copy, nonatomic) NSArray<DecoderResult *> * _Nonnull results;
         [Export("results", ArgumentSemantic.Copy)]
         BKDecoderResult[] Results { get; set; }
+
+        [Export("thumbnails", ArgumentSemantic.Copy)]
+        UIImage[] Thumbnails { get; set; }
 
         // @property (copy, nonatomic) NSString * _Nonnull imageInBase64;
         [Export("imageInBase64")]

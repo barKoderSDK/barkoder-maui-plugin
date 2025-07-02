@@ -46,6 +46,8 @@ public class BarkoderProxy: NSObject {
                 
                 barkoderView.config?.pinchToZoomEnabled = config.pinchToZoomEnabled
                 barkoderView.config?.closeSessionOnResultEnabled = config.closeSessionOnResultEnabled
+                barkoderView.config?.arConfig.emitResultsAtSessionEndOnly = config.AREmitResultsAtSessionEndOnly
+                barkoderView.config?.arConfig.continueScanningOnLimit = config.ARContinueScanningOnLimit
                 barkoderView.config?.beepOnSuccessEnabled = config.beepOnSuccessEnabled
                 barkoderView.config?.scanningIndicatorAlwaysVisible = config.scanningIndicatorAlwaysVisible
                 barkoderView.config?.vibrateOnSuccessEnabled = config.vibrateOnSuccessEnabled
@@ -104,6 +106,7 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.code32.enabled = config.decoderConfig?.code32.enabled ?? false
                 barkoderView.config?.decoderConfig?.telepen.enabled = config.decoderConfig?.telepen.enabled ?? false
 				barkoderView.config?.decoderConfig?.dotcode.enabled = config.decoderConfig?.dotcode.enabled ?? false
+                barkoderView.config?.decoderConfig?.maxiCode.enabled = config.decoderConfig?.maxicode.enabled ?? false
                 barkoderView.config?.decoderConfig?.idDocument.enabled = config.decoderConfig?.idDocument.enabled ?? false
                 barkoderView.config?.decoderConfig?.databar14.enabled = config.decoderConfig?.databar14.enabled ?? false
                 barkoderView.config?.decoderConfig?.databarLimited.enabled = config.decoderConfig?.databarLimited.enabled ?? false
@@ -157,6 +160,11 @@ public class BarkoderProxy: NSObject {
         barkoderView.stopScanning()
     }
          
+    @objc
+    public func captureImage() {
+        barkoderView.captureImage()
+    }
+
     @objc
     public func pauseScanning() {
         barkoderView.pauseScanning()
@@ -281,6 +289,11 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public func setARResultLimit(arg: Int) {
+        barkoderView.config?.arConfig.resultLimit = arg
+    }
+    
+    @objc
     public func setARLocationTransitionSpeed(arg: Float) {
         barkoderView.config?.arConfig.locationTransitionSpeed = arg
     }
@@ -310,6 +323,16 @@ public class BarkoderProxy: NSObject {
     @objc
     public func setCloseSessionOnResultEnabled(arg: Bool) {
         barkoderView.config?.closeSessionOnResultEnabled = arg
+    }
+    
+    @objc
+    public func setARContinueScanningOnLimit(arg: Bool) {
+        barkoderView.config?.arConfig.continueScanningOnLimit = arg
+    }
+    
+    @objc
+    public func setAREmitResultsAtSessionEndOnly(arg: Bool) {
+        barkoderView.config?.arConfig.emitResultsAtSessionEndOnly = arg
     }
     
     @objc
@@ -437,6 +460,10 @@ public class BarkoderProxy: NSObject {
     public func getResultDisappereanceDelayMs() -> Int {
         return barkoderView.config?.arConfig.resultDisappearanceDelayMs ?? 0
     }
+    @objc
+    public func getARResultLimit() -> Int {
+        return barkoderView.config?.arConfig.resultLimit ?? 0
+    }
     
     @objc
     public func getLocationTransitionSpeed() -> Float {
@@ -511,6 +538,16 @@ public class BarkoderProxy: NSObject {
     @objc
     public var closeSessionOnResultEnabled: Bool {
         return barkoderView.config?.closeSessionOnResultEnabled ?? false
+    }
+    
+    @objc
+    public var aRContinueScanningOnLimit: Bool {
+        return barkoderView.config?.arConfig.continueScanningOnLimit ?? false
+    }
+    
+    @objc
+    public var aREmitResultsAtSessionEndOnly: Bool {
+        return barkoderView.config?.arConfig.emitResultsAtSessionEndOnly ?? false
     }
     
     @objc
@@ -693,6 +730,8 @@ public class BarkoderProxy: NSObject {
         barkoderView.config?.decoderConfig?.maximumResultsCount = Int32(arg)
     }
     
+   
+    
     @objc
     public func setDynamicExposure(arg: Int) {
         barkoderView.setDynamicExposure(arg);
@@ -807,11 +846,36 @@ public class BarkoderProxy: NSObject {
 	public func setBarcodeThumbnailOnResultEnabled(arg: Bool) {
 		barkoderView.config?.barcodeThumbnailOnResult = arg
 	}
+    
+    @objc
+    public func setARBarcodeThumbnailOnResultEnabled(arg: Bool) {
+        barkoderView.config?.arConfig.barcodeThumbnailOnResult = arg
+    }
+    
+    @objc
+    public func setARImageResultEnabled(arg: Bool) {
+        barkoderView.config?.arConfig.imageResultEnabled = arg
+    }
+    
+    @objc
+    public func getCurrentZoomFactor() -> Float {
+        return barkoderView.getCurrentZoomFactor()
+    }
+    
+    @objc
+    public var barcodeThumbnailOnResultEnabled: Bool {
+        return barkoderView.config?.barcodeThumbnailOnResult ?? false
+    }
 	
 	@objc 
-	public var barcodeThumbnailOnResultEnabled: Bool {
-		return barkoderView.config?.barcodeThumbnailOnResult ?? false
+	public var isARBarcodeThumbnailOnResultEnabled: Bool {
+        return barkoderView.config?.arConfig.barcodeThumbnailOnResult ?? false
 	}
+    
+    @objc
+    public var isARImageResultEnabled: Bool {
+        return barkoderView.config?.arConfig.imageResultEnabled ?? false
+    }
 	
 	@objc 
 	public var multicodeCachingEnabled: Bool {
@@ -965,6 +1029,8 @@ public class BarkoderProxy: NSObject {
             return decoderConfig.kix.enabled
         case JapanesePost:
             return decoderConfig.japanesePost.enabled
+        case MaxiCode:
+            return decoderConfig.maxiCode.enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             return false
@@ -1058,6 +1124,8 @@ public class BarkoderProxy: NSObject {
             decoderConfig.kix.enabled = enabled
         case JapanesePost:
             decoderConfig.japanesePost.enabled = enabled
+        case MaxiCode:
+            decoderConfig.maxiCode.enabled = enabled
         default:
             // TODO: - Handle error for invalid barkoder config
             break
@@ -1185,6 +1253,17 @@ public class BKDConfig: NSObject {
     
     @objc
     public var closeSessionOnResultEnabled: Bool = false {
+        didSet {
+            modelDidChange?()
+        }
+    }
+    @objc
+    public var ARContinueScanningOnLimit: Bool = false {
+        didSet {
+            modelDidChange?()
+        }
+    }
+    public var AREmitResultsAtSessionEndOnly: Bool = false {
         didSet {
             modelDidChange?()
         }
@@ -1669,6 +1748,15 @@ public class BKDDecoderConfig: NSObject {
 	}
     
     @objc
+    public var maxicode: SymbologyConfig  {
+        didSet {
+            maxicode.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
     public var idDocument: SymbologyConfig  {
         didSet {
             idDocument.setModelDidChangeCallback {
@@ -1744,6 +1832,7 @@ public class BKDDecoderConfig: NSObject {
         royalMail = SymbologyConfig()
         kix = SymbologyConfig()
         japanesePost = SymbologyConfig()
+        maxicode = SymbologyConfig()
         
         super.init()
     }
@@ -1866,6 +1955,9 @@ public class DecoderPayload: NSObject {
     public var results: [DecoderResult] = []
     
     @objc
+    public var thumbnails: [UIImage] = []
+    
+    @objc
     public var imageInBase64: String = ""
     
     @objc
@@ -1889,6 +1981,7 @@ extension BarkoderProxy: BarkoderResultDelegate {
     public func scanningFinished(_ decoderResults: [DecoderResult], thumbnails: [UIImage]?, image: UIImage?) {
         let decoderPayload = DecoderPayload()
         decoderPayload.results = decoderResults
+        decoderPayload.thumbnails = thumbnails ?? []
         
         if let imageData = image?.jpegData(compressionQuality: 1.0) {
             let base64String = imageData.base64EncodedString()
@@ -1930,6 +2023,8 @@ extension BarkoderProxy: BarkoderResultDelegate {
 class BarkoderConfigDefaults {
     
     static let closeSessionOnResult = true
+    static let ARContinueScanningOnLimit = false
+    static let AREmitResultsAtSessionEndOnly = false
     static let imageResultEnabled = false
     static let locationInImageResultEnabled = false
     static let locationInPreviewEnabled = true

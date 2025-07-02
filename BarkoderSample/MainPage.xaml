@@ -16,23 +16,12 @@
 
             <barkoder:BarkoderView
                 x:Name="BKDView"
-                barkoder:LicenseKey="LICENSE_KEY"
+                barkoder:LicenseKey="LicenseKey"
                 BackgroundColor="Yellow"
-                HeightRequest="200"/>
+                 HorizontalOptions="FillAndExpand"
+                HeightRequest="400"/>
 
-            <Button
-                x:Name="StartScanningBtn"
-                Text="Start Scanning" 
-                Clicked="OnStartScanningBtnClicked"
-                HorizontalOptions="Fill" />
-
-            <Button 
-                Text="Pick an Image from Gallery"
-                Clicked="OnPickImageButtonClicked"
-                HorizontalOptions="Fill" />
-
-            <!-- Use a Grid layout to achieve 25% width for each image -->
-            <Grid ColumnDefinitions="*,*,*,*" HorizontalOptions="Fill">
+              <Grid ColumnDefinitions="*,*,*,*" HorizontalOptions="Fill">
                 <Image
                     x:Name="ScannedImage"
                     Grid.Column="0"
@@ -62,8 +51,32 @@
                     VerticalOptions="CenterAndExpand" />
             </Grid>
 
+            <Button
+                x:Name="StartScanningBtn"
+                Text="Start Scanning" 
+                Clicked="OnStartScanningBtnClicked"
+                HorizontalOptions="Fill" />
+
+              <Button
+                x:Name="StopScanningBtn"
+                Text="Stop Scanning" 
+                Clicked="OnStopScanningBtnClicked"
+                HorizontalOptions="Fill" />
+
+            <Button 
+                Text="Pick an Image from Gallery"
+                Clicked="OnPickImageButtonClicked"
+                HorizontalOptions="Fill" />
+
+            <!-- Use a Grid layout to achieve 25% width for each image -->
+          
+
             <Label
                 x:Name="TextualDataLbl"
+                HorizontalOptions="Fill" />
+
+              <Label
+                x:Name="TextualDataLbl2"
                 HorizontalOptions="Fill" />
 
         </VerticalStackLayout>

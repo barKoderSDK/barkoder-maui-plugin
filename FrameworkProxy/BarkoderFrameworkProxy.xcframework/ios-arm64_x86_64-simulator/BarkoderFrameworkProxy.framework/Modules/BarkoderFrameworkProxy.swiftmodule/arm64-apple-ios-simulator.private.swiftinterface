@@ -1,0 +1,573 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name BarkoderFrameworkProxy
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import Barkoder
+@_exported import BarkoderFrameworkProxy
+import BarkoderSDK
+import Foundation
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_inheritsConvenienceInitializers @objc(BarkoderView) public class BarkoderProxy : ObjectiveC.NSObject {
+  @objc public var view: UIKit.UIView {
+    @objc get
+  }
+  @objc public var config: BarkoderFrameworkProxy.BKDConfig? {
+    @objc get
+    @objc set
+  }
+  @objc public var decoderConfig: Barkoder.Config? {
+    @objc get
+    @objc set
+  }
+  @objc public func startScanning(completion: @escaping (BarkoderFrameworkProxy.DecoderPayload) -> Swift.Void)
+  @objc(scanImageWithCompletion:bkdConfig:completion:) public func scanImage(image: UIKit.UIImage, config: BarkoderFrameworkProxy.BKDConfig, completion: @escaping (BarkoderFrameworkProxy.DecoderPayload) -> Swift.Void)
+  @objc public func startCamera()
+  @objc public func stopScanning()
+  @objc public func captureImage()
+  @objc public func pauseScanning()
+  @objc public func freezeScanning()
+  @objc public func unfreezeScanning()
+  @objc public func isFlashAvailable(completion: @escaping (Swift.Bool) -> Swift.Void)
+  @objc public func setFlashEnabled(arg: Swift.Bool)
+  @objc public func getMaxZoomFactor(completion: @escaping (Swift.Float) -> Swift.Void)
+  @objc public func setZoomFactor(arg: Swift.Float)
+  @objc public func setLocationLineWidth(arg: Swift.Float)
+  @objc public func getLocationLineColorHex() -> Swift.String
+  @objc public func setLocationLineColor(arg: Swift.String)
+  @objc public func setARNonSelectedLocationLineColor(arg: Swift.String)
+  @objc public func setARSelectedLocationLineColor(arg: Swift.String)
+  @objc public func setARNonSelectedHeaderTextColor(arg: Swift.String)
+  @objc public func setShowDuplicatesLocation(arg: Swift.Bool)
+  @objc public func setARSelectedHeaderTextColor(arg: Swift.String)
+  @objc public func setARSelectedLocationLineWidth(arg: Swift.Float)
+  @objc public func setARNonSelectedLocationLineWidth(arg: Swift.Float)
+  @objc public func setARHeaderMaxTextHeight(arg: Swift.Float)
+  @objc public func setARHeaderMinTextHeight(arg: Swift.Float)
+  @objc public func setARHeaderHeight(arg: Swift.Float)
+  @objc public func setARHeaderVerticalTextMargin(arg: Swift.Float)
+  @objc public func setARHeaderHorizontalTextMargin(arg: Swift.Float)
+  @objc public func setARDoubleTapToFreezeEnabled(arg: Swift.Bool)
+  @objc public func setResultDisappearanceDelayMs(arg: Swift.Int)
+  @objc public func setARResultLimit(arg: Swift.Int)
+  @objc public func setARLocationTransitionSpeed(arg: Swift.Float)
+  @objc public func setARHeaderTextFormat(arg: Swift.String)
+  @objc public func setRoiLineColor(arg: Swift.String)
+  @objc public func setRoiLineWidth(arg: Swift.Float)
+  @objc public func setRoiOverlayBackgroundColor(arg: Swift.String)
+  @objc public func setCloseSessionOnResultEnabled(arg: Swift.Bool)
+  @objc public func setARContinueScanningOnLimit(arg: Swift.Bool)
+  @objc public func setAREmitResultsAtSessionEndOnly(arg: Swift.Bool)
+  @objc public func setImageResultEnabled(arg: Swift.Bool)
+  @objc public func setLocationInImageResultEnabled(arg: Swift.Bool)
+  @objc public func setThresholdBetweenDuplicatesScans(arg: Swift.Int)
+  @objc public func setLocationInPreviewEnabled(arg: Swift.Bool)
+  @objc public func setPinchToZoomEnabled(arg: Swift.Bool)
+  @objc public func setRegionOfInterestVisible(arg: Swift.Bool)
+  @objc public func setRegionOfInterest(left: Swift.Int, top: Swift.Int, width: Swift.Int, height: Swift.Int)
+  @objc public func setBeepOnSuccessEnabled(arg: Swift.Bool)
+  @objc public func setVibrateOnSuccessEnabled(arg: Swift.Bool)
+  @objc public var encodingCharacterSet: Swift.String {
+    @objc get
+  }
+  @objc public var decodingSpeed: Swift.Int {
+    @objc get
+  }
+  @objc public var formattingType: Swift.Int {
+    @objc get
+  }
+  @objc public var locationLineWidth: Swift.Int {
+    @objc get
+  }
+  @objc public func getRoiLineColorHex() -> Swift.String
+  @objc public func getARSelectedLocationLineColor() -> Swift.String
+  @objc public func getARNonSelectedLocationLineColor() -> Swift.String
+  @objc public func getARHeaderHeight() -> Swift.Float
+  @objc public func getARSelectedLocationWidth() -> Swift.Float
+  @objc public func getARNonSelectedLocationWidth() -> Swift.Float
+  @objc public func getARMode() -> BarkoderSDK.BarkoderARMode
+  @objc public func getARLocationType() -> BarkoderSDK.BarkoderARLocationType
+  @objc public func getARHeaderShowMode() -> BarkoderSDK.BarkoderARHeaderShowMode
+  @objc public func getResultDisappereanceDelayMs() -> Swift.Int
+  @objc public func getARResultLimit() -> Swift.Int
+  @objc public func getLocationTransitionSpeed() -> Swift.Float
+  @objc public func getAROverlayRefresh() -> BarkoderSDK.BarkoderAROverlayRefresh
+  @objc public func getARDoubleTapToFreeze() -> Swift.Bool
+  @objc public func getARHeaderMaxTextHeight() -> Swift.Float
+  @objc public func getARHeaderMinTextHeight() -> Swift.Float
+  @objc public func getARSelectedHeaderTextColor() -> Swift.String
+  @objc public func getARNonSelectedHeaderTextColor() -> Swift.String
+  @objc public func getARHeaderHorizontalTextMargin() -> Swift.Float
+  @objc public func getARHeaderVerticalTextMargin() -> Swift.Float
+  @objc public func getARHeaderTextFormat() -> Swift.String
+  @objc public func getScanningIndicatorColorHex() -> Swift.String
+  @objc public var roiLineWidth: Swift.Int {
+    @objc get
+  }
+  @objc public var scanningIndicatorWidth: Swift.Int {
+    @objc get
+  }
+  @objc public func getRoiOverlayBackgroundColorHex() -> Swift.String
+  @objc public var closeSessionOnResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var aRContinueScanningOnLimit: Swift.Bool {
+    @objc get
+  }
+  @objc public var aREmitResultsAtSessionEndOnly: Swift.Bool {
+    @objc get
+  }
+  @objc public var imageResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var locationInImageResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public func getRegionOfInterest() -> [CoreFoundation.CGFloat]
+  @objc public var threadsLimit: Swift.Int {
+    @objc get
+  }
+  @objc public func setThreadsLimit(threadsLimit: Swift.Int)
+  @objc public var isLocationInPreviewEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isPinchToZoomEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isRegionOfInterestVisible: Swift.Bool {
+    @objc get
+  }
+  @objc public var isBeepOnSuccessEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isVibrateOnSuccessEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var version: Swift.String {
+    @objc get
+  }
+  @objc public var msiChecksumType: Barkoder.MsiChecksum {
+    @objc get
+  }
+  @objc public func setMsiChecksumType(arg: Barkoder.MsiChecksum)
+  @objc public var code39ChecksumType: Barkoder.Code39Checksum {
+    @objc get
+  }
+  @objc public func setCode39ChecksumType(arg: Barkoder.Code39Checksum)
+  @objc public var code11ChecksumType: Barkoder.Code11Checksum {
+    @objc get
+  }
+  @objc public func setCode11ChecksumType(arg: Barkoder.Code11Checksum)
+  @objc public func setBarkoderResolution(arg: Swift.Int)
+  @objc public func setBarkoderARMode(arg: Swift.Int)
+  @objc public func setBarkoderARLocationType(arg: Swift.Int)
+  @objc public func setBarkoderARoverlayRefresh(arg: Swift.Int)
+  @objc public func setBarkoderARHeaderShowMode(arg: Swift.Int)
+  @objc public var barkoderARMode: Swift.Int {
+    @objc get
+  }
+  @objc public var barkoderARLocationType: Swift.Int {
+    @objc get
+  }
+  @objc public var barkoderARHeaderShowMode: Swift.Int {
+    @objc get
+  }
+  @objc public var barkoderAROverlayRefresh: Swift.Int {
+    @objc get
+  }
+  @objc public var barkoderResolution: Swift.Int {
+    @objc get
+  }
+  @objc public func setCamera(arg: BarkoderSDK.BarkoderView.BarkoderCameraPosition)
+  @objc public func setDecodingSpeed(arg: Swift.Int)
+  @objc public func setEncodingCharacterSet(arg: Swift.String)
+  @objc public func setFormattingType(arg: Swift.Int)
+  @objc public func setMaximumResultsCount(arg: Swift.Int)
+  @objc public func setDynamicExposure(arg: Swift.Int)
+  @objc public func setCentricFocusAndExposure(arg: Swift.Bool)
+  @objc public func setUPCEexpandToUPCA(arg: Swift.Bool)
+  @objc public func setUPCE1expandToUPCA(arg: Swift.Bool)
+  @objc public func setVideoStabilization(arg: Swift.Bool)
+  @objc public func setDuplicatesDelayMs(arg: Swift.Int)
+  @objc public func setMulticodeCachingDuration(arg: Swift.Int)
+  @objc public func setMulticodeCachingEnabled(arg: Swift.Bool)
+  @objc public func setIdDocumentMasterChecksumEnabled(arg: Swift.Bool)
+  @objc public func setCustomOption(option: Swift.String, value: Swift.Int32)
+  @objc public func setScanningIndicatorAnimationMode(arg: Swift.Int)
+  @objc public func setEnableComposite(arg: Swift.Int)
+  @objc public func setScanningIndicatorColorHex(arg: Swift.String)
+  @objc public func setScanningIndicatorWidth(arg: Swift.Float)
+  @objc public func setScanningIndicatorAlwaysVisible(arg: Swift.Bool)
+  @objc public func setDatamatrixDpmModeEnabled(arg: Swift.Bool)
+  @objc public func setQRDpmModeEnabled(arg: Swift.Bool)
+  @objc(setQRMicroDpmModeEnabledWithArg:) public func setQRMicroDpmModeEnabled(arg: Swift.Bool)
+  @objc public func setUpcEanDeblurEnabled(arg: Swift.Bool)
+  @objc public func setEnableVINRestrictions(arg: Swift.Bool)
+  @objc public func setMisshaped1DEnabled(arg: Swift.Bool)
+  @objc public func setBarcodeThumbnailOnResultEnabled(arg: Swift.Bool)
+  @objc public func setARBarcodeThumbnailOnResultEnabled(arg: Swift.Bool)
+  @objc public func setARImageResultEnabled(arg: Swift.Bool)
+  @objc public func getCurrentZoomFactor() -> Swift.Float
+  @objc public var barcodeThumbnailOnResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isARBarcodeThumbnailOnResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isARImageResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var multicodeCachingEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var datamatrixDpmModeEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var idDocumentMasterChecksumEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var qrDpmModeEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var qrMicroDpmModeEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var upcEanDeblurEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var enableMisshaped1D: Swift.Bool {
+    @objc get
+  }
+  @objc public var multicodeCachingDuration: Swift.Int {
+    @objc get
+  }
+  @objc public var maximumResultsCount: Swift.Int {
+    @objc get
+  }
+  @objc public var duplicatesDelayMs: Swift.Int {
+    @objc get
+  }
+  @objc public var isImageResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isCloseSessionOnResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public var isLocationInImageResultEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc public func isBarcodeTypeEnabled(barcodeType: Barkoder.BarcodeType) -> Swift.Bool
+  @objc public func setBarcodeTypeEnabled(barcodeType: Barkoder.BarcodeType, enabled: Swift.Bool)
+  @objc public func setBarcodeTypeLengthRange(barcodeType: Barkoder.BarcodeType, minValue: Swift.Int, maxValue: Swift.Int)
+  @objc public func getBarcodeTypeLengthRange(barcodeType: Barkoder.BarcodeType) -> [Swift.Int]
+  @objc public func configureBarkoder(barkoderConfigAsJsonString: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc(BarkoderConfig) public class BKDConfig : ObjectiveC.NSObject {
+  public var licenseKey: Swift.String
+  @objc public init(licenseKey: Swift.String)
+  @objc public var closeSessionOnResultEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var ARContinueScanningOnLimit: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  public var AREmitResultsAtSessionEndOnly: Swift.Bool {
+    get
+    set
+  }
+  @objc public var vibrateOnSuccessEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var beepOnSuccessEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var scanningIndicatorAlwaysVisible: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var pinchToZoomEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var locationInPreviewEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var roiLineColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var scanningIndicatorColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var roiLineWidth: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc public var scanningIndicatorWidth: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc public var roiOverlayBackgroundColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var regionOfInterestVisible: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var locationLineColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var locationLineWidth: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc public var imageResultEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var locationInImageResultEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var thresholdBetweenDuplicatesScans: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc public var scanningIndicatorAnimationMode: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc public var decoderConfig: BarkoderFrameworkProxy.BKDDecoderConfig? {
+    @objc get
+    @objc set
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(DecoderConfig) public class BKDDecoderConfig : ObjectiveC.NSObject {
+  @objc public var enableMisshaped1D: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var enableComposite: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc public var upcEanDeblur: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var enableVINRestrictions: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var aztec: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var aztecCompact: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var qr: BarkoderFrameworkProxy.DatamatrixConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var qrMicro: BarkoderFrameworkProxy.DatamatrixConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var code128: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var code93: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var code39: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var codabar: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var code11: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var msi: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var upcA: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var upcE: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var upcE1: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var ean8: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var ean13: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var postalIMB: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var postnet: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var planet: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var australianPost: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var royalMail: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var kix: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var japanesePost: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var pdf417: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var pdf417Micro: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var datamatrix: BarkoderFrameworkProxy.DatamatrixConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var code25: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var interleaved25: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var itf14: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var iata25: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var matrix25: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var datalogic25: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var coop25: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var code32: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var telepen: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var dotcode: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var maxicode: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var idDocument: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var databar14: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var databarLimited: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc public var databarExpanded: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
+  @objc override dynamic public init()
+  @objc public func setEnabledDecoders(symbologies: [Swift.Int])
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(SymbologyConfig) public class SymbologyConfig : ObjectiveC.NSObject {
+  @objc public var enabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(DatamatrixConfig) public class DatamatrixConfig : ObjectiveC.NSObject {
+  @objc public var enabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var dpmMode: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(DecoderPayload) public class DecoderPayload : ObjectiveC.NSObject {
+  @objc public var results: [Barkoder.DecoderResult]
+  @objc public var thumbnails: [UIKit.UIImage]
+  @objc public var imageInBase64: Swift.String
+  @objc public var mainImageInBase64: Swift.String
+  @objc public var documentImageInBase64: Swift.String
+  @objc public var signatureImageInBase64: Swift.String
+  @objc public var pictureImageInBase64: Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension BarkoderFrameworkProxy.BarkoderProxy : BarkoderSDK.BarkoderResultDelegate {
+  @objc dynamic public func scanningFinished(_ decoderResults: [Barkoder.DecoderResult], thumbnails: [UIKit.UIImage]?, image: UIKit.UIImage?)
+}
