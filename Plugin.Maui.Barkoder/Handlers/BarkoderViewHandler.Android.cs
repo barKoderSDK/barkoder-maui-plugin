@@ -5,6 +5,9 @@ using Android.Content;
 using Android.Graphics;
 using System.Drawing;
 using System.Text.Json;
+using Plugin.Maui.Barkoder.Handlers;
+using AndroidX.ExifInterface.Media;
+using Android.Media;
 
 using CommonBarkoderResolution = Plugin.Maui.Barkoder.Enums.BarkoderResolution;
 using AndroidBarkoderResolution = Com.Barkoder.Enums.BarkoderResolution;
@@ -46,6 +49,8 @@ using Com.Barkoder.Interfaces;
 using static Android.Service.Carrier.CarrierMessagingService;
 using static Com.Barkoder.Barkoder;
 using static Android.Icu.Text.ListFormatter;
+using Plugin.Maui.Barkoder.Handlers;
+using Java.Util;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
@@ -76,6 +81,17 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if (handler.BKDView != null)
         {
             handler.BKDView.Config = new Com.Barkoder.BarkoderConfig(handler.BKDView.Context, view.LicenseKey, null);
+
+
+            IDictionary<string, string> licenseInfo = Com.Barkoder.Barkoder.LicenseInfo;
+
+            if (licenseInfo != null)
+            {
+                foreach (var kvp in licenseInfo)
+                {
+                    System.Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+                }
+            }
         }
     }
 
@@ -321,6 +337,15 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if (handler.BKDView != null)
         {
             view.Version = Com.Barkoder.Barkoder.Version;
+
+        }
+    }
+
+    private static void MapLibVersion(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.LibVersion = Com.Barkoder.Barkoder.LibVersion;
 
         }
     }
@@ -826,6 +851,7 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                 bitmap = BitmapFactory.DecodeStream(ms);  // Convert base64 string to Bitmap
             }
 
+            bitmap = ApplyExifRotationIfNeeded(bitmap, imageBytes);
             Context context = handler.Context;
 
             AndroidBarkoderView AndroidBarkoderView = new AndroidBarkoderView(barkoderDelegate, handler.BKDView);
@@ -838,14 +864,328 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static Bitmap RotateBitmap(Bitmap bitmap, float degrees)
+    {
+        Matrix matrix = new Matrix();
+        matrix.PostRotate(degrees);
+        Bitmap rotated = Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, matrix, true);
+        bitmap.Recycle(); // free original bitmap
+        return rotated;
+    }
+
+    private static Bitmap ApplyExifRotationIfNeeded(Bitmap bitmap, byte[] imageBytes)
+    {
+        try
+        {
+            using var exifStream = new MemoryStream(imageBytes);
+            var exif = new AndroidX.ExifInterface.Media.ExifInterface(exifStream);
+
+            int orientation = exif.GetAttributeInt(AndroidX.ExifInterface.Media.ExifInterface.TagOrientation, (int)Orientation.Normal);
+
+            return orientation switch
+            {
+                (int)Orientation.Rotate90 => RotateBitmap(bitmap, 90),
+                (int)Orientation.Rotate180 => RotateBitmap(bitmap, 180),
+                (int)Orientation.Rotate270 => RotateBitmap(bitmap, 270),
+                _ => bitmap, // Normal orientation, no rotation
+            };
+        }
+        catch
+        {
+            // No EXIF or cannot read → return bitmap as-is
+            return bitmap;
+        }
+    }
 
   
-
 
     private static void MapStopScanning(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         handler.BKDView?.StopScanning();
     }
+
+    private static void MapSelectVisibleBarcodes(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        handler.BKDView?.SelectVisibleBarcodes();
+    }
+
+    private static void MapConfigureCloseButton(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if (handler?.BKDView == null || arg3 is not object parameters)
+            return;
+
+        var type = parameters.GetType();
+
+        bool visible = Convert.ToBoolean(type.GetProperty("visible")?.GetValue(parameters));
+        var positionObj = type.GetProperty("position")?.GetValue(parameters);
+        float[] position;
+
+        // 1. **CRITICAL:** Check for the native float[] type first.
+        if (positionObj is float[] floatArray)
+        {
+            position = floatArray;
+        }
+        // 2. Fallback check: Handle generic collection (like List<float> or List<object>)
+        else if (positionObj is IEnumerable<object> positionEnumerable)
+        {
+            // This handles collections where elements are boxed as 'object'
+            position = positionEnumerable.Select(x => Convert.ToSingle(x)).ToArray();
+        }
+        // 3. Last resort: Fallback to empty array.
+        else
+        {
+            position = Array.Empty<float>();
+        }
+
+        float iconSize = Convert.ToSingle(type.GetProperty("iconSize")?.GetValue(parameters));
+
+        string? tintColorHex = type.GetProperty("tintColor")?.GetValue(parameters) as string;
+        string? backgroundColorHex = type.GetProperty("backgroundColor")?.GetValue(parameters) as string;
+
+        float cornerRadius = Convert.ToSingle(type.GetProperty("cornerRadius")?.GetValue(parameters));
+        float padding = Convert.ToSingle(type.GetProperty("padding")?.GetValue(parameters));
+        bool useCustomIcon = Convert.ToBoolean(type.GetProperty("useCustomIcon")?.GetValue(parameters));
+
+        string? base64CustomIcon = type.GetProperty("customIconBase64")?.GetValue(parameters) as string;
+
+        Action? onClose = type.GetProperty("onClose")?.GetValue(parameters) as Action;
+
+        bool HasColor(string? hex) => !string.IsNullOrWhiteSpace(hex);
+
+        Java.Lang.Integer? tintColorJavaInt = null;
+        if (HasColor(tintColorHex))
+        {
+            // If the string is valid, convert it and create the Java object
+            var tintColorInt = Util.HexColorToIntColor(tintColorHex);
+            tintColorJavaInt = new Java.Lang.Integer(tintColorInt);
+        }
+
+        Java.Lang.Integer? backgroundColorJavaInt = null;
+        if (HasColor(backgroundColorHex))
+        {
+            // If the string is valid, convert it and create the Java object
+            var backgroundColorInt = Util.HexColorToIntColor(backgroundColorHex);
+            backgroundColorJavaInt = new Java.Lang.Integer(backgroundColorInt);
+        }
+
+
+        Android.Graphics.Bitmap? customIconBitmap = DecodeBase64ToBitmap(base64CustomIcon);
+
+        handler.BKDView.ConfigureCloseButton(
+           visible,
+     position,             // Center position
+         iconSize,
+          tintColorJavaInt,
+          backgroundColorJavaInt,
+          cornerRadius,
+          padding,
+          useCustomIcon,
+          customIconBitmap,
+          new Java.Lang.Runnable(() => onClose?.Invoke())
+      );
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    private static void MapConfigureFlashButton(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if (handler?.BKDView == null || arg3 is not object parameters)
+            return;
+
+        var type = parameters.GetType();
+
+        bool visible = Convert.ToBoolean(type.GetProperty("visible")?.GetValue(parameters));
+
+        // Parse position array safely
+        var positionObj = type.GetProperty("position")?.GetValue(parameters);
+        float[] position;
+
+        // 1. **CRITICAL:** Check for the native float[] type first.
+        if (positionObj is float[] floatArray)
+        {
+            position = floatArray;
+        }
+        // 2. Fallback check: Handle generic collection (like List<float> or List<object>)
+        else if (positionObj is IEnumerable<object> positionEnumerable)
+        {
+            // This handles collections where elements are boxed as 'object'
+            position = positionEnumerable.Select(x => Convert.ToSingle(x)).ToArray();
+        }
+        // 3. Last resort: Fallback to empty array.
+        else
+        {
+            position = Array.Empty<float>();
+        }
+
+        float iconSize = Convert.ToSingle(type.GetProperty("iconSize")?.GetValue(parameters));
+        string? tintColorHex = type.GetProperty("tintColor")?.GetValue(parameters) as string;
+        string? backgroundColorHex = type.GetProperty("backgroundColor")?.GetValue(parameters) as string;
+
+        float cornerRadius = Convert.ToSingle(type.GetProperty("cornerRadius")?.GetValue(parameters));
+        float padding = Convert.ToSingle(type.GetProperty("padding")?.GetValue(parameters));
+        bool useCustomIcon = Convert.ToBoolean(type.GetProperty("useCustomIcon")?.GetValue(parameters));
+
+        string? base64FlashOn = type.GetProperty("customIconFlashOnBase64")?.GetValue(parameters) as string;
+        string? base64FlashOff = type.GetProperty("customIconFlashOffBase64")?.GetValue(parameters) as string;
+
+        // Convert colors from hex to Android.Graphics.Color, then to Java.Lang.Integer or null
+        bool HasColor(string? hex) => !string.IsNullOrWhiteSpace(hex);
+
+        Java.Lang.Integer? tintColorJavaInt = null;
+        if (HasColor(tintColorHex))
+        {
+            // If the string is valid, convert it and create the Java object
+            var tintColorInt = Util.HexColorToIntColor(tintColorHex);
+            tintColorJavaInt = new Java.Lang.Integer(tintColorInt);
+        }
+
+        Java.Lang.Integer? backgroundColorJavaInt = null;
+        if (HasColor(backgroundColorHex))
+        {
+            // If the string is valid, convert it and create the Java object
+            var backgroundColorInt = Util.HexColorToIntColor(backgroundColorHex);
+            backgroundColorJavaInt = new Java.Lang.Integer(backgroundColorInt);
+        }
+
+
+
+        var customIconFlashOn = DecodeBase64ToBitmap(base64FlashOn);
+        var customIconFlashOff = DecodeBase64ToBitmap(base64FlashOff);
+
+    
+
+        handler.BKDView.ConfigureFlashButton(
+              visible,
+          position,
+            iconSize,
+            tintColorJavaInt,
+            backgroundColorJavaInt,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconFlashOn,
+            customIconFlashOff
+        );
+    }
+
+
+
+    private static void MapConfigureZoomButton(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if (handler?.BKDView == null || arg3 is not object parameters)
+            return;
+
+        var type = parameters.GetType();
+
+        bool visible = Convert.ToBoolean(type.GetProperty("visible")?.GetValue(parameters));
+
+        var positionObj = type.GetProperty("position")?.GetValue(parameters);
+        float[] position;
+
+        // 1. **CRITICAL:** Check for the native float[] type first.
+        if (positionObj is float[] floatArray)
+        {
+            position = floatArray;
+        }
+        // 2. Fallback check: Handle generic collection (like List<float> or List<object>)
+        else if (positionObj is IEnumerable<object> positionEnumerable)
+        {
+            // This handles collections where elements are boxed as 'object'
+            position = positionEnumerable.Select(x => Convert.ToSingle(x)).ToArray();
+        }
+        // 3. Last resort: Fallback to empty array.
+        else
+        {
+            position = Array.Empty<float>();
+        }
+
+        float iconSize = Convert.ToSingle(type.GetProperty("iconSize")?.GetValue(parameters));
+        string? tintColorHex = type.GetProperty("tintColor")?.GetValue(parameters) as string;
+        string? backgroundColorHex = type.GetProperty("backgroundColor")?.GetValue(parameters) as string;
+
+        float cornerRadius = Convert.ToSingle(type.GetProperty("cornerRadius")?.GetValue(parameters));
+        float padding = Convert.ToSingle(type.GetProperty("padding")?.GetValue(parameters));
+        bool useCustomIcon = Convert.ToBoolean(type.GetProperty("useCustomIcon")?.GetValue(parameters));
+
+        string? base64ZoomIn = type.GetProperty("customIconZoomedInBase64")?.GetValue(parameters) as string;
+        string? base64ZoomOut = type.GetProperty("customIconZoomedOutBase64")?.GetValue(parameters) as string;
+
+        float zoomedInFactor = Convert.ToSingle(type.GetProperty("zoomedInFactor")?.GetValue(parameters));
+        float zoomedOutFactor = Convert.ToSingle(type.GetProperty("zoomedOutFactor")?.GetValue(parameters));
+
+       
+        var customIconZoomIn = DecodeBase64ToBitmap(base64ZoomIn);
+        var customIconZoomOut = DecodeBase64ToBitmap(base64ZoomOut);
+
+
+        bool HasColor(string? hex) => !string.IsNullOrWhiteSpace(hex);
+
+        Java.Lang.Integer? tintColorJavaInt = null;
+        if (HasColor(tintColorHex))
+        {
+            // If the string is valid, convert it and create the Java object
+            var tintColorInt = Util.HexColorToIntColor(tintColorHex);
+            tintColorJavaInt = new Java.Lang.Integer(tintColorInt);
+        }
+
+        Java.Lang.Integer? backgroundColorJavaInt = null;
+        if (HasColor(backgroundColorHex))
+        {
+            // If the string is valid, convert it and create the Java object
+            var backgroundColorInt = Util.HexColorToIntColor(backgroundColorHex);
+            backgroundColorJavaInt = new Java.Lang.Integer(backgroundColorInt);
+        }
+
+        handler.BKDView.ConfigureZoomButton(
+            true,
+            position,
+            iconSize,
+            tintColorJavaInt,
+            backgroundColorJavaInt,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconZoomIn,
+            customIconZoomOut,
+            zoomedInFactor,
+            zoomedOutFactor
+        );
+    }
+
+
+    public static int HexColorToIntColor2(string? hex)
+    {
+        if (string.IsNullOrWhiteSpace(hex))
+            return unchecked((int)0xFFFFFFFF); // default white or transparent
+
+        // Normalize hex (e.g. #RRGGBB or #AARRGGBB)
+        hex = hex.TrimStart('#');
+
+        uint colorValue;
+        if (uint.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out colorValue))
+        {
+            // If hex was RRGGBB (6 chars), add opaque alpha FF
+            if (hex.Length == 6)
+            {
+                colorValue |= 0xFF000000;
+            }
+            // Cast to int with unchecked to allow overflow
+            return unchecked((int)colorValue);
+        }
+
+        return unchecked((int)0xFFFFFFFF); // fallback color
+    }
+
+
 
     private static void MapCaptureImage(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
@@ -944,6 +1284,43 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if ((arg3 is bool enabled) && (handler.BKDView != null))
         {
             handler.BKDView.Config.LocationInImageResultEnabled = enabled;
+        }
+    }
+
+
+    private static Android.Graphics.Color? ParseHexColor(string? hex)
+    {
+        if (string.IsNullOrWhiteSpace(hex))
+            return null;
+
+        try
+        {
+            // Ensure it starts with "#" and has 6 or 8 characters
+            if (!hex.StartsWith("#"))
+                hex = "#" + hex;
+
+            return Android.Graphics.Color.ParseColor(hex);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+
+    private static Android.Graphics.Bitmap? DecodeBase64ToBitmap(string base64)
+    {
+        if (string.IsNullOrWhiteSpace(base64))
+            return null;
+
+        try
+        {
+            byte[] decoded = Convert.FromBase64String(base64);
+            return Android.Graphics.BitmapFactory.DecodeByteArray(decoded, 0, decoded.Length);
+        }
+        catch
+        {
+            return null;
         }
     }
 
@@ -1670,8 +2047,6 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
     }
 
 
-
-
     private static void MapSetMulticodeCachingDuration(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is int multicodeCachingDuration) && (handler.BKDView != null))
@@ -1802,6 +2177,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                     break;
                 case Enums.BarcodeType.JapanesePost:
                     handler.BKDView.Config.DecoderConfig.JapanesePost.Enabled = barcodeTypeEventArgs.Enabled;
+                    break;
+                case Enums.BarcodeType.OCRText:
+                    handler.BKDView.Config.DecoderConfig.OCRText.Enabled = barcodeTypeEventArgs.Enabled;
                     break;
             }
         }
@@ -1989,6 +2367,12 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
                     }
                 }
             }
+            string binaryDataAsBase64 = res.BinaryData != null
+    ? Convert.ToBase64String(res.BinaryData.ToArray())
+    : string.Empty;
+            var sadlImage = BarkoderHelper.SadlImage(res.Extra?.ToArray() ?? Array.Empty<BKKeyValue>());
+            var sadlImageBase64 = SadlImageToBase64(sadlImage);
+
 
             // Create BarcodeResult for each scanned result
             BarcodeResult barcodeResult = new BarcodeResult(
@@ -1996,7 +2380,10 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
                 res.BarcodeTypeName,
                 extraDict, // Pass the dictionary here
                 "", // CharacterSet
-                mrzImages
+                mrzImages,
+                 ConvertLocation(res),
+                 binaryDataAsBase64,
+                 sadlImageBase64
             );
 
             barcodeResults[i] = barcodeResult;
@@ -2013,8 +2400,75 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
         ImageSource originalImageSource = BitmapToImageSource(originalImage);
 
         // Call the 3-argument version (default impl will redirect if needed)
+
+        try
+        {
+            // (even if empty)
+        }
+        finally
+        {
+            if (result != null)
+            {
+                foreach (var r in result)
+                {
+                    if (r?.Images != null)
+                    {
+                        foreach (var img in r.Images)
+                        {
+                            img?.Image?.Recycle();
+                            img?.Image?.Dispose();
+                            img?.Dispose();
+                        }
+                    }
+
+                    r?.Dispose();
+                }
+            }
+
+            if (bitmaps != null)
+            {
+                foreach (var b in bitmaps)
+                {
+                    b?.Recycle();
+                    b?.Dispose();
+                }
+            }
+
+            originalImage?.Recycle();
+            originalImage?.Dispose();
+        }
+
         BarkoderDelegate?.DidFinishScanning(barcodeResults, thumbnails, originalImageSource);
    
+    }
+
+
+
+string SadlImageToBase64(Bitmap bitmap)
+{
+    if (bitmap == null)
+        return "";
+
+    using (var stream = new MemoryStream())
+    {
+        bitmap.Compress(Bitmap.CompressFormat.Png, 100, stream); // Or JPEG
+        return Convert.ToBase64String(stream.ToArray());
+    }
+}
+
+
+private BarcodeLocation ConvertLocation(Com.Barkoder.Barkoder.Result res)
+    {
+        if (res.Location == null)
+            return null;
+
+        return new BarcodeLocation
+        {
+            LocationName = res.Location.LocationName,
+            Points = res.Location.Points?
+                        .Select(p => new BarcodePoint(p.X, p.Y))
+                        .ToList() ?? new List<BarcodePoint>()
+        };
     }
 
     public void isFlashAvailable(Action<bool> completion)

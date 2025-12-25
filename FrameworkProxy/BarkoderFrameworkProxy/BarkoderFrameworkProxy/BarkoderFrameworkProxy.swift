@@ -82,6 +82,7 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.decoderConfig?.upcE.enabled = config.decoderConfig?.upcE.enabled ?? false
                 barkoderView.config?.decoderConfig?.upcE1.enabled = config.decoderConfig?.upcE1.enabled ?? false
                 barkoderView.config?.decoderConfig?.ean13.enabled = config.decoderConfig?.ean13.enabled ?? false
+                barkoderView.config?.decoderConfig?.ocrText.enabled = config.decoderConfig?.ocrText.enabled ?? false
                 barkoderView.config?.decoderConfig?.postalIMB.enabled = config.decoderConfig?.postalIMB.enabled ?? false
                 barkoderView.config?.decoderConfig?.postnet.enabled = config.decoderConfig?.postnet.enabled ?? false
                 barkoderView.config?.decoderConfig?.planet.enabled = config.decoderConfig?.planet.enabled ?? false
@@ -158,6 +159,94 @@ public class BarkoderProxy: NSObject {
     @objc
     public func stopScanning() {
         barkoderView.stopScanning()
+    }
+    
+    @objc
+    public func configureCloseButton(
+        visible: Bool,
+        position: NSValue? = nil,
+        iconSize: NSNumber? = nil,
+        tintColor: UIColor? = nil,
+        backgroundColor: UIColor? = nil,
+        cornerRadius: NSNumber? = nil,
+        padding: NSNumber? = nil,
+        useCustomIcon: NSNumber? = nil,
+        customIcon: UIImage? = nil,
+        onClose: (@convention(block) () -> Void)? = nil
+    ) {
+        // Pass all received arguments directly to the barkoderView's function
+        barkoderView.configureCloseButton(
+            visible: visible,
+            position: position,
+            iconSize: iconSize,
+            tintColor: tintColor,
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            padding: padding,
+            useCustomIcon: useCustomIcon,
+            customIcon: customIcon,
+            onClose: onClose
+        )
+    }
+    
+    @objc
+    public func configureFlashButton(
+        visible: Bool,
+        position: NSValue? = nil,
+        iconSize: NSNumber? = nil,
+        tintColor: UIColor? = nil,
+        backgroundColor: UIColor? = nil,
+        cornerRadius: NSNumber? = nil,
+        padding: NSNumber? = nil,
+        useCustomIcon: NSNumber? = nil,
+        customIconFlashOn: UIImage? = nil,
+        customIconFlashOff: UIImage? = nil
+    ) {
+        // Pass all received arguments directly to the barkoderView's function
+        barkoderView.configureFlashButton(
+            visible: visible,
+            position: position,
+            iconSize: iconSize,
+            tintColor: tintColor,
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            padding: padding,
+            useCustomIcon: useCustomIcon,
+            customIconFlashOn: customIconFlashOn,
+            customIconFlashOff: customIconFlashOff
+        )
+    }
+    
+    @objc
+    public func configureZoomButton(
+        visible: Bool,
+        position: NSValue? = nil,
+        iconSize: NSNumber? = nil,
+        tintColor: UIColor? = nil,
+        backgroundColor: UIColor? = nil,
+        cornerRadius: NSNumber? = nil,
+        padding: NSNumber? = nil,
+        useCustomIcon: NSNumber? = nil,
+        customIconZoomedIn: UIImage? = nil,
+        customIconZoomedOut: UIImage? = nil,
+        zoomedInFactor: NSNumber? = nil,
+        zoomedOutFactor: NSNumber? = nil
+    ) {
+        // Pass all received arguments directly to the barkoderView's function
+        barkoderView.configureZoomButton(
+            visible: visible,
+            position: position,
+            iconSize: iconSize,
+            tintColor: tintColor,
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            padding: padding,
+            useCustomIcon: useCustomIcon,
+            customIconZoomedIn: customIconZoomedIn,
+            customIconZoomedOut: customIconZoomedOut,
+            zoomedInFactor: zoomedInFactor,
+            zoomedOutFactor: zoomedOutFactor
+        )
     }
          
     @objc
@@ -614,6 +703,11 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public var libVersion: String {
+        return iBarkoder.getLibVersion()
+    }
+    
+    @objc
     public var msiChecksumType: MsiChecksum {
         return barkoderView.config?.decoderConfig?.msi.checksum ?? MsiChecksum(0)
     }
@@ -736,6 +830,12 @@ public class BarkoderProxy: NSObject {
     public func setDynamicExposure(arg: Int) {
         barkoderView.setDynamicExposure(arg);
     }
+    
+    @objc
+    public func sadlImage(fromExtra extra: [AnyHashable: Any]) -> UIImage? {
+        return BarkoderHelper.sadlImage(fromExtra: extra)
+    }
+    
     @objc
     public func setCentricFocusAndExposure(arg: Bool) {
         barkoderView.setCentricFocusAndExposure(arg);
@@ -785,7 +885,16 @@ public class BarkoderProxy: NSObject {
         decoderConfig.setcustomOption(option, value: value)
         print("Custom option set: \(option) = \(value)")
     }
-	
+    
+    @objc
+    public static func setCustomOptionGlobal(option: String, value: Int32) {
+        Config.setcustomOptionGlobal(option, value: value)
+    }
+    
+    @objc
+    public func selectVisibleBarcodes() {
+        barkoderView.selectVisibleBarcodes()
+    }
     
     @objc
     public func setScanningIndicatorAnimationMode(arg: Int) {
@@ -795,6 +904,11 @@ public class BarkoderProxy: NSObject {
     @objc
     public func setEnableComposite(arg: Int) {
         barkoderView.config?.decoderConfig?.enableComposite = Int32(arg)
+    }
+    
+    @objc
+    public func getLicenseInfo() -> [String: String] {
+        return Config.getLicenseInfo()
     }
     
     @objc
@@ -979,6 +1093,8 @@ public class BarkoderProxy: NSObject {
             return decoderConfig.upcE1.enabled
         case Ean13:
             return decoderConfig.ean13.enabled
+        case OCRText:
+            return decoderConfig.ocrText.enabled
         case Ean8:
             return decoderConfig.ean8.enabled
         case PDF417:
@@ -1074,6 +1190,8 @@ public class BarkoderProxy: NSObject {
             decoderConfig.upcE1.enabled = enabled
         case Ean13:
             decoderConfig.ean13.enabled = enabled
+        case OCRText:
+            decoderConfig.ocrText.enabled = enabled
         case Ean8:
             decoderConfig.ean8.enabled = enabled
         case PDF417:
@@ -1568,6 +1686,15 @@ public class BKDDecoderConfig: NSObject {
     }
     
     @objc
+    public var ocrText: SymbologyConfig  {
+        didSet {
+            ocrText.setModelDidChangeCallback {
+                self.modelDidChange?()
+            }
+        }
+    }
+    
+    @objc
     public var postalIMB: SymbologyConfig  {
         didSet {
             postalIMB.setModelDidChangeCallback {
@@ -1807,6 +1934,7 @@ public class BKDDecoderConfig: NSObject {
         upcE = SymbologyConfig()
         upcE1 = SymbologyConfig()
         ean13 = SymbologyConfig()
+        ocrText = SymbologyConfig()
         ean8 = SymbologyConfig()
         pdf417 = SymbologyConfig()
         pdf417Micro = SymbologyConfig()
@@ -1957,11 +2085,15 @@ public class DecoderPayload: NSObject {
     @objc
     public var thumbnails: [UIImage] = []
     
+    @objc public var locations: [[NSValue]] = []
+    
     @objc
     public var imageInBase64: String = ""
     
     @objc
     public var mainImageInBase64: String = ""
+    
+    @objc public var binaryDataAsBase64: [String] = []
     
     @objc
     public var documentImageInBase64: String = ""
@@ -1982,11 +2114,26 @@ extension BarkoderProxy: BarkoderResultDelegate {
         let decoderPayload = DecoderPayload()
         decoderPayload.results = decoderResults
         decoderPayload.thumbnails = thumbnails ?? []
-        
+            
         if let imageData = image?.jpegData(compressionQuality: 1.0) {
             let base64String = imageData.base64EncodedString()
             decoderPayload.imageInBase64 = base64String
         }
+       
+        decoderPayload.binaryDataAsBase64 = []
+           for decoderResult in decoderResults {
+               decoderPayload.binaryDataAsBase64.append(
+                   decoderResult.binaryData?.base64EncodedString() ?? ""
+               )
+           }
+        
+        for decoderResult in decoderResults {
+                   let points = Array(UnsafeBufferPointer(start: decoderResult.getLocationPoints(), count: 4))
+
+                   let nsValues = points.map { NSValue(cgPoint: $0) }
+                   decoderPayload.locations.append(nsValues)
+               }
+        
         
         // Safely check for at least one result
         if let firstResult = decoderPayload.results.first, let images = firstResult.images {

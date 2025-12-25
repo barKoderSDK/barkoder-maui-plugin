@@ -9,14 +9,21 @@ namespace Plugin.Maui.Barkoder.Handlers
         public Dictionary<string, object>? Extra { get; set; } // Updated to match React structure
         public string CharacterSet { get; set; }
         public List<ImageData> MrzImages { get; set; }
+        public BarcodeLocation Location { get; set; }
+        public string BinaryDataAsBase64 { get; set; }
+        public string SadlImageAsBase64 { get; set; } = "";
 
-        public BarcodeResult(string textualData, string barcodeTypeName, Dictionary<string, object>? extra, string characterSet, List<ImageData> mrzImages)
+        public BarcodeResult(string textualData, string barcodeTypeName, Dictionary<string, object>? extra, string characterSet, List<ImageData> mrzImages, BarcodeLocation location, string binaryDataAsBase64, string sadlImageAsBase64)
         {
             TextualData = textualData;
             BarcodeTypeName = barcodeTypeName;
             Extra = extra;
             CharacterSet = characterSet;
+
             MrzImages = mrzImages;
+            Location = location;
+            BinaryDataAsBase64 = binaryDataAsBase64;
+            SadlImageAsBase64 = sadlImageAsBase64;
         }
     }
 
@@ -29,6 +36,23 @@ namespace Plugin.Maui.Barkoder.Handlers
         {
             Name = name;
             Image = image;
+        }
+    }
+    public class BarcodeLocation
+    {
+        public List<BarcodePoint> Points { get; set; } = new();
+        public string LocationName { get; set; }
+    }
+
+    public class BarcodePoint
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+
+        public BarcodePoint(float x, float y)
+        {
+            X = x;
+            Y = y;
         }
     }
 }

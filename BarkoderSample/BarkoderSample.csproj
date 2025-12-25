@@ -75,6 +75,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Xam.Plugin.Media" Version="6.0.2" />
-		<PackageReference Include="Plugin.Maui.Barkoder" Version="1.6.5" />
+		<PackageReference Include="Plugin.Maui.Barkoder" Version="1.6.7" />
 	</ItemGroup>
 </Project>

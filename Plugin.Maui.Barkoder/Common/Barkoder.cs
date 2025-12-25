@@ -137,6 +137,8 @@ namespace Barkoder
         public BarcodeConfig japanesePost;
         [JsonProperty("MaxiCode")]
         public BarcodeConfig maxicode;
+        [JsonProperty("OCR Text")]
+        public BarcodeConfig ocrText;
         [JsonProperty("general")]
         public GeneralSettings general;
 
@@ -181,6 +183,7 @@ namespace Barkoder
             BarcodeConfig? royalMail = null,
             BarcodeConfig? kix = null,
             BarcodeConfig? japanesePost = null,
+            BarcodeConfig? ocrText = null,
 
             GeneralSettings? general = null)
         {
@@ -219,11 +222,12 @@ namespace Barkoder
             this.databarExpanded = databarExpanded ?? new BarcodeConfig();
             this.postalIMB = postalIMB ?? new BarcodeConfig();
             this.postnet = postnet ?? new BarcodeConfig();
-            this.planet = databarExpanded ?? new BarcodeConfig();
+            this.planet = planet ?? new BarcodeConfig();
             this.australianPost = australianPost ?? new BarcodeConfig();
             this.royalMail = royalMail ?? new BarcodeConfig();
             this.kix = kix ?? new BarcodeConfig();
             this.japanesePost = japanesePost ?? new BarcodeConfig();
+            this.ocrText = ocrText ?? new BarcodeConfig();
             this.general = general ?? new GeneralSettings();
         }
     }

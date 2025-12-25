@@ -9,6 +9,98 @@ using Newtonsoft.Json;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
+// This static class provides the extension methods for VisualElement
+public static class ViewReadyExtensions
+{
+    // The implementation for WhenLoadedAsync, WhenHandlerReadyAsync, WhenSizedAsync, 
+    // and WhenReadyAsync goes here, exactly as you have it.
+
+    public static Task WhenLoadedAsync(this VisualElement v, CancellationToken ct = default)
+    {
+        // ... (implementation from your code)
+        if (v.IsLoaded) return Task.CompletedTask;
+
+        var tcs = new TaskCompletionSource();
+        EventHandler handler = null!;
+        handler = (_, __) =>
+        {
+            v.Loaded -= handler;
+            tcs.TrySetResult();
+        };
+        v.Loaded += handler;
+
+        if (ct.CanBeCanceled)
+            ct.Register(() =>
+            {
+                v.Loaded -= handler;
+                tcs.TrySetCanceled(ct);
+            });
+
+        return tcs.Task;
+    }
+
+    public static Task WhenHandlerReadyAsync(this VisualElement v, CancellationToken ct = default)
+    {
+        // ... (implementation from your code)
+        if (v.Handler is not null) return Task.CompletedTask;
+
+        var tcs = new TaskCompletionSource();
+        EventHandler handler = null!;
+        handler = (_, __) =>
+        {
+            if (v.Handler is null) return;
+            v.HandlerChanged -= handler;
+            tcs.TrySetResult();
+        };
+        v.HandlerChanged += handler;
+
+        if (ct.CanBeCanceled)
+            ct.Register(() =>
+            {
+                v.HandlerChanged -= handler;
+                tcs.TrySetCanceled(ct);
+            });
+
+        return tcs.Task;
+    }
+
+    public static Task WhenSizedAsync(this VisualElement v, CancellationToken ct = default)
+    {
+        // ... (implementation from your code)
+        if (v.Width > 0 && v.Height > 0 && v.IsLoaded) return Task.CompletedTask;
+
+        var tcs = new TaskCompletionSource();
+        EventHandler handler = null!;
+        handler = (_, __) =>
+        {
+            if (!v.IsLoaded) return;
+            if (v.Width <= 0 || v.Height <= 0) return;
+            v.SizeChanged -= handler;
+            tcs.TrySetResult();
+        };
+        v.SizeChanged += handler;
+
+        if (ct.CanBeCanceled)
+            ct.Register(() =>
+            {
+                v.SizeChanged -= handler;
+                tcs.TrySetCanceled(ct);
+            });
+
+        return tcs.Task;
+    }
+
+    /// <summary> 
+    /// "Ready" for controls that need the native view + a real size. 
+    /// </summary> 
+    public static async Task whenScannerReady(this VisualElement v, CancellationToken ct = default)
+    {
+        await v.WhenLoadedAsync(ct);
+        await v.WhenHandlerReadyAsync(ct);
+        await v.WhenSizedAsync(ct);
+    }
+}
+
 public class BarkoderView : View
 {
     private List<BarcodeTypeEventArgs> BarcodeTypes;
@@ -84,6 +176,10 @@ public class BarkoderView : View
     public event EventHandler<IBarkoderDelegate>? StartScanningRequested;
     public event EventHandler<IBarkoderDelegate>? ScanImageRequest;
     public event EventHandler? StopScanningRequested;
+    public event EventHandler? SelectVisibleBarcodesRequested;
+    public event EventHandler? ConfigureCloseButtonRequested;
+    public event EventHandler? ConfigureFlashButtonRequested;
+    public event EventHandler? ConfigureZoomButtonRequested;
     public event EventHandler? CaptureImageRequested;
     public event EventHandler? PauseScanningRequested;
     public event EventHandler? FreezeScanningRequested;
@@ -176,6 +272,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(string)
     , typeof(BarkoderView)
     , "1.0");
+
+    public static BindableProperty LibVersionProperty = BindableProperty.Create(nameof(LibVersion)
+   , typeof(string)
+   , typeof(BarkoderView)
+   , "1.0");
 
     public static BindableProperty IsFlashAvailableProperty = BindableProperty.Create(nameof(RegionOfInterestVisible)
     , typeof(bool)
@@ -512,6 +613,12 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         set => SetValue(VersionProperty, value);
     }
 
+    public string LibVersion
+    {
+        get => (string)GetValue(LibVersionProperty);
+        set => SetValue(LibVersionProperty, value);
+    }
+
     public string LicenseKey
     {
         get => (string)GetValue(LicenseKeyProperty);
@@ -763,7 +870,7 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         set
         {
             SetValue(LocationInImageResultEnabledProperty, value);
-            Handler?.Invoke(nameof(BarkoderView.SetLocationInImageResultEnabledRequested), true);
+            Handler?.Invoke(nameof(BarkoderView.SetLocationInImageResultEnabledRequested), value);
         }
     }
 
@@ -1297,6 +1404,103 @@ public bool UpcEanDeblurEnabled
     {
         Handler?.Invoke(nameof(BarkoderView.StopScanningRequested));
     }
+
+    public void SelectVisibleBarcodes()
+    {
+        Handler?.Invoke(nameof(BarkoderView.SelectVisibleBarcodesRequested));
+    }
+
+
+    public void ConfigureCloseButton(
+     bool visible,
+     float[] position,
+     float iconSize,                
+     string? tintColor,
+     string? backgroundColor,
+     float cornerRadius,
+     float padding,
+     bool useCustomIcon,
+     string customIconBase64,
+     Action? onClose)
+    {
+        Handler?.Invoke(nameof(ConfigureCloseButtonRequested), new
+        {
+            visible,
+            position,
+            iconSize,
+            tintColor,
+            backgroundColor,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconBase64,
+            onClose
+        });
+    }
+
+
+
+
+
+    public void ConfigureFlashButton(
+     bool visible,
+     float[] position,
+     float iconSize,
+     string? tintColor,
+     string? backgroundColor,
+     float cornerRadius,
+     float padding,
+     bool useCustomIcon,
+     string? customIconFlashOnBase64,
+     string? customIconFlashOffBase64)
+    {
+        Handler?.Invoke(nameof(ConfigureFlashButtonRequested), new
+        {
+            visible,
+            position,
+            iconSize,
+            tintColor,
+            backgroundColor,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconFlashOnBase64,
+            customIconFlashOffBase64
+        });
+    }
+
+
+    public void ConfigureZoomButton(
+      bool visible,
+      float[] position,
+      float iconSize,
+      string? tintColor,
+      string? backgroundColor,
+      float cornerRadius,
+      float padding,
+      bool useCustomIcon,
+      string? customIconZoomedInBase64,
+      string? customIconZoomedOutBase64,
+      float zoomedInFactor,
+      float zoomedOutFactor)
+    {
+        Handler?.Invoke(nameof(ConfigureZoomButtonRequested), new
+        {
+            visible,
+            position,
+            iconSize,
+            tintColor,
+            backgroundColor,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconZoomedInBase64,
+            customIconZoomedOutBase64,
+            zoomedInFactor,
+            zoomedOutFactor
+        });
+    }
+
 
     public void CaptureImage()
     {
@@ -1848,4 +2052,6 @@ public class BarcodeRangeEventArg : EventArgs
         Min = min;
         Max = max;
     }
+
 }
+

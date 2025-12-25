@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
-// swift-module-flags: -target x86_64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name BarkoderFrameworkProxy
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+// swift-compiler-version: Apple Swift version 6.2 effective-5.10 (swiftlang-6.2.0.19.9 clang-1700.3.19.1)
+// swift-module-flags: -target x86_64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name BarkoderFrameworkProxy
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2
 import Barkoder
 @_exported import BarkoderFrameworkProxy
 import BarkoderSDK
@@ -27,6 +27,15 @@ import _SwiftConcurrencyShims
   @objc(scanImageWithCompletion:bkdConfig:completion:) public func scanImage(image: UIKit.UIImage, config: BarkoderFrameworkProxy.BKDConfig, completion: @escaping (BarkoderFrameworkProxy.DecoderPayload) -> Swift.Void)
   @objc public func startCamera()
   @objc public func stopScanning()
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public func configureCloseButton(visible: Swift.Bool, position: Foundation.NSValue? = nil, iconSize: Foundation.NSNumber? = nil, tintColor: UIKit.UIColor? = nil, backgroundColor: UIKit.UIColor? = nil, cornerRadius: Foundation.NSNumber? = nil, padding: Foundation.NSNumber? = nil, useCustomIcon: Foundation.NSNumber? = nil, customIcon: UIKit.UIImage? = nil, onClose: (@convention(block) () -> Swift.Void)? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public func configureFlashButton(visible: Swift.Bool, position: Foundation.NSValue? = nil, iconSize: Foundation.NSNumber? = nil, tintColor: UIKit.UIColor? = nil, backgroundColor: UIKit.UIColor? = nil, cornerRadius: Foundation.NSNumber? = nil, padding: Foundation.NSNumber? = nil, useCustomIcon: Foundation.NSNumber? = nil, customIconFlashOn: UIKit.UIImage? = nil, customIconFlashOff: UIKit.UIImage? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public func configureZoomButton(visible: Swift.Bool, position: Foundation.NSValue? = nil, iconSize: Foundation.NSNumber? = nil, tintColor: UIKit.UIColor? = nil, backgroundColor: UIKit.UIColor? = nil, cornerRadius: Foundation.NSNumber? = nil, padding: Foundation.NSNumber? = nil, useCustomIcon: Foundation.NSNumber? = nil, customIconZoomedIn: UIKit.UIImage? = nil, customIconZoomedOut: UIKit.UIImage? = nil, zoomedInFactor: Foundation.NSNumber? = nil, zoomedOutFactor: Foundation.NSNumber? = nil)
+  #endif
   @objc public func captureImage()
   @objc public func pauseScanning()
   @objc public func freezeScanning()
@@ -149,6 +158,9 @@ import _SwiftConcurrencyShims
   @objc public var version: Swift.String {
     @objc get
   }
+  @objc public var libVersion: Swift.String {
+    @objc get
+  }
   @objc public var msiChecksumType: Barkoder.MsiChecksum {
     @objc get
   }
@@ -187,6 +199,9 @@ import _SwiftConcurrencyShims
   @objc public func setFormattingType(arg: Swift.Int)
   @objc public func setMaximumResultsCount(arg: Swift.Int)
   @objc public func setDynamicExposure(arg: Swift.Int)
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public func sadlImage(fromExtra extra: [Swift.AnyHashable : Any]) -> UIKit.UIImage?
+  #endif
   @objc public func setCentricFocusAndExposure(arg: Swift.Bool)
   @objc public func setUPCEexpandToUPCA(arg: Swift.Bool)
   @objc public func setUPCE1expandToUPCA(arg: Swift.Bool)
@@ -196,8 +211,11 @@ import _SwiftConcurrencyShims
   @objc public func setMulticodeCachingEnabled(arg: Swift.Bool)
   @objc public func setIdDocumentMasterChecksumEnabled(arg: Swift.Bool)
   @objc public func setCustomOption(option: Swift.String, value: Swift.Int32)
+  @objc public static func setCustomOptionGlobal(option: Swift.String, value: Swift.Int32)
+  @objc public func selectVisibleBarcodes()
   @objc public func setScanningIndicatorAnimationMode(arg: Swift.Int)
   @objc public func setEnableComposite(arg: Swift.Int)
+  @objc public func getLicenseInfo() -> [Swift.String : Swift.String]
   @objc public func setScanningIndicatorColorHex(arg: Swift.String)
   @objc public func setScanningIndicatorWidth(arg: Swift.Float)
   @objc public func setScanningIndicatorAlwaysVisible(arg: Swift.Bool)
@@ -433,6 +451,10 @@ import _SwiftConcurrencyShims
     @objc get
     @objc set
   }
+  @objc public var ocrText: BarkoderFrameworkProxy.SymbologyConfig {
+    @objc get
+    @objc set
+  }
   @objc public var postalIMB: BarkoderFrameworkProxy.SymbologyConfig {
     @objc get
     @objc set
@@ -560,8 +582,10 @@ import _SwiftConcurrencyShims
 @_inheritsConvenienceInitializers @objc(DecoderPayload) public class DecoderPayload : ObjectiveC.NSObject {
   @objc public var results: [Barkoder.DecoderResult]
   @objc public var thumbnails: [UIKit.UIImage]
+  @objc public var locations: [[Foundation.NSValue]]
   @objc public var imageInBase64: Swift.String
   @objc public var mainImageInBase64: Swift.String
+  @objc public var binaryDataAsBase64: [Swift.String]
   @objc public var documentImageInBase64: Swift.String
   @objc public var signatureImageInBase64: Swift.String
   @objc public var pictureImageInBase64: Swift.String
@@ -569,5 +593,7 @@ import _SwiftConcurrencyShims
   @objc deinit
 }
 extension BarkoderFrameworkProxy.BarkoderProxy : BarkoderSDK.BarkoderResultDelegate {
+  #if compiler(>=5.3) && $NonescapableTypes
   @objc dynamic public func scanningFinished(_ decoderResults: [Barkoder.DecoderResult], thumbnails: [UIKit.UIImage]?, image: UIKit.UIImage?)
+  #endif
 }

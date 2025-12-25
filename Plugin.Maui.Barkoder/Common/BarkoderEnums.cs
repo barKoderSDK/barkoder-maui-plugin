@@ -41,7 +41,8 @@ public enum BarcodeType
     RoyalMail,
     KIX,
     JapanesePost,
-    Maxicode
+    Maxicode,
+    OCRText
 }
 
 public enum BarkoderResolution
@@ -140,7 +141,8 @@ public enum DecoderType
     RoyalMail,
     KIX,
     JapanesePost,
-    Maxicode
+    Maxicode,
+    OCRText
 }
 
 public enum DecodingSpeed

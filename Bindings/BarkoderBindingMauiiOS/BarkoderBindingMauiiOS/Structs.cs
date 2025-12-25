@@ -154,6 +154,11 @@ namespace Barkoder.Xamarin
         [Export("ean13", ArgumentSemantic.Strong)]
         SymbologyConfig Ean13 { get; set; }
 
+        // @property (nonatomic, strong) SymbologyConfig * _Nonnull ocrText;
+        [Export("ocrText", ArgumentSemantic.Strong)]
+        SymbologyConfig OCRText { get; set; }
+
+
         // @property (nonatomic, strong) SymbologyConfig * _Nonnull ean13;
         [Export("postalIMB", ArgumentSemantic.Strong)]
         SymbologyConfig PostalIMB { get; set; }
@@ -389,7 +394,8 @@ namespace Barkoder.Xamarin
         royalMail,
         kix,
         japanesePost,
-        maxicode
+        maxicode,
+        ocrText
     }
 
     [BaseType(typeof(int))]
@@ -434,7 +440,8 @@ namespace Barkoder.Xamarin
         RoyalMail = 36,
         KIX = 37,
         JapanesePost = 38,
-        Maxicode = 39
+        Maxicode = 39,
+        OCRText = 40
     }
 
     [BaseType(typeof(nint))]

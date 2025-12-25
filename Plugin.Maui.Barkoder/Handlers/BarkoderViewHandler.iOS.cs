@@ -4,6 +4,8 @@ using Microsoft.Maui.Handlers;
 using UIKit;
 using BarkoderSDK = Barkoder.Xamarin;
 using Plugin.Maui.Barkoder.Interfaces;
+using Plugin.Maui.Barkoder.Handlers;
+using CoreGraphics;
 
 using BarcodeResult = Plugin.Maui.Barkoder.Handlers.BarcodeResult;
 
@@ -49,6 +51,8 @@ using CommonBarcodeType = Plugin.Maui.Barkoder.Enums.BarcodeType;
 using BarcodeType = Barkoder.Xamarin.BarcodeType;
 using Foundation;
 using Microsoft.CSharp.RuntimeBinder;
+using System.Globalization;
+using Microsoft.Maui;
 
 namespace Plugin.Maui.Barkoder.Controls;
 
@@ -72,10 +76,25 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
     {
         if (handler.BKDView != null)
         {
+            // Set license and decoder config
             handler.BKDView.Config = new BarkoderSDK.BarkoderConfig(view.LicenseKey);
             handler.BKDView.Config.DecoderConfig = new DecoderConfig();
+
+            // Get license info
+            var licenseInfo = handler.BKDView.GetLicenseInfo();
+
+            if (licenseInfo != null)
+            {
+                foreach (var key in licenseInfo.Keys)
+                {
+                    var keyStr = key.ToString();
+                    var valueStr = licenseInfo[key]?.ToString();
+                    System.Console.WriteLine($"LicenseInfo: {keyStr} = {valueStr}");
+                }
+            }
         }
     }
+
 
     private static void MapIsFlashAvailable(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -357,6 +376,14 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         if (handler.BKDView != null)
         {
             view.Version = handler.BKDView.Version;
+        }
+    }
+
+    private static void MapLibVersion(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.LibVersion = handler.BKDView.LibVersion;
         }
     }
 
@@ -823,6 +850,15 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                             }
                         }
                     }
+                    BarcodeLocation location = ConvertLocation(completion.Locations, i);
+
+                    NSData binaryData = results[i].BinaryData;
+                    string binaryDataAsBase64 = binaryData != null
+                        ? Convert.ToBase64String(binaryData.ToArray())
+                        : string.Empty;
+
+                    var sadlImage = handler.BKDView.SadlImage(results[i].Extra);
+                    var sadlIageBase64 = UIImageToBase64(sadlImage);
 
                     // Create BarcodeResult for each scanned result
                     BarcodeResult barcodeResult = new BarcodeResult(
@@ -830,7 +866,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                         results[i].BarcodeTypeName,
                         extraDict, // Pass the converted dictionary here
                         "", // Provide the CharacterSet
-                        mrzImages
+                        mrzImages,
+                        location,
+                        binaryDataAsBase64,
+                        sadlIageBase64
                     );
 
                     barcodeResults[i] = barcodeResult;
@@ -855,11 +894,23 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
     }
 
 
+public static string UIImageToBase64(UIImage image)
+{
+    if (image == null)
+        return ""; // return empty string if no image
+
+    // Convert UIImage to PNG data
+    using (NSData imageData = image.AsPNG())
+    {
+        // Convert NSData to Base64 string
+        return imageData.GetBase64EncodedString(NSDataBase64EncodingOptions.None);
+    }
+}
 
 
 
 
-    private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         // Ensure `arg3` is cast to `dynamic` to access its properties.
         try
@@ -932,21 +983,42 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                                 }
                             }
                         }
+                        BarcodeLocation location = ConvertLocation(completion.Locations, i);
 
-                        // Create BarcodeResult for each scanned result and convert UIImage to ImageSource
+                        NSData binaryData = results[i].BinaryData;
+                        string binaryDataAsBase64 = binaryData != null
+                            ? Convert.ToBase64String(binaryData.ToArray())
+                            : string.Empty;
+
+
+                        var sadlImage = handler.BKDView.SadlImage(results[i].Extra);
+                        var sadlIageBase64 = UIImageToBase64(sadlImage);
+
+                        // Create BarcodeResult for each scanned result
                         BarcodeResult barcodeResult = new BarcodeResult(
                             results[i].TextualData,
                             results[i].BarcodeTypeName,
-                            extraDict,
+                            extraDict, // Pass the converted dictionary here
                             "", // Provide the CharacterSet
-                            mrzImages
+                            mrzImages,
+                            location,
+                            binaryDataAsBase64,
+                            sadlIageBase64
                         );
 
                         barcodeResults[i] = barcodeResult;
                     }
 
+                    ImageSource[] thumbnails = completion.Thumbnails != null
+              ? completion.Thumbnails
+                  .Select(uiImage => UIImageToImageSource(uiImage))
+                  .Where(src => src != null)
+                  .Cast<ImageSource>()
+                  .ToArray()
+              : Array.Empty<ImageSource>();
+
                     // Pass results back to the delegate
-                    barkoderDelegate?.DidFinishScanning(barcodeResults, Base64ToImageSource(completion.ImageInBase64));
+                    barkoderDelegate?.DidFinishScanning(barcodeResults, thumbnails, Base64ToImageSource(completion.ImageInBase64));
                 });
             }
         }
@@ -957,7 +1029,28 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static BarcodeLocation ConvertLocation(NSArray<NSArray<NSValue>> allLocations, int index)
+    {
+        var location = new BarcodeLocation();
+        location.Points = new List<BarcodePoint>();
 
+        if (allLocations == null || index >= (int)allLocations.Count)  // ← cast here
+            return location;
+
+        var nsPointArray = allLocations[index];
+
+        foreach (var val in nsPointArray)
+        {
+            if (val is NSValue nsValue)
+            {
+                var cg = nsValue.CGPointValue;
+                location.Points.Add(new BarcodePoint((float)cg.X, (float)cg.Y));
+            }
+        }
+
+        location.LocationName = $"location_{index}";
+        return location;
+    }
 
     private static UIImage ConvertBase64ToUIImage(string base64Image)
     {
@@ -983,6 +1076,364 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
     {
         handler.BKDView?.StopScanning();
     }
+
+    private static void MapSelectVisibleBarcodes(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        handler.BKDView?.SelectVisibleBarcodes();
+    }
+
+    private static void MapConfigureZoomButton(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        // 1. Basic checks
+        if (handler?.BKDView == null || arg3 is not object parameters)
+            return;
+
+        var type = parameters.GetType();
+
+        // 2. Extract and Convert Parameters (Common Properties)
+
+        bool visible = Convert.ToBoolean(type.GetProperty("visible")?.GetValue(parameters));
+
+        // Position conversion (same logic as CloseButton)
+        var positionObj = type.GetProperty("position")?.GetValue(parameters);
+        NSValue? positionNSValue = null;
+        float[] positionFloats;
+        if (positionObj is float[] floatArray)
+        {
+            positionFloats = floatArray;
+        }
+        else if (positionObj is IEnumerable<object> positionEnumerable)
+        {
+            positionFloats = positionEnumerable.Select(x => Convert.ToSingle(x)).ToArray();
+        }
+        else
+        {
+            positionFloats = Array.Empty<float>();
+        }
+
+        if (positionFloats.Length >= 2)
+        {
+            var point = new CoreGraphics.CGPoint(positionFloats[0], positionFloats[1]);
+            positionNSValue = NSValue.FromCGPoint(point);
+        }
+        else if (positionFloats.Length == 4)
+        {
+            var rect = new CoreGraphics.CGRect(
+                positionFloats[0], positionFloats[1],
+                positionFloats[2], positionFloats[3]
+            );
+            positionNSValue = NSValue.FromCGRect(rect);
+        }
+
+        NSNumber? iconSize = new NSNumber(Convert.ToSingle(type.GetProperty("iconSize")?.GetValue(parameters)));
+        NSNumber? cornerRadius = new NSNumber(Convert.ToSingle(type.GetProperty("cornerRadius")?.GetValue(parameters)));
+        NSNumber? padding = new NSNumber(Convert.ToSingle(type.GetProperty("padding")?.GetValue(parameters)));
+
+        string? tintColorHex = type.GetProperty("tintColor")?.GetValue(parameters) as string;
+        string? backgroundColorHex = type.GetProperty("backgroundColor")?.GetValue(parameters) as string;
+
+        // NOTE: Assume HexColorToUIColor is available
+        UIColor? tintColor = string.IsNullOrWhiteSpace(tintColorHex) ? null : HexColorToUIColor(tintColorHex);
+        UIColor? backgroundColor = string.IsNullOrWhiteSpace(backgroundColorHex) ? null : HexColorToUIColor(backgroundColorHex);
+
+        bool useCustomIconBool = Convert.ToBoolean(type.GetProperty("useCustomIcon")?.GetValue(parameters));
+        NSNumber? useCustomIcon = new NSNumber(useCustomIconBool);
+
+        // 3. Extract and Convert Image Parameters (Zoom-Specific)
+
+        // Zoomed In Icon
+        string? base64IconIn = type.GetProperty("customIconZoomedInBase64")?.GetValue(parameters) as string;
+        // NOTE: Assume DecodeBase64ToUIImage is available
+        UIImage? customIconZoomedIn = DecodeBase64ToUIImage(base64IconIn);
+
+        // Zoomed Out Icon
+        string? base64IconOut = type.GetProperty("customIconZoomedOutBase64")?.GetValue(parameters) as string;
+        UIImage? customIconZoomedOut = DecodeBase64ToUIImage(base64IconOut);
+
+        // 4. Extract and Convert Factor Parameters
+
+        NSNumber? zoomedInFactor = new NSNumber(Convert.ToSingle(type.GetProperty("zoomedInFactor")?.GetValue(parameters)));
+        NSNumber? zoomedOutFactor = new NSNumber(Convert.ToSingle(type.GetProperty("zoomedOutFactor")?.GetValue(parameters)));
+
+        // 5. Call the Native iOS Binding method
+        handler.BKDView.ConfigureZoomButton(
+            visible,
+            positionNSValue,
+            iconSize,
+            tintColor,
+            backgroundColor,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconZoomedIn,
+            customIconZoomedOut,
+            zoomedInFactor,
+            zoomedOutFactor
+        );
+    }
+
+    private static void MapConfigureFlashButton(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        // 1. Basic checks
+        if (handler?.BKDView == null || arg3 is not object parameters)
+            return;
+
+        var type = parameters.GetType();
+
+        // 2. Extract and Convert Parameters (Common Properties)
+
+        bool visible = Convert.ToBoolean(type.GetProperty("visible")?.GetValue(parameters));
+
+        // Position conversion (same logic as CloseButton)
+        var positionObj = type.GetProperty("position")?.GetValue(parameters);
+        NSValue? positionNSValue = null;
+        float[] positionFloats;
+        if (positionObj is float[] floatArray)
+        {
+            positionFloats = floatArray;
+        }
+        else if (positionObj is IEnumerable<object> positionEnumerable)
+        {
+            positionFloats = positionEnumerable.Select(x => Convert.ToSingle(x)).ToArray();
+        }
+        else
+        {
+            positionFloats = Array.Empty<float>();
+        }
+
+        if (positionFloats.Length >= 2)
+        {
+            var point = new CoreGraphics.CGPoint(positionFloats[0], positionFloats[1]);
+            positionNSValue = NSValue.FromCGPoint(point);
+        }
+        else if (positionFloats.Length == 4)
+        {
+            var rect = new CoreGraphics.CGRect(
+                positionFloats[0], positionFloats[1],
+                positionFloats[2], positionFloats[3]
+            );
+            positionNSValue = NSValue.FromCGRect(rect);
+        }
+
+        NSNumber? iconSize = new NSNumber(Convert.ToSingle(type.GetProperty("iconSize")?.GetValue(parameters)));
+        NSNumber? cornerRadius = new NSNumber(Convert.ToSingle(type.GetProperty("cornerRadius")?.GetValue(parameters)));
+        NSNumber? padding = new NSNumber(Convert.ToSingle(type.GetProperty("padding")?.GetValue(parameters)));
+
+        string? tintColorHex = type.GetProperty("tintColor")?.GetValue(parameters) as string;
+        string? backgroundColorHex = type.GetProperty("backgroundColor")?.GetValue(parameters) as string;
+
+        // NOTE: Assume HexColorToUIColor is available
+        UIColor? tintColor = string.IsNullOrWhiteSpace(tintColorHex) ? null : HexColorToUIColor(tintColorHex);
+        UIColor? backgroundColor = string.IsNullOrWhiteSpace(backgroundColorHex) ? null : HexColorToUIColor(backgroundColorHex);
+
+        bool useCustomIconBool = Convert.ToBoolean(type.GetProperty("useCustomIcon")?.GetValue(parameters));
+        NSNumber? useCustomIcon = new NSNumber(useCustomIconBool);
+
+        // 3. Extract and Convert Image Parameters (Flash-Specific)
+
+        // Flash On Icon
+        string? base64IconOn = type.GetProperty("customIconFlashOnBase64")?.GetValue(parameters) as string;
+        // NOTE: Assume DecodeBase64ToUIImage is available
+        UIImage? customIconFlashOn = DecodeBase64ToUIImage(base64IconOn);
+
+        // Flash Off Icon
+        string? base64IconOff = type.GetProperty("customIconFlashOffBase64")?.GetValue(parameters) as string;
+        UIImage? customIconFlashOff = DecodeBase64ToUIImage(base64IconOff);
+
+        // 4. Call the Native iOS Binding method
+        handler.BKDView.ConfigureFlashButton(
+            visible,
+            positionNSValue,
+            iconSize,
+            tintColor,
+            backgroundColor,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIconFlashOn,
+            customIconFlashOff
+        );
+    }
+
+    private static void MapConfigureCloseButton(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        // 1. Basic checks
+        // BKDView is the native iOS BarkoderView instance from your binding
+        if (handler?.BKDView == null || arg3 is not object parameters)
+            return;
+
+        var type = parameters.GetType();
+
+        // 2. Extract and Convert Parameters from the anonymous object
+
+        // a) visible (bool -> bool)
+        bool visible = Convert.ToBoolean(type.GetProperty("visible")?.GetValue(parameters));
+
+        // b) position (float[] -> NSValue)
+        var positionObj = type.GetProperty("position")?.GetValue(parameters);
+        NSValue? positionNSValue = null;
+
+        float[] positionFloats;
+        if (positionObj is float[] floatArray)
+        {
+            positionFloats = floatArray;
+        }
+        else if (positionObj is IEnumerable<object> positionEnumerable)
+        {
+            // This handles collections where elements are boxed as 'object'
+            positionFloats = positionEnumerable.Select(x => Convert.ToSingle(x)).ToArray();
+        }
+        else
+        {
+            positionFloats = Array.Empty<float>();
+        }
+
+        // The iOS native method expects an NSValue for position.
+        // If your position array contains a CGPoint (2 elements) or CGRect (4 elements), 
+        // you must convert it. Assuming CGPoint (x, y) for simplicity, if length is 2.
+        if (positionFloats.Length >= 2)
+        {
+            var point = new CoreGraphics.CGPoint(positionFloats[0], positionFloats[1]);
+            positionNSValue = NSValue.FromCGPoint(point);
+        }
+        // For CGRect (x, y, width, height)
+        else if (positionFloats.Length == 4)
+        {
+            var rect = new CoreGraphics.CGRect(
+                positionFloats[0], positionFloats[1],
+                positionFloats[2], positionFloats[3]
+            );
+            positionNSValue = NSValue.FromCGRect(rect);
+        }
+
+        // c) iconSize, cornerRadius, padding (float -> NSNumber)
+        NSNumber? iconSize = new NSNumber(Convert.ToSingle(type.GetProperty("iconSize")?.GetValue(parameters)));
+        NSNumber? cornerRadius = new NSNumber(Convert.ToSingle(type.GetProperty("cornerRadius")?.GetValue(parameters)));
+        NSNumber? padding = new NSNumber(Convert.ToSingle(type.GetProperty("padding")?.GetValue(parameters)));
+
+        // d) tintColor, backgroundColor (string Hex -> UIColor)
+        string? tintColorHex = type.GetProperty("tintColor")?.GetValue(parameters) as string;
+        string? backgroundColorHex = type.GetProperty("backgroundColor")?.GetValue(parameters) as string;
+
+        // NOTE: Replace 'Util.HexColorToUIColor' with your actual helper method
+        UIColor? tintColor = string.IsNullOrWhiteSpace(tintColorHex) ? null : HexColorToUIColor(tintColorHex);
+        UIColor? backgroundColor = string.IsNullOrWhiteSpace(backgroundColorHex) ? null : HexColorToUIColor(backgroundColorHex);
+
+        // e) useCustomIcon (bool -> NSNumber)
+        bool useCustomIconBool = Convert.ToBoolean(type.GetProperty("useCustomIcon")?.GetValue(parameters));
+        NSNumber? useCustomIcon = new NSNumber(useCustomIconBool);
+
+        // f) customIcon (Base64 string -> UIImage)
+        string? base64CustomIcon = type.GetProperty("customIconBase64")?.GetValue(parameters) as string;
+        // NOTE: Replace 'DecodeBase64ToUIImage' with your actual helper method
+        UIImage? customIcon = DecodeBase64ToUIImage(base64CustomIcon);
+
+        // g) onClose (Action -> Action / native block)
+        Action? onClose = type.GetProperty("onClose")?.GetValue(parameters) as Action;
+        // The native binding accepts a C# Action directly for the block argument.
+
+        // 3. Call the Native iOS Binding method
+        handler.BKDView.ConfigureCloseButton(
+            visible,
+            positionNSValue,
+            iconSize,
+            tintColor,
+            backgroundColor,
+            cornerRadius,
+            padding,
+            useCustomIcon,
+            customIcon,
+            onClose
+        );
+    }
+
+    public static UIImage? DecodeBase64ToUIImage(string? base64String)
+    {
+        if (string.IsNullOrWhiteSpace(base64String))
+        {
+            return null;
+        }
+
+        try
+        {
+            // 1. Convert the Base64 string to a byte array
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+
+            // 2. Convert the byte array to NSData
+            // NSData is the Objective-C/iOS equivalent of a raw byte buffer
+            NSData imageData = NSData.FromArray(imageBytes);
+
+            // 3. Create a UIImage from the NSData
+            // This is the standard way to load an image from raw data on iOS
+            return UIImage.LoadFromData(imageData);
+        }
+        catch (FormatException)
+        {
+            // Handle cases where the string is not a valid Base64 format
+            Console.WriteLine("Error: Invalid Base64 string provided for image decoding.");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            // Handle other potential exceptions (e.g., data corruption, memory issues)
+            Console.WriteLine($"Error loading UIImage from data: {ex.Message}");
+            return null;
+        }
+    }
+
+    public static UIColor? HexColorToUIColor(string? hex)
+    {
+        if (string.IsNullOrWhiteSpace(hex))
+        {
+            return null;
+        }
+
+        // Remove the '#' prefix if it exists
+        string colorString = hex.Trim().Replace("#", string.Empty);
+
+        // Default to fully opaque (FF) if only 6 digits are provided
+        uint alpha = 255;
+        uint red, green, blue;
+
+        try
+        {
+            if (colorString.Length == 8) // AARRGGBB format
+            {
+                // Parse A, R, G, B components
+                alpha = uint.Parse(colorString.Substring(0, 2), NumberStyles.HexNumber);
+                red = uint.Parse(colorString.Substring(2, 2), NumberStyles.HexNumber);
+                green = uint.Parse(colorString.Substring(4, 2), NumberStyles.HexNumber);
+                blue = uint.Parse(colorString.Substring(6, 2), NumberStyles.HexNumber);
+            }
+            else if (colorString.Length == 6) // RRGGBB format
+            {
+                // Parse R, G, B components (alpha is already 255/1.0f)
+                red = uint.Parse(colorString.Substring(0, 2), NumberStyles.HexNumber);
+                green = uint.Parse(colorString.Substring(2, 2), NumberStyles.HexNumber);
+                blue = uint.Parse(colorString.Substring(4, 2), NumberStyles.HexNumber);
+            }
+            else
+            {
+                // Invalid length
+                return null;
+            }
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"Error: Invalid hex color format provided: {hex}");
+            return null;
+        }
+
+        // Convert 0-255 values to floating-point values (0.0f - 1.0f) expected by UIColor
+        return UIColor.FromRGBA(
+            (nfloat)red / 255.0f,
+            (nfloat)green / 255.0f,
+            (nfloat)blue / 255.0f,
+            (nfloat)alpha / 255.0f
+        );
+    }
+
+ 
 
     private static void MapCaptureImage(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
@@ -1851,6 +2302,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                     break;
                 case Enums.BarcodeType.Maxicode:
                     handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.maxicode, barcodeTypeEventArgs.Enabled);
+                    break;
+                case Enums.BarcodeType.OCRText:
+                    handler.BKDView.SetBarcodeTypeEnabledWithBarcodeType(BarcodeType.ocrText, barcodeTypeEventArgs.Enabled);
                     break;
             }
         }

@@ -1,6 +1,6 @@
 #!/bin/bash
 echo ":rocket: Define parameters"
-IOS_SDK_VERSION="18.2"
+IOS_SDK_VERSION="26.0"
 SWIFT_PROJECT_NAME="BarkoderFrameworkProxy"
 SWIFT_PROJECT_PATH="$SWIFT_PROJECT_NAME/$SWIFT_PROJECT_NAME.xcodeproj"
 SWIFT_BUILD_PATH="$SWIFT_PROJECT_NAME/build"

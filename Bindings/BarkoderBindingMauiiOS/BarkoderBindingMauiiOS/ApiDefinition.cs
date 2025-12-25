@@ -32,12 +32,61 @@ namespace Barkoder.Xamarin
         [Export("stopScanning")]
         void StopScanning();
 
+        // -(void)stopScanning;
+        [Export("selectVisibleBarcodes")]
+        void SelectVisibleBarcodes();
+
         [Export("captureImage")]
         void CaptureImage();
 
         // -(void)pauseScanning;
         [Export("pauseScanning")]
         void PauseScanning();
+
+        [Export("configureCloseButtonWithVisible:position:iconSize:tintColor:backgroundColor:cornerRadius:padding:useCustomIcon:customIcon:onClose:")]
+        void ConfigureCloseButton(
+     bool visible,
+     [NullAllowed] NSValue position,
+     [NullAllowed] NSNumber iconSize,
+     [NullAllowed] UIColor tintColor,
+     [NullAllowed] UIColor backgroundColor,
+     [NullAllowed] NSNumber cornerRadius,
+     [NullAllowed] NSNumber padding,
+     [NullAllowed] NSNumber useCustomIcon,
+     [NullAllowed] UIImage customIcon,
+     [NullAllowed] Action onClose
+ );
+
+        [Export("configureFlashButtonWithVisible:position:iconSize:tintColor:backgroundColor:cornerRadius:padding:useCustomIcon:customIconFlashOn:customIconFlashOff:")]
+        void ConfigureFlashButton(
+    bool visible,
+    [NullAllowed] NSValue position,
+    [NullAllowed] NSNumber iconSize,
+    [NullAllowed] UIColor tintColor,
+    [NullAllowed] UIColor backgroundColor,
+    [NullAllowed] NSNumber cornerRadius,
+    [NullAllowed] NSNumber padding,
+    [NullAllowed] NSNumber useCustomIcon,
+    [NullAllowed] UIImage customIconFlashOn,
+    [NullAllowed] UIImage customIconFlashOff
+);
+
+
+        [Export("configureZoomButtonWithVisible:position:iconSize:tintColor:backgroundColor:cornerRadius:padding:useCustomIcon:customIconZoomedIn:customIconZoomedOut:zoomedInFactor:zoomedOutFactor:")]
+        void ConfigureZoomButton(
+    bool visible,
+    [NullAllowed] NSValue position,
+    [NullAllowed] NSNumber iconSize,
+    [NullAllowed] UIColor tintColor,
+    [NullAllowed] UIColor backgroundColor,
+    [NullAllowed] NSNumber cornerRadius,
+    [NullAllowed] NSNumber padding,
+    [NullAllowed] NSNumber useCustomIcon,
+    [NullAllowed] UIImage customIconZoomedIn,
+    [NullAllowed] UIImage customIconZoomedOut,
+    [NullAllowed] NSNumber zoomedInFactor,
+    [NullAllowed] NSNumber zoomedOutFactor
+);
 
         [Export("freezeScanning")]
         void FreezeScanning();
@@ -282,6 +331,9 @@ namespace Barkoder.Xamarin
         [Export("version")]
         string Version { get; }
 
+        [Export("libVersion")]
+        string LibVersion { get; }
+
         // @property (readonly, nonatomic) NSInteger msiChecksumType;
         [Export("msiChecksumType")]
         MsiChecksumType MsiChecksumType { get; }
@@ -376,9 +428,17 @@ namespace Barkoder.Xamarin
         void SetARHeaderTextFormat(string arg);
 
 
+            [Export("getLicenseInfo")]
+            NSDictionary GetLicenseInfo();
 
-        // @property (readonly, nonatomic) NSInteger barkoderResolution;
-        [Export("barkoderARMode")]
+            // Expose sadlImage(fromExtra:)
+            [Export("sadlImageFromExtra:")]
+            [return: NullAllowed]
+            UIImage SadlImage(NSDictionary extra);
+        
+
+    // @property (readonly, nonatomic) NSInteger barkoderResolution;
+    [Export("barkoderARMode")]
         BarkoderARMode BarkoderARMode { get; }
 
         [Export("barkoderARLocationType")]
@@ -536,7 +596,12 @@ namespace Barkoder.Xamarin
         [Export("setCustomOptionWithOption:value:")]
         void SetCustomOption(string option, int value);
 
-           // Scanning Indicator Animation Mode
+
+        [Static]
+        [Export("setCustomOptionGlobalWithOption:value:")]
+        void SetCustomOptionGlobal(string option, int value);
+
+        // Scanning Indicator Animation Mode
         [Export("setScanningIndicatorAnimationModeWithArg:")]
         void SetScanningIndicatorAnimationMode(nint arg);
 
@@ -586,6 +651,9 @@ namespace Barkoder.Xamarin
         [Export("thumbnails", ArgumentSemantic.Copy)]
         UIImage[] Thumbnails { get; set; }
 
+        [Export("locations", ArgumentSemantic.Retain)]
+        NSArray<NSArray<NSValue>> Locations { get; set; }
+
         // @property (copy, nonatomic) NSString * _Nonnull imageInBase64;
         [Export("imageInBase64")]
         string ImageInBase64 { get; set; }
@@ -607,6 +675,9 @@ namespace Barkoder.Xamarin
         [Export("textualData", ArgumentSemantic.Retain)]
         string TextualData { get; set; }
 
+        [Export("locations", ArgumentSemantic.Retain)]
+        NSArray<NSArray<NSValue>> Locations { get; set; }
+
         [Export ("extra", ArgumentSemantic.Retain)]
 		NSDictionary Extra { get; set; }
 
@@ -614,6 +685,9 @@ namespace Barkoder.Xamarin
     // // @property (readwrite, retain, nonatomic) BKImageDescriptor[] *images;
         [Export("images", ArgumentSemantic.Retain)]
         BKImageDescriptor[] Images { get; set; }
+
+        [Export("binaryData", ArgumentSemantic.Retain)]
+        NSData BinaryData { get; set; }
     }
     
     [BaseType(typeof(NSObject))]
