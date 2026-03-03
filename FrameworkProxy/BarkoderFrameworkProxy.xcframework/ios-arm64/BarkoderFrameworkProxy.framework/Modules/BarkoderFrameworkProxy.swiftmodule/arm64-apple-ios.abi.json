@@ -2010,6 +2010,34 @@
           },
           {
             "kind": "Function",
+            "name": "setPowerSavingMode",
+            "printedName": "setPowerSavingMode(arg:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@BarkoderFrameworkProxy@objc(cs)BarkoderView(im)setPowerSavingModeWithArg:",
+            "mangledName": "$s22BarkoderFrameworkProxy0aC0C18setPowerSavingMode3argySi_tF",
+            "moduleName": "BarkoderFrameworkProxy",
+            "objc_name": "setPowerSavingModeWithArg:",
+            "declAttributes": [
+              "AccessControl",
+              "ObjC"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
             "name": "setLocationInPreviewEnabled",
             "printedName": "setLocationInPreviewEnabled(arg:)",
             "children": [
@@ -8086,6 +8114,99 @@
                 "declKind": "Accessor",
                 "usr": "s:22BarkoderFrameworkProxy9BKDConfigC31thresholdBetweenDuplicatesScansSivM",
                 "mangledName": "$s22BarkoderFrameworkProxy9BKDConfigC31thresholdBetweenDuplicatesScansSivM",
+                "moduleName": "BarkoderFrameworkProxy",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "powerSavingMode",
+            "printedName": "powerSavingMode",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@BarkoderFrameworkProxy@objc(cs)BarkoderConfig(py)powerSavingMode",
+            "mangledName": "$s22BarkoderFrameworkProxy9BKDConfigC15powerSavingModeSivp",
+            "moduleName": "BarkoderFrameworkProxy",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl",
+              "ObjC"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@BarkoderFrameworkProxy@objc(cs)BarkoderConfig(im)powerSavingMode",
+                "mangledName": "$s22BarkoderFrameworkProxy9BKDConfigC15powerSavingModeSivg",
+                "moduleName": "BarkoderFrameworkProxy",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@BarkoderFrameworkProxy@objc(cs)BarkoderConfig(im)setPowerSavingMode:",
+                "mangledName": "$s22BarkoderFrameworkProxy9BKDConfigC15powerSavingModeSivs",
+                "moduleName": "BarkoderFrameworkProxy",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:22BarkoderFrameworkProxy9BKDConfigC15powerSavingModeSivM",
+                "mangledName": "$s22BarkoderFrameworkProxy9BKDConfigC15powerSavingModeSivM",
                 "moduleName": "BarkoderFrameworkProxy",
                 "implicit": true,
                 "accessorKind": "_modify"
@@ -14321,1057 +14442,1064 @@
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 3361,
+      "offset": 3439,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 3479,
+      "offset": 3557,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 3590,
+      "offset": 3668,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 3719,
+      "offset": 3797,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 3832,
+      "offset": 3910,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 3959,
+      "offset": 4037,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4066,
+      "offset": 4144,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4183,
+      "offset": 4261,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4300,
+      "offset": 4378,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4415,
+      "offset": 4493,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4530,
+      "offset": 4608,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4647,
+      "offset": 4725,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4762,
+      "offset": 4840,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4871,
+      "offset": 4949,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 4982,
+      "offset": 5060,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5093,
+      "offset": 5171,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5206,
+      "offset": 5284,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5319,
+      "offset": 5397,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5436,
+      "offset": 5514,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5557,
+      "offset": 5635,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5674,
+      "offset": 5752,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5789,
+      "offset": 5867,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 5920,
+      "offset": 5998,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6041,
+      "offset": 6119,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6150,
+      "offset": 6228,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6277,
+      "offset": 6355,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6388,
+      "offset": 6466,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6503,
+      "offset": 6581,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6628,
+      "offset": 6706,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 6751,
+      "offset": 6829,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 6880,
+      "offset": 6958,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 6990,
+      "offset": 7068,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 7110,
+      "offset": 7188,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7222,
+      "offset": 7300,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7351,
+      "offset": 7429,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7464,
+      "offset": 7542,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7579,
+      "offset": 7657,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7698,
+      "offset": 7776,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7823,
+      "offset": 7901,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 7938,
+      "offset": 8016,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8053,
+      "offset": 8131,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8170,
+      "offset": 8248,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8275,
+      "offset": 8353,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8394,
+      "offset": 8472,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8517,
+      "offset": 8595,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8638,
+      "offset": 8716,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8769,
+      "offset": 8847,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 8902,
+      "offset": 8980,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "StringLiteral",
-      "offset": 19736,
+      "offset": 19933,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 19877,
+      "offset": 20074,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 20016,
+      "offset": 20213,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 20141,
+      "offset": 20338,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 23678,
+      "offset": 23875,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 23813,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 24114,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 24262,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 24418,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 24545,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 24692,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 25059,
+      "offset": 24010,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 25401,
+      "offset": 24311,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 25530,
+      "offset": 24459,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 25662,
+      "offset": 24615,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 25795,
+      "offset": 24742,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 25934,
+      "offset": 24889,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 26276,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 26576,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 26885,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 28406,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 28544,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 28686,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 28828,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 28964,
+      "offset": 25256,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 34161,
+      "offset": 25598,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 34312,
+      "offset": 25727,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 34449,
+      "offset": 25859,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 25992,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 26131,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 34764,
+      "offset": 26473,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 26773,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 27082,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 28603,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 28741,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 28883,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 29025,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 29161,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 34358,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 34509,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 34646,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34961,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 34941,
+      "offset": 35138,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 35072,
+      "offset": 35269,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 35212,
+      "offset": 35409,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 35346,
+      "offset": 35543,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 35486,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 35797,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 35937,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 36063,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 36210,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 36359,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 48649,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 48779,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 48903,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 49036,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 49162,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 49302,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 49426,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 63133,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 63468,
+      "offset": 35683,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 63584,
+      "offset": 35994,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 36134,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 36260,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 36407,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 36556,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 48846,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 48976,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 49100,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 49233,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 49359,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 49499,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 49623,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 63483,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 63818,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 63934,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "Array",
-      "offset": 65602,
+      "offset": 65952,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "Array",
-      "offset": 65659,
+      "offset": 66009,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "Array",
-      "offset": 65713,
+      "offset": 66063,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "StringLiteral",
-      "offset": 65770,
+      "offset": 66120,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "StringLiteral",
-      "offset": 65831,
+      "offset": 66181,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "Array",
-      "offset": 65891,
+      "offset": 66241,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "StringLiteral",
-      "offset": 65956,
+      "offset": 66306,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "StringLiteral",
-      "offset": 66022,
+      "offset": 66372,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "StringLiteral",
-      "offset": 66086,
+      "offset": 66436,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 68619,
+      "offset": 68969,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 68667,
+      "offset": 69017,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 68720,
+      "offset": 69070,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 68762,
+      "offset": 69112,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 68814,
+      "offset": 69164,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 68862,
+      "offset": 69212,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 68899,
+      "offset": 69249,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 68953,
+      "offset": 69303,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 68959,
+      "offset": 69309,
       "length": 2,
       "value": "30"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 68970,
+      "offset": 69320,
       "length": 2,
       "value": "94"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 68982,
+      "offset": 69332,
       "length": 2,
       "value": "40"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69028,
+      "offset": 69378,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69078,
+      "offset": 69428,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69137,
+      "offset": 69487,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69190,
+      "offset": 69540,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69242,
+      "offset": 69592,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69295,
+      "offset": 69645,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 69345,
+      "offset": 69695,
       "length": 5,
       "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 69405,
-      "length": 1,
-      "value": "5"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 69460,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 69500,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 69543,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "BooleanLiteral",
-      "offset": 69585,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "FloatLiteral",
-      "offset": 69654,
-      "length": 3,
-      "value": "0.8"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "FloatLiteral",
-      "offset": 69666,
-      "length": 14,
-      "value": "0.003921568627"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "FloatLiteral",
-      "offset": 69688,
-      "length": 13,
-      "value": "0.09803921569"
-    },
-    {
-      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
-      "kind": "IntegerLiteral",
-      "offset": 69710,
-      "length": 1,
-      "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
       "offset": 69755,
       "length": 1,
-      "value": "2"
+      "value": "5"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 69795,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 69850,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 69890,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 69933,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "BooleanLiteral",
+      "offset": 69975,
+      "length": 5,
+      "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 69815,
+      "offset": 70044,
       "length": 3,
       "value": "0.8"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 69827,
+      "offset": 70056,
       "length": 14,
       "value": "0.003921568627"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 69849,
+      "offset": 70078,
       "length": 13,
       "value": "0.09803921569"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 69871,
+      "offset": 70100,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 70145,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 69942,
+      "offset": 70205,
       "length": 3,
       "value": "0.8"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 69954,
+      "offset": 70217,
       "length": 14,
       "value": "0.003921568627"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 69976,
+      "offset": 70239,
       "length": 13,
       "value": "0.09803921569"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 69998,
+      "offset": 70261,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "FloatLiteral",
+      "offset": 70332,
+      "length": 3,
+      "value": "0.8"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "FloatLiteral",
+      "offset": 70344,
+      "length": 14,
+      "value": "0.003921568627"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "FloatLiteral",
+      "offset": 70366,
+      "length": 13,
+      "value": "0.09803921569"
+    },
+    {
+      "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
+      "kind": "IntegerLiteral",
+      "offset": 70388,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 70038,
+      "offset": 70428,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 70087,
+      "offset": 70477,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 70160,
+      "offset": 70550,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 70170,
+      "offset": 70560,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 70179,
+      "offset": 70569,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "FloatLiteral",
-      "offset": 70189,
+      "offset": 70579,
       "length": 12,
       "value": "0.3950227649"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 70255,
+      "offset": 70645,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "BooleanLiteral",
-      "offset": 70304,
+      "offset": 70694,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/adamantus\/Documents\/GitHub\/barkoder-maui\/FrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy\/BarkoderFrameworkProxy.swift",
       "kind": "IntegerLiteral",
-      "offset": 70354,
+      "offset": 70744,
       "length": 4,
       "value": "3000"
     }

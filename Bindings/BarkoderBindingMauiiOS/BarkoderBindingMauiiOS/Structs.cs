@@ -71,6 +71,9 @@ namespace Barkoder.Xamarin
         [Export("thresholdBetweenDuplicatesScans")]
         nint ThresholdBetweenDuplicatesScans { get; set; }
 
+        [Export("powerSavingMode")]
+        nint PowerSavingMode { get; set; }
+
         // @property (nonatomic, strong) DecoderConfig * _Nullable decoderConfig;
         [NullAllowed, Export("decoderConfig", ArgumentSemantic.Strong)]
         DecoderConfig DecoderConfig { get; set; }

@@ -63,6 +63,7 @@ public class BarkoderProxy: NSObject {
                 barkoderView.config?.imageResultEnabled = config.imageResultEnabled
                 barkoderView.config?.locationInImageResultEnabled = config.locationInImageResultEnabled
                 barkoderView.config?.thresholdBetweenDuplicatesScans = config.thresholdBetweenDuplicatesScans
+                barkoderView.config?.powerSavingMode = config.powerSavingMode
                 barkoderView.config?.scanningIndicatorAnimation = config.scanningIndicatorAnimationMode
                 barkoderView.config?.decoderConfig?.enableComposite = Int32(config.decoderConfig?.enableComposite ?? 0)
                 barkoderView.config?.decoderConfig?.enableMisshaped1D = config.decoderConfig?.enableMisshaped1D ?? false
@@ -437,6 +438,11 @@ public class BarkoderProxy: NSObject {
     @objc
     public func setThresholdBetweenDuplicatesScans(arg: Int) {
         barkoderView.config?.thresholdBetweenDuplicatesScans = arg
+    }
+    
+    @objc
+    public func setPowerSavingMode(arg: Int) {
+        barkoderView.config?.powerSavingMode = arg
     }
     
     @objc
@@ -1487,6 +1493,12 @@ public class BKDConfig: NSObject {
         }
     }
     
+    @objc public var powerSavingMode: Int = BarkoderConfigDefaults.powerSavingMode {
+        didSet {
+            modelDidChange?()
+        }
+    }
+    
     @objc public var scanningIndicatorAnimationMode: Int = BarkoderConfigDefaults.scanningIndicatorAnimationMode {
         didSet {
             modelDidChange?()
@@ -2185,6 +2197,7 @@ class BarkoderConfigDefaults {
     static let barcodeThumbnailOnResult: Bool = true
     static let enableVINRestrictions: Bool = false
     static let thresholdBetweenDuplicatesScans: Int = 5
+    static let powerSavingMode: Int = 0
     static let scanningIndicatorAnimationMode: Int = 0
     static let enableComposite: Int = 0
     static let enableMisshaped1D: Bool = false

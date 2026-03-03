@@ -160,6 +160,9 @@ namespace Barkoder.Xamarin
         [Export("setThresholdBetweenDuplicatesScansWithArg:")]
         void SetThresholdBetweenDuplicatesScansWithArg(nint arg);
 
+         [Export("setPowerSavingModeWithArg:")]
+        void SetPowerSavingModeWithArg(nint arg);
+
         // -(void)setLocationInPreviewEnabledWithArg:(BOOL)arg;
         [Export("setLocationInPreviewEnabledWithArg:")]
         void SetLocationInPreviewEnabledWithArg(bool arg);

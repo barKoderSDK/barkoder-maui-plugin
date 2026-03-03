@@ -332,6 +332,7 @@ SWIFT_CLASS_NAMED("BKDConfig")
 @property (nonatomic) BOOL imageResultEnabled;
 @property (nonatomic) BOOL locationInImageResultEnabled;
 @property (nonatomic) NSInteger thresholdBetweenDuplicatesScans;
+@property (nonatomic) NSInteger powerSavingMode;
 @property (nonatomic) NSInteger scanningIndicatorAnimationMode;
 @property (nonatomic, strong) DecoderConfig * _Nullable decoderConfig;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
@@ -446,6 +447,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (void)setImageResultEnabledWithArg:(BOOL)arg;
 - (void)setLocationInImageResultEnabledWithArg:(BOOL)arg;
 - (void)setThresholdBetweenDuplicatesScansWithArg:(NSInteger)arg;
+- (void)setPowerSavingModeWithArg:(NSInteger)arg;
 - (void)setLocationInPreviewEnabledWithArg:(BOOL)arg;
 - (void)setPinchToZoomEnabledWithArg:(BOOL)arg;
 - (void)setRegionOfInterestVisibleWithArg:(BOOL)arg;

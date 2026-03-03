@@ -247,6 +247,7 @@ public class BarkoderView : View
     public event EventHandler<bool>? SetEnableVINRestrictionsRequested;
     public event EventHandler<bool>? SetARDoubleTapToFreezeEnabledRequested;
     public event EventHandler<int>? SetThresholdBetweenDuplicatesScansRequested;
+    public event EventHandler<int>? SetPowerSavingModeRequested;
     public event EventHandler<int>? SetEnableCompositeRequested;
     public event EventHandler<BarcodeRangeEventArg>? SetBarcodeTypeLengthRangeRequested;
     public event EventHandler<string>? ConfigureBarkoderRequested;
@@ -326,7 +327,7 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     public static BindableProperty RoiOverlayBackgroundColorHexProperty = BindableProperty.Create(nameof(RoiOverlayBackgroundColorHex)
     , typeof(string)
     , typeof(BarkoderView)
-    , "#000000");
+    , "#80000000");
 
     public static BindableProperty EncodingCharacterSetProperty = BindableProperty.Create(nameof(EncodingCharacterSet)
     , typeof(string)
@@ -576,6 +577,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     , typeof(int)
     , typeof(BarkoderView)
     , 0);
+
+    public static BindableProperty PowerSavingModeProperty = BindableProperty.Create(nameof(PowerSavingMode)
+  , typeof(int)
+  , typeof(BarkoderView)
+  , 0);
 
     public static BindableProperty EnableCompositeProperty = BindableProperty.Create(nameof(EnableComposite)
    , typeof(int)
@@ -1347,6 +1353,16 @@ public bool UpcEanDeblurEnabled
         }
     }
 
+    public int PowerSavingMode
+    {
+        get => (int)GetValue(PowerSavingModeProperty);
+        set
+        {
+            SetValue(PowerSavingModeProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetPowerSavingModeRequested), value);
+        }
+    }
+
     public int EnableComposite
     {
         get => (int)GetValue(EnableCompositeProperty);
@@ -1964,6 +1980,11 @@ public bool UpcEanDeblurEnabled
         ThresholdBetweenDuplicatesScans = thresholdBetweenDuplicatesScans;
     }
 
+
+    public void SetPowerSavingMode(int powerSavingMode)
+    {
+        PowerSavingMode = powerSavingMode;
+    }
 
     public void SetEnableComposite(int enableComposite)
     {

@@ -73,6 +73,7 @@ import _SwiftConcurrencyShims
   @objc public func setImageResultEnabled(arg: Swift.Bool)
   @objc public func setLocationInImageResultEnabled(arg: Swift.Bool)
   @objc public func setThresholdBetweenDuplicatesScans(arg: Swift.Int)
+  @objc public func setPowerSavingMode(arg: Swift.Int)
   @objc public func setLocationInPreviewEnabled(arg: Swift.Bool)
   @objc public func setPinchToZoomEnabled(arg: Swift.Bool)
   @objc public func setRegionOfInterestVisible(arg: Swift.Bool)
@@ -361,6 +362,10 @@ import _SwiftConcurrencyShims
     @objc set
   }
   @objc public var thresholdBetweenDuplicatesScans: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc public var powerSavingMode: Swift.Int {
     @objc get
     @objc set
   }

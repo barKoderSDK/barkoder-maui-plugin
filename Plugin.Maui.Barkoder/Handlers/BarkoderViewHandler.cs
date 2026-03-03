@@ -74,6 +74,7 @@ namespace Plugin.Maui.Barkoder.Controls
                 [nameof(BarkoderView.VINRestrictionsEnabledProperty)] = MapVINRestrictionsEnabled,
                 [nameof(BarkoderView.ARDoubleTapToFreezeEnabledProperty)] = MapARDoubleTapToFreezeEnabled,
                 [nameof(BarkoderView.ThresholdBetweenDuplicatesScansProperty)] = MapThresholdBetweenDuplicatesScans,
+                [nameof(BarkoderView.PowerSavingModeProperty)] = MapPowerSavingMode,
                 [nameof(BarkoderView.EnableCompositeProperty)] = MapEnableComposite,
                 [nameof(BarkoderView.RegionOfInterestProperty)] = MapRegionOfInterest,
 
@@ -166,6 +167,7 @@ namespace Plugin.Maui.Barkoder.Controls
             [nameof(BarkoderView.SetEnableVINRestrictionsRequested)] = MapSetEnableVINRestrictions,
             [nameof(BarkoderView.SetARDoubleTapToFreezeEnabledRequested)] = MapSetDoubleTapToFreezeEnabled,
             [nameof(BarkoderView.SetThresholdBetweenDuplicatesScansRequested)] = MapSetThresholdBetweenDuplicatesScans,
+            [nameof(BarkoderView.SetPowerSavingModeRequested)] = MapSetPowerSavingMode,
             [nameof(BarkoderView.SetEnableCompositeRequested)] = MapSetEnableComposite,
             [nameof(BarkoderView.SetBarcodeTypeLengthRangeRequested)] = MapSetBarcodeTypeLengthRange,
             [nameof(BarkoderView.ConfigureBarkoderRequested)] = MapConfigureBarkoder,

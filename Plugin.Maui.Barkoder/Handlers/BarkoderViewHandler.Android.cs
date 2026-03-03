@@ -206,9 +206,9 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
 
     private static void MapRoiOverlayBackgroundColorHex(BarkoderViewHandler handler, BarkoderView view)
     {
-        if (handler.BKDView != null)
+        if (handler.BKDView != null && !string.IsNullOrEmpty(view.RoiOverlayBackgroundColorHex))
         {
-            view.RoiOverlayBackgroundColorHex = Util.IntColorToHexColor(handler.BKDView.Config.RoiOverlayBackgroundColor);
+            handler.BKDView.Config.RoiOverlayBackgroundColor = Util.HexColorToIntColor(view.RoiOverlayBackgroundColorHex);
         }
     }
 
@@ -800,6 +800,14 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
         {
             view.ThresholdBetweenDuplicatesScans = handler.BKDView.Config.ThresholdBetweenDuplicatesScans;
+        }
+    }
+
+    private static void MapPowerSavingMode(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.PowerSavingMode = handler.BKDView.Config.PowerSavingMode;
         }
     }
 
@@ -2209,6 +2217,14 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapSetPowerSavingMode(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int powerSavingMode) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.PowerSavingMode = powerSavingMode;
+        }
+    }
+
     private static void MapSetBarcodeTypeLengthRange(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is BarcodeRangeEventArg barcodeRangeEventArg) && (handler.BKDView != null))
@@ -2316,135 +2332,276 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
         BkdView.StartScanning(this);
     }
 
-   
 
-    public void ScanningFinished(Com.Barkoder.Barkoder.Result[] result, Bitmap[] bitmaps, Bitmap originalImage)
+
+    private int _scanWorkToken = 0;
+
+    private static byte[] BitmapToJpegBytes(Bitmap bitmap, int quality = 60)
     {
-        BarcodeResult[] barcodeResults = new BarcodeResult[result.Length];
+        if (bitmap == null) return Array.Empty<byte>();
 
-        for (int i = 0; i < result.Length; i++)
+        using var ms = new MemoryStream();
+        bitmap.Compress(Bitmap.CompressFormat.Jpeg, quality, ms);
+        return ms.ToArray();
+    }
+
+    private static ImageSource? BytesToImageSource(byte[] bytes)
+    {
+        if (bytes == null || bytes.Length == 0) return null;
+        return ImageSource.FromStream(() => new MemoryStream(bytes));
+    }
+
+    public void ScanningFinished(
+    Com.Barkoder.Barkoder.Result[] result,
+    Bitmap[] bitmaps,
+    Bitmap originalImage)
+    {
+        var myToken = System.Threading.Interlocked.Increment(ref _scanWorkToken);
+
+        _ = Task.Run(() =>
         {
-            List<ImageData> mrzImages = new List<ImageData>(); // Create a new list for each result
+            BarcodeResult[] barcodeResults = Array.Empty<BarcodeResult>();
+            ImageSource[] thumbnails = Array.Empty<ImageSource>();
+            ImageSource? originalImageSource = null;
 
-            var res = result[i];
-
-            // Convert IList<BKKeyValue> to Dictionary<string, object>
-            Dictionary<string, object>? extraDict = null;
-
-            if (res.Extra != null && res.Extra.Any())
+            try
             {
-                extraDict = new Dictionary<string, object>();
-                foreach (var kv in res.Extra)
+                if (myToken != _scanWorkToken)
+                    return;
+
+                var safeResults = result ?? Array.Empty<Com.Barkoder.Barkoder.Result>();
+                barcodeResults = new BarcodeResult[safeResults.Length];
+
+                for (int i = 0; i < safeResults.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(kv.Key))
+                    var res = safeResults[i];
+                    if (res == null)
                     {
-                        extraDict[kv.Key] = kv.Value ?? string.Empty; // Handle null values
+                        barcodeResults[i] = new BarcodeResult("", "", null, "", new List<ImageData>(), null, "", "");
+                        continue;
                     }
-                }
-            }
 
-            // Convert Images
-            if (res.Images != null)
-            {
-                foreach (var image in res.Images)
-                {
-                    if (image.Image != null)
+                    // === Extra: read ONCE, dispose after use ===
+                    Dictionary<string, object>? extraDict = null;
+                    BKKeyValue[]? extraArrayCopy = null;
+                    IList<Com.Barkoder.Barkoder.BKKeyValue>? extraList = null;
+                    try
                     {
-                        ImageSource? imageSource = BitmapToImageSource(image.Image);
-
-                        if (imageSource != null)
+                        extraList = res.Extra;
+                        if (extraList != null && extraList.Count > 0)
                         {
-                            mrzImages.Add(new ImageData(image.Name, imageSource));
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Failed to convert Bitmap to ImageSource for image name: {image.Name}");
-                        }
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Image is null for name: {image.Name}");
-                    }
-                }
-            }
-            string binaryDataAsBase64 = res.BinaryData != null
-    ? Convert.ToBase64String(res.BinaryData.ToArray())
-    : string.Empty;
-            var sadlImage = BarkoderHelper.SadlImage(res.Extra?.ToArray() ?? Array.Empty<BKKeyValue>());
-            var sadlImageBase64 = SadlImageToBase64(sadlImage);
+                            int extraCount = extraList.Count;
+                            extraDict = new Dictionary<string, object>(extraCount);
+                            extraArrayCopy = new BKKeyValue[extraCount];
 
-
-            // Create BarcodeResult for each scanned result
-            BarcodeResult barcodeResult = new BarcodeResult(
-                res.TextualData,
-                res.BarcodeTypeName,
-                extraDict, // Pass the dictionary here
-                "", // CharacterSet
-                mrzImages,
-                 ConvertLocation(res),
-                 binaryDataAsBase64,
-                 sadlImageBase64
-            );
-
-            barcodeResults[i] = barcodeResult;
-        }
-
-        ImageSource[]? thumbnails = bitmaps?
-              .Where(b => b != null)
-              .Select(b => BitmapToImageSource(b))
-              .Where(src => src != null)
-              .Cast<ImageSource>()
-              .ToArray() ?? Array.Empty<ImageSource>();
-
-        // Convert original image
-        ImageSource originalImageSource = BitmapToImageSource(originalImage);
-
-        // Call the 3-argument version (default impl will redirect if needed)
-
-        try
-        {
-            // (even if empty)
-        }
-        finally
-        {
-            if (result != null)
-            {
-                foreach (var r in result)
-                {
-                    if (r?.Images != null)
-                    {
-                        foreach (var img in r.Images)
-                        {
-                            img?.Image?.Recycle();
-                            img?.Image?.Dispose();
-                            img?.Dispose();
+                            for (int e = 0; e < extraCount; e++)
+                            {
+                                var kv = extraList[e];
+                                extraArrayCopy[e] = kv;
+                                if (kv != null && !string.IsNullOrEmpty(kv.Key))
+                                    extraDict[kv.Key] = kv.Value ?? string.Empty;
+                            }
                         }
                     }
+                    catch { }
 
-                    r?.Dispose();
+                    // === Images: read ONCE, extract bytes, dispose immediately ===
+                    var mrzImages = new List<ImageData>();
+                    IList<Com.Barkoder.Barkoder.BKImageDescriptor>? imagesList = null;
+                    try
+                    {
+                        imagesList = res.Images;
+                        if (imagesList != null)
+                        {
+                            int imgCount = imagesList.Count;
+                            for (int j = 0; j < imgCount; j++)
+                            {
+                                var imageDesc = imagesList[j];
+                                if (imageDesc == null) continue;
+
+                                Bitmap? bmp = null;
+                                try
+                                {
+                                    bmp = imageDesc.Image;
+                                    if (bmp != null && !bmp.IsRecycled)
+                                    {
+                                        var imgName = imageDesc.Name;
+                                        var src = CompressBitmapToImageSource(bmp, 50);
+                                        if (src != null)
+                                            mrzImages.Add(new ImageData(imgName, src));
+                                    }
+                                }
+                                finally
+                                {
+                                    try { bmp?.Recycle(); bmp?.Dispose(); } catch { }
+                                    try { imageDesc.Dispose(); } catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        if (imagesList is IDisposable disposableImages)
+                            try { disposableImages.Dispose(); } catch { }
+                    }
+
+                    // === BinaryData: read ONCE, dispose JavaArray ===
+                    string binaryDataAsBase64 = string.Empty;
+                    IList<byte>? binaryData = null;
+                    try
+                    {
+                        binaryData = res.BinaryData;
+                        if (binaryData != null)
+                            binaryDataAsBase64 = Convert.ToBase64String(binaryData.ToArray());
+                    }
+                    catch { }
+                    finally
+                    {
+                        if (binaryData is IDisposable disposableBinary)
+                            disposableBinary.Dispose();
+                    }
+
+                    // === SADL ===
+                    string sadlImageBase64 = "";
+                    Bitmap? sadlBitmap = null;
+                    try
+                    {
+                        sadlBitmap = BarkoderHelper.SadlImage(extraArrayCopy ?? Array.Empty<BKKeyValue>());
+                        sadlImageBase64 = SadlImageToBase64(sadlBitmap);
+                    }
+                    catch { }
+                    finally
+                    {
+                        try { sadlBitmap?.Recycle(); sadlBitmap?.Dispose(); } catch { }
+                    }
+
+                    // === Location ===
+                    var location = ConvertLocation(res);
+
+                    barcodeResults[i] = new BarcodeResult(
+                        res?.TextualData ?? string.Empty,
+                        res.BarcodeTypeName ?? string.Empty,
+                        extraDict,
+                        "",
+                        mrzImages,
+                        location,
+                        binaryDataAsBase64,
+                        sadlImageBase64
+                    );
+
+                    // Dispose extra wrappers
+                    if (extraArrayCopy != null)
+                        foreach (var kv in extraArrayCopy)
+                            try { kv?.Dispose(); } catch { }
+                    if (extraList is IDisposable disposableExtra)
+                        try { disposableExtra.Dispose(); } catch { }
                 }
-            }
 
-            if (bitmaps != null)
-            {
-                foreach (var b in bitmaps)
+                // === Check token before doing expensive image work ===
+                if (myToken != _scanWorkToken)
+                    return;
+
+                // === Thumbnails ===
+                if (bitmaps != null && bitmaps.Length > 0)
                 {
-                    b?.Recycle();
-                    b?.Dispose();
+                    var thumbList = new List<ImageSource>(bitmaps.Length);
+                    for (int t = 0; t < bitmaps.Length; t++)
+                    {
+                        if (myToken != _scanWorkToken) return; // bail early
+
+                        var b = bitmaps[t];
+                        if (b == null || b.IsRecycled) continue;
+                        var src = CompressBitmapToImageSource(b, 40);
+                        if (src != null)
+                            thumbList.Add(src);
+                    }
+                    thumbnails = thumbList.ToArray();
                 }
+
+                // === Original image — downscale if large ===
+                if (originalImage != null && !originalImage.IsRecycled)
+                {
+                    if (myToken != _scanWorkToken) return;
+
+                    originalImageSource = CompressBitmapToImageSource(originalImage, 50, maxDimension: 1280);
+                }
+
+                if (myToken != _scanWorkToken)
+                    return;
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    BarkoderDelegate?.DidFinishScanning(
+                        barcodeResults,
+                        thumbnails,
+                        originalImageSource
+                    );
+                });
             }
+            finally
+            {
+                if (result != null)
+                {
+                    foreach (var r in result)
+                        try { r?.Dispose(); } catch { }
+                }
 
-            originalImage?.Recycle();
-            originalImage?.Dispose();
-        }
+                if (bitmaps != null)
+                {
+                    foreach (var b in bitmaps)
+                    {
+                        try { b?.Recycle(); b?.Dispose(); } catch { }
+                    }
+                }
 
-        BarkoderDelegate?.DidFinishScanning(barcodeResults, thumbnails, originalImageSource);
-   
+                try { originalImage?.Recycle(); originalImage?.Dispose(); } catch { }
+            }
+        });
     }
 
 
+    private static ImageSource? CompressBitmapToImageSource(Bitmap bitmap, int quality, int maxDimension = 0)
+    {
+        if (bitmap == null || bitmap.IsRecycled)
+            return null;
 
-string SadlImageToBase64(Bitmap bitmap)
+        Bitmap? scaled = null;
+        try
+        {
+            var target = bitmap;
+
+            // Downscale if needed to reduce memory
+            if (maxDimension > 0 && (bitmap.Width > maxDimension || bitmap.Height > maxDimension))
+            {
+                float scale = Math.Min((float)maxDimension / bitmap.Width, (float)maxDimension / bitmap.Height);
+                int newW = (int)(bitmap.Width * scale);
+                int newH = (int)(bitmap.Height * scale);
+                scaled = Bitmap.CreateScaledBitmap(bitmap, newW, newH, true);
+                target = scaled;
+            }
+
+            // Compress directly into a MemoryStream, then detach the buffer
+            using var ms = new MemoryStream();
+            target.Compress(Bitmap.CompressFormat.Jpeg, quality, ms);
+            var bytes = ms.ToArray();
+
+            if (bytes.Length == 0)
+                return null;
+
+            return ImageSource.FromStream(() => new MemoryStream(bytes));
+        }
+        finally
+        {
+            if (scaled != null && scaled != bitmap)
+            {
+                try { scaled.Recycle(); scaled.Dispose(); } catch { }
+            }
+        }
+    }
+
+
+    string SadlImageToBase64(Bitmap bitmap)
 {
     if (bitmap == null)
         return "";
@@ -2457,18 +2614,51 @@ string SadlImageToBase64(Bitmap bitmap)
 }
 
 
-private BarcodeLocation ConvertLocation(Com.Barkoder.Barkoder.Result res)
+    private BarcodeLocation ConvertLocation(Com.Barkoder.Barkoder.Result res)
     {
-        if (res.Location == null)
-            return null;
-
-        return new BarcodeLocation
+        Com.Barkoder.Barkoder.BKLocation? location = null;
+        try
         {
-            LocationName = res.Location.LocationName,
-            Points = res.Location.Points?
-                        .Select(p => new BarcodePoint(p.X, p.Y))
-                        .ToList() ?? new List<BarcodePoint>()
-        };
+            location = res.Location;
+            if (location == null)
+                return null;
+
+            var locationName = location.LocationName;
+            var nativePoints = location.Points;
+
+            var points = new List<BarcodePoint>();
+            if (nativePoints != null)
+            {
+                int count = nativePoints.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    var p = nativePoints[i];
+                    try
+                    {
+                        if (p != null)
+                            points.Add(new BarcodePoint(p.X, p.Y));
+                    }
+                    finally
+                    {
+                        p?.Dispose();
+                    }
+                }
+
+                // JavaArray implements IDisposable — must release the JNI ref
+                if (nativePoints is IDisposable disposablePoints)
+                    disposablePoints.Dispose();
+            }
+
+            return new BarcodeLocation
+            {
+                LocationName = locationName,
+                Points = points
+            };
+        }
+        finally
+        {
+            location?.Dispose();
+        }
     }
 
     public void isFlashAvailable(Action<bool> completion)
@@ -2503,23 +2693,18 @@ private BarcodeLocation ConvertLocation(Com.Barkoder.Barkoder.Result res)
 
     private static ImageSource BitmapToImageSource(Bitmap bitmap)
     {
-        if (bitmap == null || Bitmap.CompressFormat.Jpeg == null)
+        if (bitmap == null)
+            return null;
+
+        // Copy bitmap data immediately
+        byte[] bytes;
+        using (var ms = new MemoryStream())
         {
-            return ImageSource.FromStream(() => new MemoryStream());
+            bitmap.Compress(Bitmap.CompressFormat.Jpeg, 80, ms);
+            bytes = ms.ToArray();
         }
 
-        // Converting from Bitmap to Base64 string
-        MemoryStream stream = new MemoryStream();
-        bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
-        byte[] bytes = stream.ToArray();
-        string ImageInBase64 = Convert.ToBase64String(bytes);
-
-        // Converting from Base64 string to ImageSource
-        byte[] imageBytes = Convert.FromBase64String(ImageInBase64);
-        MemoryStream imageSourceStream = new MemoryStream(imageBytes);
-        ImageSource imageSource = ImageSource.FromStream(() => imageSourceStream);
-
-        return imageSource;
+        return ImageSource.FromStream(() => new MemoryStream(bytes));
     }
 
     public class SimpleKeyValue

@@ -764,6 +764,14 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapPowerSavingMode(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.PowerSavingMode = (int)handler.BKDView.Config.PowerSavingMode;
+        }
+    }
+
     private static void MapStartCamera(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         handler.BKDView?.StartCamera();
@@ -2404,6 +2412,14 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
         if ((arg3 is int thresholdBetweenDuplicatesScans) && (handler.BKDView != null) && (handler.BKDView.Config != null) && (handler.BKDView.Config?.DecoderConfig != null))
         {
             handler.BKDView.SetThresholdBetweenDuplicatesScansWithArg(thresholdBetweenDuplicatesScans);
+        }
+    }
+
+    private static void MapSetPowerSavingMode(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is int powerSavingMode) && (handler.BKDView != null) && (handler.BKDView.Config != null) && (handler.BKDView.Config?.DecoderConfig != null))
+        {
+            handler.BKDView.SetPowerSavingModeWithArg(powerSavingMode);
         }
     }
 
