@@ -1,4 +1,4 @@
-﻿#if IOS
+﻿#if IOS || MACCATALYST
 using Barkoder.Xamarin;
 using Microsoft.Maui.Handlers;
 using UIKit;
@@ -23,12 +23,14 @@ using CommonBarkoderLocationType = Plugin.Maui.Barkoder.Enums.BarkoderARLocation
 using CommonBarkoderARHeaderShowMode = Plugin.Maui.Barkoder.Enums.BarkoderARHeaderShowMode;
 
 using CommonBarkoderAROverlayRefresh = Plugin.Maui.Barkoder.Enums.BarkoderAROverlayRefresh;
+using CommonRoiCenterMark = Plugin.Maui.Barkoder.Enums.BarkoderRoiCenterMark;
 
 using iOSBarkoderARLocationType = Barkoder.Xamarin.BarkoderARLocationType;
 
 using iOSBarkoderARHeaderShowMode = Barkoder.Xamarin.BarkoderARHeaderShowMode;
 
 using iOSBarkoderAROverlayRefresh = Barkoder.Xamarin.BarkoderAROverlayRefresh;
+using iOSRoiCenterMark = Barkoder.Xamarin.BarkoderRoiCenterMark;
 
 
 using CommonDecodingSpeed = Plugin.Maui.Barkoder.Enums.DecodingSpeed;
@@ -51,6 +53,7 @@ using CommonBarcodeType = Plugin.Maui.Barkoder.Enums.BarcodeType;
 using BarcodeType = Barkoder.Xamarin.BarcodeType;
 using Foundation;
 using Microsoft.CSharp.RuntimeBinder;
+using ObjCRuntime;
 using System.Globalization;
 using Microsoft.Maui;
 
@@ -59,6 +62,14 @@ namespace Plugin.Maui.Barkoder.Controls;
 public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
 {
     private BarkoderSDK.BarkoderView? BKDView;
+
+    private static void LogRoi(string message)
+    {
+        var full = $"[Barkoder iOS ROI] {message}";
+        System.Console.WriteLine(full);
+        System.Diagnostics.Debug.WriteLine(full);
+    }
+
 
     protected override UIView CreatePlatformView()
     {
@@ -80,6 +91,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             handler.BKDView.Config = new BarkoderSDK.BarkoderConfig(view.LicenseKey);
             handler.BKDView.Config.DecoderConfig = new DecoderConfig();
 
+            // Re-apply ROI center mark after config exists. Startup commands can run
+            // before config init, and the native proxy treats those as no-ops.
+            MapBarkoderRoiCenterMark(handler, view);
+
             // Get license info
             var licenseInfo = handler.BKDView.GetLicenseInfo();
 
@@ -91,6 +106,16 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                     var valueStr = licenseInfo[key]?.ToString();
                     System.Console.WriteLine($"LicenseInfo: {keyStr} = {valueStr}");
                 }
+            }
+
+            // Set DeviceId now that config/decoderConfig is initialized
+            try
+            {
+                view.DeviceId = handler.BKDView.DeviceId;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"DeviceId error: {ex.Message}");
             }
         }
     }
@@ -258,6 +283,38 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapARReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARReturnOnlyMatchedResults = handler.BKDView.ARReturnOnlyMatchedResults;
+        }
+    }
+
+    private static void MapARDisplayOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.ARDisplayOnlyMatchedResults = handler.BKDView.ARDisplayOnlyMatchedResults;
+        }
+    }
+
+    private static void MapDecoderMatchFilter(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.DecoderMatchFilter = handler.BKDView.DecoderMatchFilter ?? "";
+        }
+    }
+
+    private static void MapDecoderReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            view.DecoderReturnOnlyMatchedResults = handler.BKDView.DecoderReturnOnlyMatchedResults;
+        }
+    }
+
 
     private static void MapRoiOverlayBackgroundColorHex(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -387,6 +444,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapDeviceId(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            try
+            {
+                view.DeviceId = handler.BKDView.DeviceId;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"MapDeviceId error: {ex.Message}");
+                view.DeviceId = "";
+            }
+        }
+    }
+
     private static void MapBarkoderResolution(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
@@ -430,6 +503,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             else if (barkoderARMode == iOSBarkoderARMode.NONINTERACTIVE)
             {
                 view.BarkoderARMode = Enums.BarkoderARMode.NonInteractive;
+            }
+            else if (barkoderARMode == iOSBarkoderARMode.MATCHFILTER)
+            {
+                view.BarkoderARMode = Enums.BarkoderARMode.MatchFilter;
             }
         }
 
@@ -504,6 +581,30 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
         }
     }
 
+    private static void MapBarkoderRoiCenterMark(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView == null || handler.BKDView.Config == null)
+        {
+            LogRoi($"Map property deferred: requested={view.BarkoderRoiCenterMark}, configReady={handler.BKDView?.Config != null}");
+            return;
+        }
+
+        switch (view.BarkoderRoiCenterMark)
+        {
+            case CommonRoiCenterMark.NONE:
+                handler.BKDView.SetRoiCenterMarkWithArg((nint)iOSRoiCenterMark.NONE);
+                break;
+            case CommonRoiCenterMark.POINT:
+                handler.BKDView.SetRoiCenterMarkWithArg((nint)iOSRoiCenterMark.POINT);
+                break;
+            case CommonRoiCenterMark.CROSSHAIR:
+                handler.BKDView.SetRoiCenterMarkWithArg((nint)iOSRoiCenterMark.CROSSHAIR);
+                break;
+        }
+
+        LogRoi($"Map property applied: requested={view.BarkoderRoiCenterMark}, native={handler.BKDView.BarkoderRoiCenterMark}");
+    }
+
     private static void MapFormattingType(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
@@ -529,6 +630,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
             else if (formattingType == iOSFormattingType.SADL)
             {
                 view.FormattingType = CommonFormattingType.SADL;
+            }
+            else if (formattingType == iOSFormattingType.BCBP)
+            {
+                view.FormattingType = CommonFormattingType.BCBP;
             }
         }
     }
@@ -877,7 +982,8 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, UIView>
                         mrzImages,
                         location,
                         binaryDataAsBase64,
-                        sadlIageBase64
+                        sadlIageBase64,
+                        results[i].IsMatched
                     );
 
                     barcodeResults[i] = barcodeResult;
@@ -927,8 +1033,6 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
 
             if (arguments.barkoderDelegate is IBarkoderDelegate barkoderDelegate)
             {
-                Console.WriteLine("MapScanImage called with base64Image.");
-
                 string base64Image = arguments.base64Image;
 
                 // Create UIImage from base64 string
@@ -1011,7 +1115,8 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
                             mrzImages,
                             location,
                             binaryDataAsBase64,
-                            sadlIageBase64
+                            sadlIageBase64,
+                            results[i].IsMatched
                         );
 
                         barcodeResults[i] = barcodeResult;
@@ -1464,6 +1569,11 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
         handler.BKDView?.UnfreezeScanning();
     }
 
+    private static void MapResetARCache(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        handler.BKDView?.ResetARCache();
+    }
+
 
     private static void MapRegionOfInterestVisible(BarkoderViewHandler handler, BarkoderView view)
     {
@@ -1689,6 +1799,38 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
         }
     }
 
+    private static void MapSetARReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARReturnOnlyMatchedResults(enabled);
+        }
+    }
+
+    private static void MapSetARDisplayOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetARDisplayOnlyMatchedResults(enabled);
+        }
+    }
+
+    private static void MapSetDecoderMatchFilter(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string matchFilter) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetDecoderMatchFilter(matchFilter);
+        }
+    }
+
+    private static void MapSetDecoderReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.SetDecoderReturnOnlyMatchedResults(enabled);
+        }
+    }
+
     private static void MapSetARHeaderTextFormat(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is string headerFormatText) && (handler.BKDView != null))
@@ -1793,6 +1935,11 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
                 case CommonBarkoderARMode.NonInteractive:
                     {
                         handler.BKDView.SetBarkoderARMode(3);
+                        break;
+                    }
+                case CommonBarkoderARMode.MatchFilter:
+                    {
+                        handler.BKDView.SetBarkoderARMode(4);
                         break;
                     }
             }
@@ -1905,6 +2052,41 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
         }
     }
 
+    private static void MapSetBarkoderRoiCenterMark(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonRoiCenterMark roiCenterMark) && (handler.BKDView != null))
+        {
+            if (handler.BKDView.Config == null)
+            {
+                LogRoi($"Command deferred: requested={roiCenterMark}, configReady=false");
+                return;
+            }
+
+            switch (roiCenterMark)
+            {
+                case CommonRoiCenterMark.NONE:
+                    {
+                        handler.BKDView.SetRoiCenterMarkWithArg((nint)iOSRoiCenterMark.NONE);
+                        LogRoi($"Command applied: requested={roiCenterMark}, native={handler.BKDView.BarkoderRoiCenterMark}");
+                        break;
+                    }
+                case CommonRoiCenterMark.POINT:
+                    {
+                        handler.BKDView.SetRoiCenterMarkWithArg((nint)iOSRoiCenterMark.POINT);
+                        LogRoi($"Command applied: requested={roiCenterMark}, native={handler.BKDView.BarkoderRoiCenterMark}");
+                        break;
+                    }
+                case CommonRoiCenterMark.CROSSHAIR:
+                    {
+                        handler.BKDView.SetRoiCenterMarkWithArg((nint)iOSRoiCenterMark.CROSSHAIR);
+                        LogRoi($"Command applied: requested={roiCenterMark}, native={handler.BKDView.BarkoderRoiCenterMark}");
+                        break;
+                    }
+            }
+
+        }
+    }
+
 
     private static void MapSetFormattingType(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
@@ -1935,6 +2117,11 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
                 case CommonFormattingType.SADL:
                     {
                         handler.BKDView.SetFormattingTypeWithArg(4);
+                        break;
+                    }
+                case CommonFormattingType.BCBP:
+                    {
+                        handler.BKDView.SetFormattingTypeWithArg(5);
                         break;
                     }
             }
@@ -2473,6 +2660,46 @@ private static void MapScanImage(BarkoderViewHandler handler, BarkoderView view,
         {
             handler.BKDView.ConfigureBarkoder(configAsJsonString);
         }
+    }
+
+    public List<Dictionary<string, string>> GetAvailableCameras()
+    {
+        var result = new List<Dictionary<string, string>>();
+
+#if MACCATALYST
+        if (BKDView != null)
+        {
+            try
+            {
+                var json = BKDView.GetAvailableCamerasAsJson();
+                Console.WriteLine($"GetAvailableCameras JSON: {json}");
+                if (!string.IsNullOrEmpty(json))
+                {
+                    var cameras = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+                    if (cameras != null)
+                    {
+                        result = cameras;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetAvailableCameras error: {ex.Message}");
+            }
+        }
+#endif
+
+        return result;
+    }
+
+    private static void MapSetCameraById(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+#if MACCATALYST
+        if (arg3 is string cameraId && handler.BKDView != null)
+        {
+            handler.BKDView.SetCameraById(cameraId);
+        }
+#endif
     }
 
     private static ImageSource Base64ToImageSource(String imageInBase64format)

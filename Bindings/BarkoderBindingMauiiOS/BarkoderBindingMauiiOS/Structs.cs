@@ -302,7 +302,8 @@ namespace Barkoder.Xamarin
         OFF,
         INTERACTIVEDISABLED,
         INTERACTIVEENABLED,
-        NONINTERACTIVE
+        NONINTERACTIVE,
+        MATCHFILTER
     }
 
     [BaseType(typeof(nint))]
@@ -352,7 +353,17 @@ namespace Barkoder.Xamarin
         Automatic,
         GS1,
         AAMVA,
-        SADL
+        SADL,
+        BCBP
+    }
+
+
+    [BaseType(typeof(nint))]
+    public enum BarkoderRoiCenterMark
+    {
+        NONE = 0,
+        CROSSHAIR = 1,
+        POINT = 2
     }
 
     [BaseType(typeof(nint))]

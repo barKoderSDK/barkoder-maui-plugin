@@ -40,6 +40,7 @@ import _SwiftConcurrencyShims
   @objc public func pauseScanning()
   @objc public func freezeScanning()
   @objc public func unfreezeScanning()
+  @objc public func resetARCache()
   @objc public func isFlashAvailable(completion: @escaping (Swift.Bool) -> Swift.Void)
   @objc public func setFlashEnabled(arg: Swift.Bool)
   @objc public func getMaxZoomFactor(completion: @escaping (Swift.Float) -> Swift.Void)
@@ -60,6 +61,10 @@ import _SwiftConcurrencyShims
   @objc public func setARHeaderVerticalTextMargin(arg: Swift.Float)
   @objc public func setARHeaderHorizontalTextMargin(arg: Swift.Float)
   @objc public func setARDoubleTapToFreezeEnabled(arg: Swift.Bool)
+  @objc public func setARReturnOnlyMatchedResults(arg: Swift.Bool)
+  @objc public func setARDisplayOnlyMatchedResults(arg: Swift.Bool)
+  @objc public func setDecoderMatchFilter(arg: Swift.String)
+  @objc public func setDecoderReturnOnlyMatchedResults(arg: Swift.Bool)
   @objc public func setResultDisappearanceDelayMs(arg: Swift.Int)
   @objc public func setARResultLimit(arg: Swift.Int)
   @objc public func setARLocationTransitionSpeed(arg: Swift.Float)
@@ -106,6 +111,10 @@ import _SwiftConcurrencyShims
   @objc public func getLocationTransitionSpeed() -> Swift.Float
   @objc public func getAROverlayRefresh() -> BarkoderSDK.BarkoderAROverlayRefresh
   @objc public func getARDoubleTapToFreeze() -> Swift.Bool
+  @objc public func getARReturnOnlyMatchedResults() -> Swift.Bool
+  @objc public func getARDisplayOnlyMatchedResults() -> Swift.Bool
+  @objc public func getDecoderMatchFilter() -> Swift.String
+  @objc public func getDecoderReturnOnlyMatchedResults() -> Swift.Bool
   @objc public func getARHeaderMaxTextHeight() -> Swift.Float
   @objc public func getARHeaderMinTextHeight() -> Swift.Float
   @objc public func getARSelectedHeaderTextColor() -> Swift.String
@@ -162,6 +171,9 @@ import _SwiftConcurrencyShims
   @objc public var libVersion: Swift.String {
     @objc get
   }
+  @objc public var deviceId: Swift.String {
+    @objc get
+  }
   @objc public var msiChecksumType: Barkoder.MsiChecksum {
     @objc get
   }
@@ -175,6 +187,7 @@ import _SwiftConcurrencyShims
   }
   @objc public func setCode11ChecksumType(arg: Barkoder.Code11Checksum)
   @objc public func setBarkoderResolution(arg: Swift.Int)
+  @objc public func setRoiCenterMark(arg: Swift.Int)
   @objc public func setBarkoderARMode(arg: Swift.Int)
   @objc public func setBarkoderARLocationType(arg: Swift.Int)
   @objc public func setBarkoderARoverlayRefresh(arg: Swift.Int)
@@ -194,7 +207,12 @@ import _SwiftConcurrencyShims
   @objc public var barkoderResolution: Swift.Int {
     @objc get
   }
+  @objc public var roiCenterMark: Swift.Int {
+    @objc get
+  }
   @objc public func setCamera(arg: BarkoderSDK.BarkoderView.BarkoderCameraPosition)
+  @objc public func getAvailableCamerasAsJson() -> Swift.String
+  @objc public func setCameraById(arg: Swift.String)
   @objc public func setDecodingSpeed(arg: Swift.Int)
   @objc public func setEncodingCharacterSet(arg: Swift.String)
   @objc public func setFormattingType(arg: Swift.Int)

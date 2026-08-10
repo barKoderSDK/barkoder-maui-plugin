@@ -1,0 +1,20 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- Default: copy OCR resources next to the app executable -->
+    <BarkoderCopyOcrResources Condition="'$(BarkoderCopyOcrResources)'==''">true</BarkoderCopyOcrResources>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(BarkoderCopyOcrResources)'=='true'">
+    <!-- Files were packed under contentFiles/any/any/... -->
+    <BarkoderOcrResourceFiles Include="$(MSBuildThisFileDirectory)..\contentFiles\any\any\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="BarkoderCopyOcrResourcesToOutput" AfterTargets="Build" Condition="'$(BarkoderCopyOcrResources)'=='true'">
+    <Message Text="[BarkoderNET.OCR] Copying OCR resources to $(TargetDir)" Importance="high" />
+
+    <!-- Copy all OCR resource files into the root output folder (same place as the exe). -->
+    <Copy SourceFiles="@(BarkoderOcrResourceFiles)"
+          DestinationFolder="$(TargetDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

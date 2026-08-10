@@ -414,6 +414,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (void)pauseScanning;
 - (void)freezeScanning;
 - (void)unfreezeScanning;
+- (void)resetARCache;
 - (void)isFlashAvailableWithCompletion:(void (^ _Nonnull)(BOOL))completion;
 - (void)setFlashEnabledWithArg:(BOOL)arg;
 - (void)getMaxZoomFactorWithCompletion:(void (^ _Nonnull)(float))completion;
@@ -434,6 +435,10 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (void)setARHeaderVerticalTextMarginWithArg:(float)arg;
 - (void)setARHeaderHorizontalTextMarginWithArg:(float)arg;
 - (void)setARDoubleTapToFreezeEnabledWithArg:(BOOL)arg;
+- (void)setARReturnOnlyMatchedResultsWithArg:(BOOL)arg;
+- (void)setARDisplayOnlyMatchedResultsWithArg:(BOOL)arg;
+- (void)setDecoderMatchFilterWithArg:(NSString * _Nonnull)arg;
+- (void)setDecoderReturnOnlyMatchedResultsWithArg:(BOOL)arg;
 - (void)setResultDisappearanceDelayMsWithArg:(NSInteger)arg;
 - (void)setARResultLimitWithArg:(NSInteger)arg;
 - (void)setARLocationTransitionSpeedWithArg:(float)arg;
@@ -472,6 +477,10 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (float)getLocationTransitionSpeed SWIFT_WARN_UNUSED_RESULT;
 - (enum BarkoderAROverlayRefresh)getAROverlayRefresh SWIFT_WARN_UNUSED_RESULT;
 - (BOOL)getARDoubleTapToFreeze SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getARReturnOnlyMatchedResults SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getARDisplayOnlyMatchedResults SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nonnull)getDecoderMatchFilter SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getDecoderReturnOnlyMatchedResults SWIFT_WARN_UNUSED_RESULT;
 - (float)getARHeaderMaxTextHeight SWIFT_WARN_UNUSED_RESULT;
 - (float)getARHeaderMinTextHeight SWIFT_WARN_UNUSED_RESULT;
 - (NSString * _Nonnull)getARSelectedHeaderTextColor SWIFT_WARN_UNUSED_RESULT;
@@ -498,6 +507,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 @property (nonatomic, readonly) BOOL isVibrateOnSuccessEnabled;
 @property (nonatomic, readonly, copy) NSString * _Nonnull version;
 @property (nonatomic, readonly, copy) NSString * _Nonnull libVersion;
+@property (nonatomic, readonly, copy) NSString * _Nonnull deviceId;
 @property (nonatomic, readonly) MsiChecksum msiChecksumType;
 - (void)setMsiChecksumTypeWithArg:(MsiChecksum)arg;
 @property (nonatomic, readonly) Code39Checksum code39ChecksumType;
@@ -505,6 +515,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 @property (nonatomic, readonly) Code11Checksum code11ChecksumType;
 - (void)setCode11ChecksumTypeWithArg:(Code11Checksum)arg;
 - (void)setBarkoderResolutionWithArg:(NSInteger)arg;
+- (void)setRoiCenterMarkWithArg:(NSInteger)arg;
 - (void)setBarkoderARModeWithArg:(NSInteger)arg;
 - (void)setBarkoderARLocationTypeWithArg:(NSInteger)arg;
 - (void)setBarkoderARoverlayRefreshWithArg:(NSInteger)arg;
@@ -514,7 +525,10 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 @property (nonatomic, readonly) NSInteger barkoderARHeaderShowMode;
 @property (nonatomic, readonly) NSInteger barkoderAROverlayRefresh;
 @property (nonatomic, readonly) NSInteger barkoderResolution;
+@property (nonatomic, readonly) NSInteger roiCenterMark;
 - (void)setCameraWithArg:(enum BarkoderCameraPosition)arg;
+- (NSString * _Nonnull)getAvailableCamerasAsJson SWIFT_WARN_UNUSED_RESULT;
+- (void)setCameraByIdWithArg:(NSString * _Nonnull)arg;
 - (void)setDecodingSpeedWithArg:(NSInteger)arg;
 - (void)setEncodingCharacterSetWithArg:(NSString * _Nonnull)arg;
 - (void)setFormattingTypeWithArg:(NSInteger)arg;
@@ -1027,6 +1041,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (void)pauseScanning;
 - (void)freezeScanning;
 - (void)unfreezeScanning;
+- (void)resetARCache;
 - (void)isFlashAvailableWithCompletion:(void (^ _Nonnull)(BOOL))completion;
 - (void)setFlashEnabledWithArg:(BOOL)arg;
 - (void)getMaxZoomFactorWithCompletion:(void (^ _Nonnull)(float))completion;
@@ -1047,6 +1062,10 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (void)setARHeaderVerticalTextMarginWithArg:(float)arg;
 - (void)setARHeaderHorizontalTextMarginWithArg:(float)arg;
 - (void)setARDoubleTapToFreezeEnabledWithArg:(BOOL)arg;
+- (void)setARReturnOnlyMatchedResultsWithArg:(BOOL)arg;
+- (void)setARDisplayOnlyMatchedResultsWithArg:(BOOL)arg;
+- (void)setDecoderMatchFilterWithArg:(NSString * _Nonnull)arg;
+- (void)setDecoderReturnOnlyMatchedResultsWithArg:(BOOL)arg;
 - (void)setResultDisappearanceDelayMsWithArg:(NSInteger)arg;
 - (void)setARResultLimitWithArg:(NSInteger)arg;
 - (void)setARLocationTransitionSpeedWithArg:(float)arg;
@@ -1085,6 +1104,10 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 - (float)getLocationTransitionSpeed SWIFT_WARN_UNUSED_RESULT;
 - (enum BarkoderAROverlayRefresh)getAROverlayRefresh SWIFT_WARN_UNUSED_RESULT;
 - (BOOL)getARDoubleTapToFreeze SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getARReturnOnlyMatchedResults SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getARDisplayOnlyMatchedResults SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nonnull)getDecoderMatchFilter SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getDecoderReturnOnlyMatchedResults SWIFT_WARN_UNUSED_RESULT;
 - (float)getARHeaderMaxTextHeight SWIFT_WARN_UNUSED_RESULT;
 - (float)getARHeaderMinTextHeight SWIFT_WARN_UNUSED_RESULT;
 - (NSString * _Nonnull)getARSelectedHeaderTextColor SWIFT_WARN_UNUSED_RESULT;
@@ -1111,6 +1134,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 @property (nonatomic, readonly) BOOL isVibrateOnSuccessEnabled;
 @property (nonatomic, readonly, copy) NSString * _Nonnull version;
 @property (nonatomic, readonly, copy) NSString * _Nonnull libVersion;
+@property (nonatomic, readonly, copy) NSString * _Nonnull deviceId;
 @property (nonatomic, readonly) MsiChecksum msiChecksumType;
 - (void)setMsiChecksumTypeWithArg:(MsiChecksum)arg;
 @property (nonatomic, readonly) Code39Checksum code39ChecksumType;
@@ -1118,6 +1142,7 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 @property (nonatomic, readonly) Code11Checksum code11ChecksumType;
 - (void)setCode11ChecksumTypeWithArg:(Code11Checksum)arg;
 - (void)setBarkoderResolutionWithArg:(NSInteger)arg;
+- (void)setRoiCenterMarkWithArg:(NSInteger)arg;
 - (void)setBarkoderARModeWithArg:(NSInteger)arg;
 - (void)setBarkoderARLocationTypeWithArg:(NSInteger)arg;
 - (void)setBarkoderARoverlayRefreshWithArg:(NSInteger)arg;
@@ -1127,7 +1152,10 @@ SWIFT_CLASS_NAMED("BarkoderProxy")
 @property (nonatomic, readonly) NSInteger barkoderARHeaderShowMode;
 @property (nonatomic, readonly) NSInteger barkoderAROverlayRefresh;
 @property (nonatomic, readonly) NSInteger barkoderResolution;
+@property (nonatomic, readonly) NSInteger roiCenterMark;
 - (void)setCameraWithArg:(enum BarkoderCameraPosition)arg;
+- (NSString * _Nonnull)getAvailableCamerasAsJson SWIFT_WARN_UNUSED_RESULT;
+- (void)setCameraByIdWithArg:(NSString * _Nonnull)arg;
 - (void)setDecodingSpeedWithArg:(NSInteger)arg;
 - (void)setEncodingCharacterSetWithArg:(NSString * _Nonnull)arg;
 - (void)setFormattingTypeWithArg:(NSInteger)arg;

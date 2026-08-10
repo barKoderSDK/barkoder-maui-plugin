@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BKDSampleMAUI"
+             xmlns:bkd="clr-namespace:Barkoder.Windows.UI;assembly=BarkoderSDK"
+             x:Class="BKDSampleMAUI.MainPage"
+             Title="Barkoder Scanner Sample">
+
+    <Grid ColumnDefinitions="280,*,300" Padding="16" ColumnSpacing="12">
+
+        <!-- LEFT: Config + Controls -->
+        <ScrollView Grid.Column="0">
+            <VerticalStackLayout Spacing="12">
+
+                <!-- Header -->
+                <VerticalStackLayout Spacing="4">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="Barkoder Windows SDK" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" />
+                        <Label x:Name="LibVersionLabel" Text="" FontSize="12" TextColor="#4CAF50" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Label x:Name="StateLabel" Text="State: Idle" FontSize="12" TextColor="Gray" />
+                </VerticalStackLayout>
+
+                <!-- Last Scanned -->
+                <Frame BackgroundColor="#E8F5E9" BorderColor="#4CAF50" Padding="8" CornerRadius="6">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Last Scanned:" FontSize="11" TextColor="Gray" />
+                        <Label x:Name="LastScannedLabel" Text="—" FontSize="14" FontAttributes="Bold" TextColor="#1B5E20" />
+                        <Label x:Name="LastScannedTypeLabel" Text="" FontSize="11" TextColor="#666" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Camera Selection -->
+                <Frame BorderColor="LightGray" Padding="8" CornerRadius="6">
+                    <VerticalStackLayout Spacing="4">
+                        <HorizontalStackLayout Spacing="4">
+                            <Label Text="Camera:" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" />
+                            <Button x:Name="RefreshCamerasBtn" Text="⟳ Refresh" FontSize="10" Padding="6,2"
+                                    HeightRequest="26" Clicked="OnRefreshCameras" />
+                        </HorizontalStackLayout>
+                        <Picker x:Name="CameraPicker" Title="(default - first available)" FontSize="11" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Buttons -->
+                <VerticalStackLayout Spacing="6">
+                    <Button x:Name="StartBtn" Text="Start Scanning" BackgroundColor="#4CAF50"
+                            TextColor="White" Clicked="OnStartScanning" HeightRequest="38" FontSize="13" />
+                    <Button x:Name="StopBtn" Text="Stop Scanning" BackgroundColor="#F44336"
+                            TextColor="White" Clicked="OnStopScanning" IsEnabled="False" HeightRequest="38" FontSize="13" />
+                    <Button x:Name="ScanImageBtn" Text="Scan Image" BackgroundColor="#2196F3"
+                            TextColor="White" Clicked="OnScanImage" HeightRequest="38" FontSize="13" />
+                </VerticalStackLayout>
+
+                <!-- Config -->
+                <Frame BorderColor="LightGray" Padding="10" CornerRadius="8">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="1D Barcodes" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Code128Check" IsChecked="True" />
+                            <Label Text="Code128" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Code93Check" IsChecked="True" />
+                            <Label Text="Code93" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Code39Check" IsChecked="True" />
+                            <Label Text="Code39" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Code11Check" IsChecked="True" />
+                            <Label Text="Code11" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Code25Check" IsChecked="True" />
+                            <Label Text="Code25" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Code32Check" IsChecked="True" />
+                            <Label Text="Code32" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="CodabarCheck" IsChecked="True" />
+                            <Label Text="Codabar" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="MsiCheck" IsChecked="True" />
+                            <Label Text="MSI" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="TelepenCheck" IsChecked="True" />
+                            <Label Text="Telepen" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Interleaved2of5Check" IsChecked="True" />
+                            <Label Text="Interleaved 2of5" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="ITF14Check" IsChecked="True" />
+                            <Label Text="ITF-14" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="IATA25Check" IsChecked="True" />
+                            <Label Text="IATA 25" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Matrix25Check" IsChecked="True" />
+                            <Label Text="Matrix 25" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Datalogic25Check" IsChecked="True" />
+                            <Label Text="Datalogic 25" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="COOP25Check" IsChecked="True" />
+                            <Label Text="COOP 25" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="EAN/UPC" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Ean13Check" IsChecked="True" />
+                            <Label Text="EAN-13" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Ean8Check" IsChecked="True" />
+                            <Label Text="EAN-8" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="UpcaCheck" IsChecked="True" />
+                            <Label Text="UPC-A" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="UpceCheck" IsChecked="True" />
+                            <Label Text="UPC-E" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Upce1Check" IsChecked="True" />
+                            <Label Text="UPC-E1" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="2D Barcodes" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="QrCheck" IsChecked="True" />
+                            <Label Text="QR" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="QrMicroCheck" IsChecked="True" />
+                            <Label Text="QR Micro" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="DataMatrixCheck" IsChecked="True" />
+                            <Label Text="DataMatrix" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="PDF417Check" IsChecked="True" />
+                            <Label Text="PDF417" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="PDF417MicroCheck" IsChecked="True" />
+                            <Label Text="PDF417 Micro" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="AztecCheck" IsChecked="True" />
+                            <Label Text="Aztec" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="AztecCompactCheck" IsChecked="True" />
+                            <Label Text="Aztec Compact" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="DotCodeCheck" IsChecked="True" />
+                            <Label Text="DotCode" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="MaxiCodeCheck" IsChecked="True" />
+                            <Label Text="MaxiCode" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="Databar (RSS)" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="Databar14Check" IsChecked="False" />
+                            <Label Text="Databar-14" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="DatabarLimitedCheck" IsChecked="False" />
+                            <Label Text="Databar Limited" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="DatabarExpandedCheck" IsChecked="False" />
+                            <Label Text="Databar Expanded" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="Postal" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="PostalIMBCheck" IsChecked="False" />
+                            <Label Text="USPS IMB" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="PostnetCheck" IsChecked="False" />
+                            <Label Text="Postnet" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="PlanetCheck" IsChecked="False" />
+                            <Label Text="Planet" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="AustralianPostCheck" IsChecked="False" />
+                            <Label Text="Australian Post" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="RoyalMailCheck" IsChecked="False" />
+                            <Label Text="Royal Mail" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="KIXCheck" IsChecked="False" />
+                            <Label Text="KIX" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="JapanesePostCheck" IsChecked="False" />
+                            <Label Text="Japanese Post" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="Other" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="IDDocumentCheck" IsChecked="True" />
+                            <Label Text="ID Document" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="OCRTextCheck" IsChecked="False" />
+                            <Label Text="OCR Text" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,8" />
+                        <Label Text="Settings" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="CloseOnResultCheck" IsChecked="False" />
+                            <Label Text="Close on result" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="BeepCheck" IsChecked="True" />
+                            <Label Text="Beep" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Res:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="ResolutionPicker" SelectedIndex="1" WidthRequest="80" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>HD</x:String>
+                                        <x:String>FHD</x:String>
+                                        <x:String>UHD</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Speed:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="DecodingSpeedPicker" SelectedIndex="1" WidthRequest="100" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Fast</x:String>
+                                        <x:String>Normal</x:String>
+                                        <x:String>Slow</x:String>
+                                        <x:String>Rigorous</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Formatting:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="FormattingPicker" SelectedIndex="1" WidthRequest="100" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Disabled</x:String>
+                                        <x:String>Automatic</x:String>
+                                        <x:String>GS1</x:String>
+                                        <x:String>AAMVA</x:String>
+                                        <x:String>SADL</x:String>
+                                        <x:String>BCBP</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <VerticalStackLayout Spacing="2">
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="Dup threshold:" VerticalOptions="Center" FontSize="12" />
+                                <Label x:Name="ThresholdValueLabel" Text="0s" VerticalOptions="Center" FontSize="12"
+                                       FontAttributes="Bold" />
+                            </HorizontalStackLayout>
+                            <Slider x:Name="ThresholdSlider" Minimum="-1" Maximum="30" Value="0"
+                                    VerticalOptions="Center"
+                                    ValueChanged="OnThresholdChanged" />
+                        </VerticalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="Core Config" FontSize="13" FontAttributes="Bold" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="ImageResultCheck" IsChecked="True" />
+                            <Label Text="Image result" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="ThumbnailCheck" IsChecked="True" />
+                            <Label Text="Barcode thumbnail" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="LocationInImageCheck" IsChecked="True" />
+                            <Label Text="Location in image" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="LocationInPreviewCheck" IsChecked="True" />
+                            <Label Text="Location in preview" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="RoiVisibleCheck" IsChecked="True" />
+                            <Label Text="ROI visible" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="EnableMisshaped1DCheck" IsChecked="False" />
+                            <Label Text="Misshaped 1D" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="EnableCompositeCheck" IsChecked="False" />
+                            <Label Text="Composite codes" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="UpcEanDeblurCheck" IsChecked="False" />
+                            <Label Text="UPC/EAN deblur" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="EnableVINCheck" IsChecked="False" />
+                            <Label Text="VIN restrictions" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="4">
+                            <CheckBox x:Name="MulticodeCachingCheck" IsChecked="False" />
+                            <Label Text="Multicode caching" VerticalOptions="Center" FontSize="12" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,4" />
+                        <Label Text="AR Mode" FontSize="13" FontAttributes="Bold" TextColor="#2196F3" />
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="AR Mode:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="ARModePicker" SelectedIndex="0" WidthRequest="140" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Off</x:String>
+                                        <x:String>Interactive Disabled</x:String>
+                                        <x:String>Interactive Enabled</x:String>
+                                        <x:String>Non-Interactive</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Location:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="ARLocationTypePicker" SelectedIndex="2" WidthRequest="120" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>None</x:String>
+                                        <x:String>Tight</x:String>
+                                        <x:String>Bounding Box</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Header:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="ARHeaderModePicker" SelectedIndex="2" WidthRequest="120" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Never</x:String>
+                                        <x:String>Always</x:String>
+                                        <x:String>On Selected</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Refresh:" VerticalOptions="Center" FontSize="12" />
+                            <Picker x:Name="ARRefreshPicker" SelectedIndex="0" WidthRequest="100" FontSize="12">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Smooth</x:String>
+                                        <x:String>Normal</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </HorizontalStackLayout>
+
+                        <VerticalStackLayout Spacing="2">
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="Disappear delay:" VerticalOptions="Center" FontSize="12" />
+                                <Label x:Name="ARDisappearDelayLabel" Text="800ms" VerticalOptions="Center" FontSize="12"
+                                       FontAttributes="Bold" />
+                            </HorizontalStackLayout>
+                            <Slider x:Name="ARDisappearDelaySlider" Minimum="100" Maximum="3000" Value="800"
+                                    VerticalOptions="Center"
+                                    ValueChanged="OnARDisappearDelayChanged" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="2">
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="Transition speed:" VerticalOptions="Center" FontSize="12" />
+                                <Label x:Name="ARTransitionSpeedLabel" Text="0.3" VerticalOptions="Center" FontSize="12"
+                                       FontAttributes="Bold" />
+                            </HorizontalStackLayout>
+                            <Slider x:Name="ARTransitionSpeedSlider" Minimum="0.1" Maximum="1.0" Value="0.3"
+                                    VerticalOptions="Center"
+                                    ValueChanged="OnARTransitionSpeedChanged" />
+                        </VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Header format:" VerticalOptions="Center" FontSize="12" />
+                            <Entry x:Name="ARHeaderFormatEntry" Text="[barcode_text]" WidthRequest="130" FontSize="11" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Image Result:" VerticalOptions="Center" FontSize="12" />
+                            <CheckBox x:Name="ARImageResultCheck" IsChecked="False" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Barcode Thumbnail:" VerticalOptions="Center" FontSize="12" />
+                            <CheckBox x:Name="ARBarcodeThumbnailCheck" IsChecked="False" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="Double-Tap Freeze:" VerticalOptions="Center" FontSize="12" />
+                            <CheckBox x:Name="ARDoubleTapFreezeCheck" IsChecked="True" />
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- MIDDLE: Camera Preview (full space) -->
+        <Border Grid.Column="1" Stroke="Gray" StrokeThickness="2"
+                StrokeShape="RoundRectangle 8" Background="Black">
+            <Grid x:Name="CameraPreviewGrid">
+                <bkd:CameraPreview x:Name="CameraPreviewView" />
+                <Image x:Name="ScanImageOverlay" IsVisible="False" Aspect="AspectFit" />
+                <Label x:Name="NoCameraLabel" Text="Camera preview will appear here"
+                       HorizontalOptions="Center" VerticalOptions="Center"
+                       TextColor="White" FontSize="16" />
+                <!-- Transparent tap target for AR barcode selection -->
+                <BoxView x:Name="ARTapTarget" Color="Transparent" InputTransparent="False"
+                         IsVisible="False">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnARTap" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+            </Grid>
+        </Border>
+
+        <!-- RIGHT: Results + Images -->
+        <ScrollView Grid.Column="2">
+            <VerticalStackLayout Spacing="10">
+
+                <!-- Result Image -->
+                <Frame BorderColor="LightGray" Padding="8" CornerRadius="6">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Result Image" FontSize="12" FontAttributes="Bold" />
+                        <Border Stroke="Gray" StrokeThickness="1" StrokeShape="RoundRectangle 4"
+                                Background="Black">
+                            <Image x:Name="ResultImageView" Aspect="AspectFit" HeightRequest="200" />
+                        </Border>
+                        <Button Text="Save to Desktop" FontSize="11" HeightRequest="30" Padding="8,0"
+                                Clicked="OnSaveResultImage" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Thumbnails -->
+                <Frame BorderColor="LightGray" Padding="8" CornerRadius="6">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Thumbnails" FontSize="12" FontAttributes="Bold" />
+                        <ScrollView Orientation="Horizontal" HeightRequest="80">
+                            <HorizontalStackLayout x:Name="ThumbnailsPanel" Spacing="4" />
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- MRZ Images (picture, signature, document, main) -->
+                <Frame x:Name="MrzImagesFrame" BorderColor="LightGray" Padding="8" CornerRadius="6" IsVisible="False">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="MRZ Images" FontSize="12" FontAttributes="Bold" />
+                        <VerticalStackLayout x:Name="MrzImagesPanel" Spacing="6" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Results -->
+                <Frame BorderColor="LightGray" Padding="8" CornerRadius="6">
+                    <VerticalStackLayout Spacing="4">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="Results" FontSize="13" FontAttributes="Bold" VerticalOptions="Center" />
+                            <Label x:Name="ResultCountLabel" Text="(0)" FontSize="12" TextColor="Gray" VerticalOptions="Center" />
+                            <Label x:Name="LastCallbackLengthLabel" Text="" FontSize="11" TextColor="#2196F3" VerticalOptions="Center" />
+                            <Button x:Name="ClearBtn" Text="Clear" FontSize="10" Padding="6,2"
+                                    HeightRequest="26" Clicked="OnClearResults" />
+                        </HorizontalStackLayout>
+                        <Frame BorderColor="#E0E0E0" Padding="8" CornerRadius="6" BackgroundColor="#FAFAFA">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Last Result:" FontSize="10" TextColor="Gray" />
+                                <Label x:Name="LastResultTypeLabel" Text="" FontSize="11" TextColor="#555" />
+                                <Label x:Name="LastResultDataLabel" Text="—" FontSize="16" FontAttributes="Bold" TextColor="#1a1a1a" />
+                                <Label x:Name="LastResultExtrasLabel" Text="" FontSize="10" TextColor="#777" IsVisible="False" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

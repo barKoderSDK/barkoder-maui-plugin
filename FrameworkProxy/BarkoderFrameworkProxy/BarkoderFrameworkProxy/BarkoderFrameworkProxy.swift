@@ -203,6 +203,7 @@ public class BarkoderProxy: NSObject {
         customIconFlashOn: UIImage? = nil,
         customIconFlashOff: UIImage? = nil
     ) {
+        #if !targetEnvironment(macCatalyst)
         // Pass all received arguments directly to the barkoderView's function
         barkoderView.configureFlashButton(
             visible: visible,
@@ -216,6 +217,7 @@ public class BarkoderProxy: NSObject {
             customIconFlashOn: customIconFlashOn,
             customIconFlashOff: customIconFlashOff
         )
+        #endif
     }
     
     @objc
@@ -271,15 +273,26 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public func resetARCache() {
+        barkoderView.resetARCache()
+    }
+    
+    @objc
     public func isFlashAvailable(completion: @escaping (Bool) -> Void) {
+        #if !targetEnvironment(macCatalyst)
         barkoderView.isFlashAvailable({ flashAvailable in
             completion(flashAvailable)
         })
+        #else
+        completion(false)
+        #endif
     }
     
     @objc
     public func setFlashEnabled(arg: Bool) {
+        #if !targetEnvironment(macCatalyst)
         barkoderView.setFlash(arg)
+        #endif
     }
     
     @objc
@@ -371,6 +384,26 @@ public class BarkoderProxy: NSObject {
     @objc
     public func setARDoubleTapToFreezeEnabled(arg: Bool) {
         barkoderView.config?.arConfig.doubleTapToFreezeEnabled = arg
+    }
+    
+    @objc
+    public func setARReturnOnlyMatchedResults(arg: Bool) {
+        barkoderView.config?.arConfig.returnOnlyMatchedResults = arg
+    }
+    
+    @objc
+    public func setARDisplayOnlyMatchedResults(arg: Bool) {
+        barkoderView.config?.arConfig.displayOnlyMatchedResults = arg
+    }
+    
+    @objc
+    public func setDecoderMatchFilter(arg: String) {
+        barkoderView.config?.decoderConfig?.matchFilter = arg
+    }
+    
+    @objc
+    public func setDecoderReturnOnlyMatchedResults(arg: Bool) {
+        barkoderView.config?.decoderConfig?.returnOnlyMatchedResults = arg
     }
     
     @objc
@@ -576,6 +609,26 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public func getARReturnOnlyMatchedResults() -> Bool {
+        return barkoderView.config?.arConfig.returnOnlyMatchedResults ?? false
+    }
+    
+    @objc
+    public func getARDisplayOnlyMatchedResults() -> Bool {
+        return barkoderView.config?.arConfig.displayOnlyMatchedResults ?? false
+    }
+    
+    @objc
+    public func getDecoderMatchFilter() -> String {
+        return barkoderView.config?.decoderConfig?.matchFilter ?? ""
+    }
+    
+    @objc
+    public func getDecoderReturnOnlyMatchedResults() -> Bool {
+        return barkoderView.config?.decoderConfig?.returnOnlyMatchedResults ?? false
+    }
+    
+    @objc
     public func getARHeaderMaxTextHeight() -> Float {
         return barkoderView.config?.arConfig.headerMaxTextHeight ?? 0.0
     }
@@ -714,6 +767,11 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public var deviceId: String {
+        return barkoderView.config?.decoderConfig?.getDeviceId() ?? ""
+    }
+    
+    @objc
     public var msiChecksumType: MsiChecksum {
         return barkoderView.config?.decoderConfig?.msi.checksum ?? MsiChecksum(0)
     }
@@ -748,6 +806,28 @@ public class BarkoderProxy: NSObject {
         if let barkoderResolution = BarkoderView.BarkoderResolution.init(rawValue: arg) {
             barkoderView.config?.barkoderResolution = barkoderResolution
         }
+    }
+    
+    @objc
+    public func setRoiCenterMark(arg: Int) {
+        guard let config = barkoderView.config else {
+            print("[BarkoderProxy ROI] setRoiCenterMark ignored: config is nil, arg=\(arg)")
+            return
+        }
+
+        switch arg {
+        case 0:
+            config.roiCenterMark = .none
+        case 1:
+            config.roiCenterMark = .crosshair
+        case 2:
+            config.roiCenterMark = .point
+        default:
+            print("[BarkoderProxy ROI] setRoiCenterMark ignored: unsupported arg=\(arg)")
+            return
+        }
+
+        print("[BarkoderProxy ROI] setRoiCenterMark applied: arg=\(arg), native=\(config.roiCenterMark.rawValue)")
     }
     
     @objc
@@ -805,9 +885,36 @@ public class BarkoderProxy: NSObject {
     }
     
     @objc
+    public var roiCenterMark: Int {
+        return barkoderView.config?.roiCenterMark.rawValue ?? 0
+    }
+    
+    @objc
     public func setCamera(arg: BarkoderView.BarkoderCameraPosition) {
+        #if !targetEnvironment(macCatalyst)
         barkoderView.setCamera(arg)
-        
+        #endif
+    }
+    
+    @objc
+    public func getAvailableCamerasAsJson() -> String {
+        #if targetEnvironment(macCatalyst)
+        let cameras = barkoderView.getAvailableCameras()
+        if let data = try? JSONSerialization.data(withJSONObject: cameras, options: []),
+           let jsonString = String(data: data, encoding: .utf8) {
+            return jsonString
+        }
+        return "[]"
+        #else
+        return "[]"
+        #endif
+    }
+    
+    @objc
+    public func setCameraById(arg: String) {
+        #if targetEnvironment(macCatalyst)
+        barkoderView.setCameraById(arg)
+        #endif
     }
     
     @objc

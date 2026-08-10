@@ -1,0 +1,38 @@
+﻿<BindingAssembly>
+	<NativeReference Name="Barkoder.xcframework">
+		<ForceLoad></ForceLoad>
+		<Frameworks>CoreImage ImageIO CoreFoundation UIKit ExternalAccessory Foundation AVFoundation SystemConfiguration CoreGraphics CoreMedia CoreVideo MediaPlayer Security AudioToolbox</Frameworks>
+		<IdentityWithoutPathSeparatorSuffix>../../../FrameworkProxy/BarkoderFrameworkProxy/build/Release-fat/Barkoder.xcframework</IdentityWithoutPathSeparatorSuffix>
+		<IsCxx></IsCxx>
+		<Kind>Framework</Kind>
+		<LinkerFlags>-ObjC</LinkerFlags>
+		<LinkWithSwiftSystemLibraries></LinkWithSwiftSystemLibraries>
+		<NeedsGccExceptionHandling></NeedsGccExceptionHandling>
+		<SmartLink>False</SmartLink>
+		<WeakFrameworks></WeakFrameworks>
+	</NativeReference>
+	<NativeReference Name="BarkoderFrameworkProxy.xcframework">
+		<ForceLoad></ForceLoad>
+		<Frameworks>CoreImage ImageIO CoreFoundation UIKit ExternalAccessory Foundation AVFoundation SystemConfiguration CoreGraphics CoreMedia CoreVideo MediaPlayer Security AudioToolbox</Frameworks>
+		<IdentityWithoutPathSeparatorSuffix>../../../FrameworkProxy/BarkoderFrameworkProxy/build/Release-fat/BarkoderFrameworkProxy.xcframework</IdentityWithoutPathSeparatorSuffix>
+		<IsCxx></IsCxx>
+		<Kind>Framework</Kind>
+		<LinkerFlags>-ObjC</LinkerFlags>
+		<LinkWithSwiftSystemLibraries></LinkWithSwiftSystemLibraries>
+		<NeedsGccExceptionHandling></NeedsGccExceptionHandling>
+		<SmartLink>False</SmartLink>
+		<WeakFrameworks></WeakFrameworks>
+	</NativeReference>
+	<NativeReference Name="BarkoderSDK.xcframework">
+		<ForceLoad></ForceLoad>
+		<Frameworks>CoreImage ImageIO CoreFoundation UIKit ExternalAccessory Foundation AVFoundation SystemConfiguration CoreGraphics CoreMedia CoreVideo MediaPlayer Security AudioToolbox</Frameworks>
+		<IdentityWithoutPathSeparatorSuffix>../../../FrameworkProxy/BarkoderFrameworkProxy/build/Release-fat/BarkoderSDK.xcframework</IdentityWithoutPathSeparatorSuffix>
+		<IsCxx></IsCxx>
+		<Kind>Framework</Kind>
+		<LinkerFlags>-ObjC</LinkerFlags>
+		<LinkWithSwiftSystemLibraries></LinkWithSwiftSystemLibraries>
+		<NeedsGccExceptionHandling></NeedsGccExceptionHandling>
+		<SmartLink>False</SmartLink>
+		<WeakFrameworks></WeakFrameworks>
+	</NativeReference>
+</BindingAssembly>

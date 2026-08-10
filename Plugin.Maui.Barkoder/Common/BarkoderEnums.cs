@@ -58,7 +58,8 @@ public enum BarkoderARMode
     OFF,
     InteractiveDisabled,
     InteractiveEnabled,
-    NonInteractive
+    NonInteractive,
+    MatchFilter
 }
 
 public enum BarkoderARHeaderShowMode
@@ -159,7 +160,15 @@ public enum FormattingType
     Automatic,
     GS1,
     AAMVA,
-    SADL
+    SADL,
+    BCBP
+}
+
+public enum BarkoderRoiCenterMark
+{
+    NONE,
+    POINT,
+    CROSSHAIR
 }
 
 public enum MsiChecksumType

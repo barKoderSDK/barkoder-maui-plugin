@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>Barkoder.Windows</RootNamespace>
+    <AssemblyName>BarkoderSDK</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>Barkoder Barcode Scanner SDK for Windows</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BarkoderNET.OCR" Version="1.7.4" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\beep.wav" />
+  </ItemGroup>
+
+</Project>

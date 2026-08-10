@@ -134,6 +134,27 @@ public class BarkoderView : View
         Handler?.Invoke(nameof(SetCamera), position);
     }
 
+    /// <summary>
+    /// Gets a list of available cameras on the device. Available on Mac Catalyst and Windows.
+    /// Returns a list of dictionaries, each containing "id" and "name" keys.
+    /// </summary>
+    public List<Dictionary<string, string>> GetAvailableCameras()
+    {
+        if (Handler is Controls.BarkoderViewHandler handler)
+            return handler.GetAvailableCameras();
+
+        return new List<Dictionary<string, string>>();
+    }
+
+    /// <summary>
+    /// Sets the active camera by its device ID (obtained from GetAvailableCameras).
+    /// Available on Mac Catalyst and Windows.
+    /// </summary>
+    public void SetCameraById(string cameraId)
+    {
+        Handler?.Invoke(nameof(BarkoderView.SetCameraByIdRequested), cameraId);
+    }
+
     public void SetCentricFocusAndExposure(bool enabled)
     {
         Handler?.Invoke(nameof(SetCentricFocusAndExposure), enabled);
@@ -184,6 +205,7 @@ public class BarkoderView : View
     public event EventHandler? PauseScanningRequested;
     public event EventHandler? FreezeScanningRequested;
     public event EventHandler? UnfreezeScanningRequested;
+    public event EventHandler? ResetARCacheRequested;
     public event EventHandler<bool>? FlashEnableRequested;
     public event EventHandler<float>? SetZoomFactorRequested;
     public event EventHandler<bool>? SetPinchToZoomEnabledRequested;
@@ -220,6 +242,7 @@ public class BarkoderView : View
     public event EventHandler<BarkoderARHeaderShowMode>? SetBarkoderARHeaderShowModeRequested;
     public event EventHandler<BarkoderARLocationType>? SetBarkoderARLocationTypeRequested;
     public event EventHandler<BarkoderAROverlayRefresh>? SetBarkoderARoverlayRefreshRequested;
+    public event EventHandler<BarkoderRoiCenterMark>? SetBarkoderRoiCenterMarkRequested;
     public event EventHandler<DecodingSpeed>? SetDecodingSpeedRequested;
     public event EventHandler<FormattingType>? SetFormattingTypeRequested;
     public event EventHandler<MsiChecksumType>? SetMsiChecksumTypeRequested;
@@ -246,11 +269,16 @@ public class BarkoderView : View
     public event EventHandler<BarcodeTypeEventArgs>? SetBarcodeTypeEnabledRequested;
     public event EventHandler<bool>? SetEnableVINRestrictionsRequested;
     public event EventHandler<bool>? SetARDoubleTapToFreezeEnabledRequested;
+    public event EventHandler<bool>? SetARReturnOnlyMatchedResultsRequested;
+    public event EventHandler<bool>? SetARDisplayOnlyMatchedResultsRequested;
+    public event EventHandler<string>? SetDecoderMatchFilterRequested;
+    public event EventHandler<bool>? SetDecoderReturnOnlyMatchedResultsRequested;
     public event EventHandler<int>? SetThresholdBetweenDuplicatesScansRequested;
     public event EventHandler<int>? SetPowerSavingModeRequested;
     public event EventHandler<int>? SetEnableCompositeRequested;
     public event EventHandler<BarcodeRangeEventArg>? SetBarcodeTypeLengthRangeRequested;
     public event EventHandler<string>? ConfigureBarkoderRequested;
+    public event EventHandler<string>? SetCameraByIdRequested;
 
     // Bindable properties
 
@@ -278,6 +306,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
    , typeof(string)
    , typeof(BarkoderView)
    , "1.0");
+
+    public static BindableProperty DeviceIdProperty = BindableProperty.Create(nameof(DeviceId)
+   , typeof(string)
+   , typeof(BarkoderView)
+   , "");
 
     public static BindableProperty IsFlashAvailableProperty = BindableProperty.Create(nameof(RegionOfInterestVisible)
     , typeof(bool)
@@ -449,6 +482,11 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
 , typeof(BarkoderView)
 , BarkoderAROverlayRefresh.NORMAL);
 
+    public static BindableProperty BarkoderRoiCenterMarkProperty = BindableProperty.Create(nameof(BarkoderRoiCenterMark)
+    , typeof(BarkoderRoiCenterMark)
+    , typeof(BarkoderView)
+    , BarkoderRoiCenterMark.NONE);
+
     public static BindableProperty DecodingSpeedProperty = BindableProperty.Create(nameof(DecodingSpeed)
     , typeof(DecodingSpeed)
     , typeof(BarkoderView)
@@ -573,6 +611,26 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
 , typeof(BarkoderView)
 , false);
 
+    public static BindableProperty ARReturnOnlyMatchedResultsProperty = BindableProperty.Create(nameof(ARReturnOnlyMatchedResults)
+, typeof(bool)
+, typeof(BarkoderView)
+, false);
+
+    public static BindableProperty ARDisplayOnlyMatchedResultsProperty = BindableProperty.Create(nameof(ARDisplayOnlyMatchedResults)
+, typeof(bool)
+, typeof(BarkoderView)
+, false);
+
+    public static BindableProperty DecoderMatchFilterProperty = BindableProperty.Create(nameof(DecoderMatchFilter)
+, typeof(string)
+, typeof(BarkoderView)
+, string.Empty);
+
+    public static BindableProperty DecoderReturnOnlyMatchedResultsProperty = BindableProperty.Create(nameof(DecoderReturnOnlyMatchedResults)
+, typeof(bool)
+, typeof(BarkoderView)
+, false);
+
     public static BindableProperty ThresholdBetweenDuplicatesScansProperty = BindableProperty.Create(nameof(ThresholdBetweenDuplicatesScans)
     , typeof(int)
     , typeof(BarkoderView)
@@ -623,6 +681,12 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
     {
         get => (string)GetValue(LibVersionProperty);
         set => SetValue(LibVersionProperty, value);
+    }
+
+    public string DeviceId
+    {
+        get => (string)GetValue(DeviceIdProperty);
+        set => SetValue(DeviceIdProperty, value);
     }
 
     public string LicenseKey
@@ -1029,6 +1093,16 @@ public static BindableProperty RegionOfInterestVisibleProperty = BindablePropert
         }
     }
 
+    public BarkoderRoiCenterMark BarkoderRoiCenterMark
+    {
+        get => (BarkoderRoiCenterMark)GetValue(BarkoderRoiCenterMarkProperty);
+        set
+        {
+            SetValue(BarkoderRoiCenterMarkProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetBarkoderRoiCenterMarkRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves or sets the current decoding speed setting for barcode scanning.
     /// </summary>
@@ -1340,6 +1414,46 @@ public bool UpcEanDeblurEnabled
         }
     }
 
+    public bool ARReturnOnlyMatchedResults
+    {
+        get => (bool)GetValue(ARReturnOnlyMatchedResultsProperty);
+        set
+        {
+            SetValue(ARReturnOnlyMatchedResultsProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARReturnOnlyMatchedResultsRequested), value);
+        }
+    }
+
+    public bool ARDisplayOnlyMatchedResults
+    {
+        get => (bool)GetValue(ARDisplayOnlyMatchedResultsProperty);
+        set
+        {
+            SetValue(ARDisplayOnlyMatchedResultsProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetARDisplayOnlyMatchedResultsRequested), value);
+        }
+    }
+
+    public string DecoderMatchFilter
+    {
+        get => (string)GetValue(DecoderMatchFilterProperty);
+        set
+        {
+            SetValue(DecoderMatchFilterProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetDecoderMatchFilterRequested), value);
+        }
+    }
+
+    public bool DecoderReturnOnlyMatchedResults
+    {
+        get => (bool)GetValue(DecoderReturnOnlyMatchedResultsProperty);
+        set
+        {
+            SetValue(DecoderReturnOnlyMatchedResultsProperty, value);
+            Handler?.Invoke(nameof(BarkoderView.SetDecoderReturnOnlyMatchedResultsRequested), value);
+        }
+    }
+
     /// <summary>
     /// Retrieves the threshold between duplicate scans.
     /// </summary>
@@ -1539,6 +1653,11 @@ public bool UpcEanDeblurEnabled
     public void FreezeScanning()
     {
         Handler?.Invoke(nameof(BarkoderView.FreezeScanningRequested));
+    }
+
+    public void ResetARCache()
+    {
+        Handler?.Invoke(nameof(BarkoderView.ResetARCacheRequested));
     }
 
     /// <summary>
@@ -1741,6 +1860,11 @@ public bool UpcEanDeblurEnabled
     public void SetBarkoderARoverlayRefresh(BarkoderAROverlayRefresh overlayRefresh)
     {
         BarkoderAROverlayRefresh = overlayRefresh;
+    }
+
+    public void SetBarkoderRoiCenterMark(BarkoderRoiCenterMark roiCenterMark)
+    {
+        BarkoderRoiCenterMark = roiCenterMark;
     }
 
 
@@ -1969,6 +2093,26 @@ public bool UpcEanDeblurEnabled
     public void SetARDoubleTapToFreezeEnabled(bool enabled)
     {
         ARDoubleTapToFreezeEnabled = enabled;
+    }
+
+    public void SetARReturnOnlyMatchedResults(bool enabled)
+    {
+        ARReturnOnlyMatchedResults = enabled;
+    }
+
+    public void SetARDisplayOnlyMatchedResults(bool enabled)
+    {
+        ARDisplayOnlyMatchedResults = enabled;
+    }
+
+    public void SetDecoderMatchFilter(string matchFilter)
+    {
+        DecoderMatchFilter = matchFilter;
+    }
+
+    public void SetDecoderReturnOnlyMatchedResults(bool enabled)
+    {
+        DecoderReturnOnlyMatchedResults = enabled;
     }
 
     /// <summary>

@@ -38,29 +38,63 @@ mkdir -p "$SWIFT_BUILD_PATH/Release-iphonesimulator"
 cp -R "$SWIFT_BUILD_PATH/Build/Products/Release-iphonesimulator/$SWIFT_PROJECT_NAME.framework" "$SWIFT_BUILD_PATH/Release-iphonesimulator/"
 cp -R "$SWIFT_BUILD_PATH/Build/Products/Release-iphonesimulator/Barkoder.framework" "$SWIFT_BUILD_PATH/Release-iphonesimulator/" 2>/dev/null
 cp -R "$SWIFT_BUILD_PATH/Build/Products/Release-iphonesimulator/BarkoderSDK.framework" "$SWIFT_BUILD_PATH/Release-iphonesimulator/" 2>/dev/null
+
+echo ":hammer: Building frameworks for Mac Catalyst (arm64 & x86_64)"
+# Build for Mac Catalyst
+xcodebuild -scheme "$SWIFT_PROJECT_NAME" -project "$SWIFT_PROJECT_PATH" -configuration Release \
+-destination "platform=macOS,variant=Mac Catalyst" \
+ARCHS="arm64 x86_64" EXCLUDED_ARCHS="arm64e" \
+ONLY_ACTIVE_ARCH=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES SUPPORTS_MACCATALYST=YES \
+-derivedDataPath "$SWIFT_BUILD_PATH"
+
+# Ensure the Mac Catalyst build exists
+if [ ! -d "$SWIFT_BUILD_PATH/Build/Products/Release-maccatalyst" ]; then
+  echo ":x: Error: Mac Catalyst build failed. No Release-maccatalyst directory found."
+  exit 1
+fi
+
+mkdir -p "$SWIFT_BUILD_PATH/Release-maccatalyst"
+cp -R "$SWIFT_BUILD_PATH/Build/Products/Release-maccatalyst/$SWIFT_PROJECT_NAME.framework" "$SWIFT_BUILD_PATH/Release-maccatalyst/"
+cp -R "$SWIFT_BUILD_PATH/Build/Products/Release-maccatalyst/Barkoder.framework" "$SWIFT_BUILD_PATH/Release-maccatalyst/" 2>/dev/null
+cp -R "$SWIFT_BUILD_PATH/Build/Products/Release-maccatalyst/BarkoderSDK.framework" "$SWIFT_BUILD_PATH/Release-maccatalyst/" 2>/dev/null
 echo ":package: Creating XCFrameworks Directory"
 rm -Rf "$SWIFT_XCFRAMEWORK_PATH"
 mkdir -p "$SWIFT_XCFRAMEWORK_PATH"
 echo ":link: Generating XCFrameworks"
 # :white_check_mark: Generate BarkoderFrameworkProxy.xcframework
 if [ -d "$SWIFT_BUILD_PATH/Release-iphoneos/$SWIFT_PROJECT_NAME.framework" ] && [ -d "$SWIFT_BUILD_PATH/Release-iphonesimulator/$SWIFT_PROJECT_NAME.framework" ]; then
+  CATALYST_ARG=""
+  if [ -d "$SWIFT_BUILD_PATH/Release-maccatalyst/$SWIFT_PROJECT_NAME.framework" ]; then
+    CATALYST_ARG="-framework $SWIFT_BUILD_PATH/Release-maccatalyst/$SWIFT_PROJECT_NAME.framework"
+  fi
   xcodebuild -create-xcframework \
   -framework "$SWIFT_BUILD_PATH/Release-iphoneos/$SWIFT_PROJECT_NAME.framework" \
   -framework "$SWIFT_BUILD_PATH/Release-iphonesimulator/$SWIFT_PROJECT_NAME.framework" \
+  $CATALYST_ARG \
   -output "$SWIFT_XCFRAMEWORK_PATH/$SWIFT_PROJECT_NAME.xcframework"
 fi
 # :white_check_mark: Generate Barkoder.xcframework
 if [ -d "$SWIFT_BUILD_PATH/Release-iphoneos/Barkoder.framework" ] && [ -d "$SWIFT_BUILD_PATH/Release-iphonesimulator/Barkoder.framework" ]; then
+  CATALYST_ARG=""
+  if [ -d "$SWIFT_BUILD_PATH/Release-maccatalyst/Barkoder.framework" ]; then
+    CATALYST_ARG="-framework $SWIFT_BUILD_PATH/Release-maccatalyst/Barkoder.framework"
+  fi
   xcodebuild -create-xcframework \
   -framework "$SWIFT_BUILD_PATH/Release-iphoneos/Barkoder.framework" \
   -framework "$SWIFT_BUILD_PATH/Release-iphonesimulator/Barkoder.framework" \
+  $CATALYST_ARG \
   -output "$SWIFT_XCFRAMEWORK_PATH/Barkoder.xcframework"
 fi
 # :white_check_mark: Generate BarkoderSDK.xcframework
 if [ -d "$SWIFT_BUILD_PATH/Release-iphoneos/BarkoderSDK.framework" ] && [ -d "$SWIFT_BUILD_PATH/Release-iphonesimulator/BarkoderSDK.framework" ]; then
+  CATALYST_ARG=""
+  if [ -d "$SWIFT_BUILD_PATH/Release-maccatalyst/BarkoderSDK.framework" ]; then
+    CATALYST_ARG="-framework $SWIFT_BUILD_PATH/Release-maccatalyst/BarkoderSDK.framework"
+  fi
   xcodebuild -create-xcframework \
   -framework "$SWIFT_BUILD_PATH/Release-iphoneos/BarkoderSDK.framework" \
   -framework "$SWIFT_BUILD_PATH/Release-iphonesimulator/BarkoderSDK.framework" \
+  $CATALYST_ARG \
   -output "$SWIFT_XCFRAMEWORK_PATH/BarkoderSDK.xcframework"
 fi
 echo ":mag: Verifying XCFrameworks"

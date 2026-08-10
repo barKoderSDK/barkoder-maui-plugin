@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Plugin.Maui.Barkoder</id>
+    <version>$version$</version>
+    <authors>Barkoder</authors>
+    <description>The barKoder SDK Maui plugin grants an easy to use Maui solution with a great interface that can be integrated in both iOS and Android apps, Windows, and Mac Catalyst.</description>
+    <copyright>Copyright @2023 Barkoder</copyright>
+    <projectUrl>https://barkoder.com</projectUrl>
+    <tags>barkoder bkd maui android ios maccatalyst windows native scanner barcode</tags>
+    <readme>README.md</readme>
+    <dependencies>
+      <group targetFramework="net8.0-android34.0">
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+      </group>
+      <group targetFramework="net8.0-ios18.0">
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+      </group>
+      <group targetFramework="net8.0-maccatalyst18.0">
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+      </group>
+      <group targetFramework="net8.0-windows10.0.19041.0">
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+      </group>
+    </dependencies>
+    <contentFiles>
+      <files include="any/any/latin_dict.txt" buildAction="None" />
+      <files include="any/any/mrz.traineddata" buildAction="None" />
+      <files include="any/any/mrzfast.traineddata" buildAction="None" />
+      <files include="any/any/n2_384x384_float32.onnx" buildAction="None" />
+      <files include="any/any/n2_512x512_float32.onnx" buildAction="None" />
+      <files include="any/any/v2_cls.onnx" buildAction="None" />
+      <files include="any/any/v3_det.onnx" buildAction="None" />
+      <files include="any/any/v3_rec_latin.onnx" buildAction="None" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <!-- README -->
+    <file src="docs\README.md" target="" />
+
+    <!-- Android -->
+    <file src="lib\BarkoderBindingMauiAndroid.dll" target="lib\net8.0-android34.0" />
+    <file src="bin\$configuration$\net8.0-android\Plugin.Maui.Barkoder.dll" target="lib\net8.0-android34.0" />
+    <file src="bin\$configuration$\net8.0-android\Plugin.Maui.Barkoder.xml" target="lib\net8.0-android34.0" />
+
+    <!-- iOS (stripped: maccatalyst slice removed by prepare_nuget_resources.sh) -->
+    <file src="lib\BarkoderBindingMauiiOS.dll" target="lib\net8.0-ios18.0" />
+    <file src="bin\$configuration$\net8.0-ios\Plugin.Maui.Barkoder.dll" target="lib\net8.0-ios18.0" />
+    <file src="staging\ios\BarkoderBindingMauiiOS.resources\**" target="lib\net8.0-ios18.0\BarkoderBindingMauiiOS.resources" />
+
+    <!-- Mac Catalyst (stripped: ios-arm64 + simulator slices removed by prepare_nuget_resources.sh) -->
+    <file src="lib\BarkoderBindingMauiiOS-maccatalyst.dll" target="lib\net8.0-maccatalyst18.0\BarkoderBindingMauiiOS.dll" />
+    <file src="bin\$configuration$\net8.0-maccatalyst\Plugin.Maui.Barkoder.dll" target="lib\net8.0-maccatalyst18.0" />
+    <file src="staging\maccatalyst\BarkoderBindingMauiiOS.resources\**" target="lib\net8.0-maccatalyst18.0\BarkoderBindingMauiiOS.resources" />
+
+    <!-- Windows - managed DLLs -->
+    <file src="lib\BarkoderSDK.dll" target="lib\net8.0-windows10.0.19041.0" />
+    <file src="lib\BarkoderNET.OCR.dll" target="lib\net8.0-windows10.0.19041.0" />
+    <file src="bin\$configuration$\net8.0-windows10.0.19041.0\Plugin.Maui.Barkoder.dll" target="lib\net8.0-windows10.0.19041.0" />
+
+    <!-- Windows - native runtimes (x64) -->
+    <file src="lib\ocr\runtimes\win-x64\native\Barkoder.dll" target="runtimes\win-x64\native" />
+    <file src="lib\ocr\runtimes\win-x64\native\BarkoderWrapper.dll" target="runtimes\win-x64\native" />
+    <file src="lib\ocr\runtimes\win-x64\native\onnxruntime.dll" target="runtimes\win-x64\native" />
+    <file src="lib\ocr\runtimes\win-x64\native\libiconv.dll" target="runtimes\win-x64\native" />
+
+    <!-- Windows - native runtimes (arm64) -->
+    <file src="lib\ocr\runtimes\win-arm64\native\Barkoder.dll" target="runtimes\win-arm64\native" />
+    <file src="lib\ocr\runtimes\win-arm64\native\BarkoderWrapper.dll" target="runtimes\win-arm64\native" />
+    <file src="lib\ocr\runtimes\win-arm64\native\onnxruntime.dll" target="runtimes\win-arm64\native" />
+    <file src="lib\ocr\runtimes\win-arm64\native\libiconv.dll" target="runtimes\win-arm64\native" />
+
+    <!-- OCR model files (contentFiles with buildAction=None, copied by targets file on Windows only) -->
+    <file src="lib\ocr\contentFiles\any\any\**" target="contentFiles\any\any" />
+
+    <!-- Build targets (copies OCR models to output on Windows only) -->
+    <file src="lib\ocr\buildTransitive\Plugin.Maui.Barkoder.targets" target="buildTransitive" />
+    <file src="lib\ocr\buildTransitive\Plugin.Maui.Barkoder.targets" target="build" />
+  </files>
+</package>

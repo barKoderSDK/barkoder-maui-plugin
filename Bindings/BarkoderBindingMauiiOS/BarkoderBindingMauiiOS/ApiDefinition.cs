@@ -94,6 +94,9 @@ namespace Barkoder.Xamarin
         [Export("unfreezeScanning")]
         void UnfreezeScanning();
 
+        [Export("resetARCache")]
+        void ResetARCache();
+
         // -(void)isFlashAvailableWithCompletion:(void (^ _Nonnull)(BOOL))completion;
         [Export("isFlashAvailableWithCompletion:")]
         void IsFlashAvailableWithCompletion(Action<bool> completion);
@@ -240,6 +243,18 @@ namespace Barkoder.Xamarin
         [Export("getARDoubleTapToFreeze")]
         bool ARDoubleTapToFreeze { get; }
 
+        [Export("getARReturnOnlyMatchedResults")]
+        bool ARReturnOnlyMatchedResults { get; }
+
+        [Export("getARDisplayOnlyMatchedResults")]
+        bool ARDisplayOnlyMatchedResults { get; }
+
+        [Export("getDecoderMatchFilter")]
+        string DecoderMatchFilter { get; }
+
+        [Export("getDecoderReturnOnlyMatchedResults")]
+        bool DecoderReturnOnlyMatchedResults { get; }
+
         [Export("getARHeaderMaxTextHeight")]
         float ARHeaderMaxTextHeight { get; }
 
@@ -337,6 +352,9 @@ namespace Barkoder.Xamarin
         [Export("libVersion")]
         string LibVersion { get; }
 
+        [Export("deviceId")]
+        string DeviceId { get; }
+
         // @property (readonly, nonatomic) NSInteger msiChecksumType;
         [Export("msiChecksumType")]
         MsiChecksumType MsiChecksumType { get; }
@@ -369,6 +387,13 @@ namespace Barkoder.Xamarin
         [Export("barkoderResolution")]
         BarkoderResolution BarkoderResolution { get; }
 
+
+         [Export("setRoiCenterMarkWithArg:")]
+    void SetRoiCenterMarkWithArg(nint arg);
+
+        // @property (readonly, nonatomic) NSInteger roiCenterMark;
+        [Export("roiCenterMark")]
+        nint BarkoderRoiCenterMark { get; }
 
         [Export("setBarkoderARModeWithArg:")]
         void SetBarkoderARMode(nint arg);
@@ -417,6 +442,18 @@ namespace Barkoder.Xamarin
 
         [Export("setARDoubleTapToFreezeEnabledWithArg:")]
         void SetARDoubleTapToFreezeEnabled(bool arg);
+
+        [Export("setARReturnOnlyMatchedResultsWithArg:")]
+        void SetARReturnOnlyMatchedResults(bool arg);
+
+        [Export("setARDisplayOnlyMatchedResultsWithArg:")]
+        void SetARDisplayOnlyMatchedResults(bool arg);
+
+        [Export("setDecoderMatchFilterWithArg:")]
+        void SetDecoderMatchFilter(string arg);
+
+        [Export("setDecoderReturnOnlyMatchedResultsWithArg:")]
+        void SetDecoderReturnOnlyMatchedResults(bool arg);
 
         [Export("setResultDisappearanceDelayMsWithArg:")]
         void SetResultDisappearanceDelayMs(nint arg);
@@ -641,6 +678,12 @@ namespace Barkoder.Xamarin
         [Export("setCameraWithArg:")]
         void setCamera(BarkoderCameraPosition arg);
 
+        [Export("getAvailableCamerasAsJson")]
+        string GetAvailableCamerasAsJson();
+
+        [Export("setCameraByIdWithArg:")]
+        void SetCameraById(string arg);
+
     }
 
       // @interface DecoderPayload : NSObject
@@ -691,6 +734,9 @@ namespace Barkoder.Xamarin
 
         [Export("binaryData", ArgumentSemantic.Retain)]
         NSData BinaryData { get; set; }
+
+        [Export("isMatched")]
+        bool IsMatched { get; set; }
     }
     
     [BaseType(typeof(NSObject))]

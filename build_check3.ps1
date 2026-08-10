@@ -1,0 +1,10 @@
+Set-Location "c:\Users\User\Desktop\MAUI multiplatform\barkoder-maui5\Plugin.Maui.Barkoder"
+$output = dotnet build -f net8.0-windows10.0.19041.0 2>&1 | Out-String
+$outFile = Join-Path $env:USERPROFILE "Desktop\build_output.txt"
+$output | Set-Content $outFile
+$lines = $output -split "`n"
+foreach ($line in $lines) {
+    if ($line -match "error CS|FAILED|succeeded") {
+        Write-Host $line.Trim()
+    }
+}

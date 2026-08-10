@@ -12,8 +12,9 @@ namespace Plugin.Maui.Barkoder.Handlers
         public BarcodeLocation Location { get; set; }
         public string BinaryDataAsBase64 { get; set; }
         public string SadlImageAsBase64 { get; set; } = "";
+        public bool IsMatched { get; set; }
 
-        public BarcodeResult(string textualData, string barcodeTypeName, Dictionary<string, object>? extra, string characterSet, List<ImageData> mrzImages, BarcodeLocation location, string binaryDataAsBase64, string sadlImageAsBase64)
+        public BarcodeResult(string textualData, string barcodeTypeName, Dictionary<string, object>? extra, string characterSet, List<ImageData> mrzImages, BarcodeLocation location, string binaryDataAsBase64, string sadlImageAsBase64, bool isMatched = false)
         {
             TextualData = textualData;
             BarcodeTypeName = barcodeTypeName;
@@ -24,6 +25,7 @@ namespace Plugin.Maui.Barkoder.Handlers
             Location = location;
             BinaryDataAsBase64 = binaryDataAsBase64;
             SadlImageAsBase64 = sadlImageAsBase64;
+            IsMatched = isMatched;
         }
     }
 

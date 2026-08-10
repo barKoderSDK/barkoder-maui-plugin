@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="$(TargetFramework.Contains('windows'))">
+    <BarkoderCopyOcrResources Condition="'$(BarkoderCopyOcrResources)'==''">true</BarkoderCopyOcrResources>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(TargetFramework.Contains('windows')) AND '$(BarkoderCopyOcrResources)'=='true'">
+    <BarkoderOcrResourceFiles Include="$(MSBuildThisFileDirectory)..\contentFiles\any\any\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="BarkoderCopyOcrResourcesToOutput" AfterTargets="Build" Condition="$(TargetFramework.Contains('windows')) AND '$(BarkoderCopyOcrResources)'=='true'">
+    <Message Text="[Plugin.Maui.Barkoder] Copying OCR resources to $(TargetDir)" Importance="high" />
+    <Copy SourceFiles="@(BarkoderOcrResourceFiles)"
+          DestinationFolder="$(TargetDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-ios</TargetFramework>
+    <TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
      <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsBindingProject>true</IsBindingProject>
     <NoBindingEmbedding>true</NoBindingEmbedding>
 
      <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-ios'">12.2</SupportedOSPlatformVersion>
-    <!-- End addition -->
+     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">14.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />

@@ -246,6 +246,8 @@ namespace Barkoder
         public int RoiWidth;
         [JsonProperty("roi_h")]
         public int RoiHeight;
+        [JsonProperty("roiCenterMark")]
+        public BarkoderRoiCenterMark RoiCenterMark;
         [JsonProperty("formattingType")]
         public FormattingType FormattingType;
         [JsonProperty("encodingCharacterSet")]
@@ -262,6 +264,7 @@ namespace Barkoder
             int? roiY = null,
             int? roiWidth = null,
             int? roiHeight = null,
+            BarkoderRoiCenterMark? roiCenterMark = null,
             FormattingType? formattingType = null,
             string? encodingCharacterSet = null,
             bool? upcEanDeblur = null,
@@ -274,6 +277,7 @@ namespace Barkoder
             this.RoiY = roiY ?? 5;
             this.RoiWidth = roiWidth ?? 90;
             this.RoiHeight = roiHeight ?? 90;
+            this.RoiCenterMark = roiCenterMark ?? BarkoderRoiCenterMark.NONE;
             this.FormattingType = formattingType ?? FormattingType.Disabled;
             this.EncodingCharacterSet = encodingCharacterSet ?? "";
             this.UpcEanDeblur = upcEanDeblur ?? false;

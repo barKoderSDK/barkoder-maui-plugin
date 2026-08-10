@@ -15,9 +15,11 @@ using CommonARMode = Plugin.Maui.Barkoder.Enums.BarkoderARMode;
 using CommonARHeaderShowMode = Plugin.Maui.Barkoder.Enums.BarkoderARHeaderShowMode;
 using CommonARLocationType = Plugin.Maui.Barkoder.Enums.BarkoderARLocationType;
 using CommonAROverlayRefresh = Plugin.Maui.Barkoder.Enums.BarkoderAROverlayRefresh;
+using CommonRoiCenterMark = Plugin.Maui.Barkoder.Enums.BarkoderRoiCenterMark;
 using AndroidARMode = Com.Barkoder.Enums.BarkoderARMode;
 using AndroidARHeaderShowMode = Com.Barkoder.Enums.BarkoderARHeaderShowMode;
 using AndroidARLocationType = Com.Barkoder.Enums.BarkoderARLocationType;
+using AndroidRoiCenterMark = Com.Barkoder.Enums.BarkoderRoiCenterMark;
 
 using CommonBarkoderCameraPosition = Plugin.Maui.Barkoder.Enums.BarkoderCameraPosition;
 using AndroidBarkoderCameraPosition = Com.Barkoder.Enums.BarkoderCameraPosition;
@@ -91,6 +93,16 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                 {
                     System.Console.WriteLine($"{kvp.Key}: {kvp.Value}");
                 }
+            }
+
+            // Set DeviceId now that config is initialized
+            try
+            {
+                view.DeviceId = Com.Barkoder.Barkoder.DeviceId;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"DeviceId error: {ex.Message}");
             }
         }
     }
@@ -346,7 +358,22 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if (handler.BKDView != null)
         {
             view.LibVersion = Com.Barkoder.Barkoder.LibVersion;
+        }
+    }
 
+    private static void MapDeviceId(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if (handler.BKDView != null)
+        {
+            try
+            {
+                view.DeviceId = Com.Barkoder.Barkoder.DeviceId;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"MapDeviceId error: {ex.Message}");
+                view.DeviceId = "";
+            }
         }
     }
 
@@ -406,6 +433,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
             else if (barkoderARMode == AndroidARMode.NonInteractive)
             {
                 view.BarkoderARMode = Enums.BarkoderARMode.NonInteractive;
+            }
+            else if (barkoderARMode == AndroidARMode.MatchFilter)
+            {
+                view.BarkoderARMode = Enums.BarkoderARMode.MatchFilter;
             }
         }
     }
@@ -481,6 +512,27 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapBarkoderRoiCenterMark(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            AndroidRoiCenterMark roiCenterMark = handler.BKDView.Config.RoiCenterMark;
+
+            if (roiCenterMark == AndroidRoiCenterMark.None)
+            {
+                view.BarkoderRoiCenterMark = CommonRoiCenterMark.NONE;
+            }
+            else if (roiCenterMark == AndroidRoiCenterMark.Point)
+            {
+                view.BarkoderRoiCenterMark = CommonRoiCenterMark.POINT;
+            }
+            else if (roiCenterMark == AndroidRoiCenterMark.Crosshair)
+            {
+                view.BarkoderRoiCenterMark = CommonRoiCenterMark.CROSSHAIR;
+            }
+        }
+    }
+
     private static void MapFormattingType(BarkoderViewHandler handler, BarkoderView view)
     {
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
@@ -506,6 +558,10 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
             else if (formattingType == AndroidFormattingType.Sadl)
             {
                 view.FormattingType = CommonFormattingType.SADL;
+            }
+            else if (formattingType == AndroidFormattingType.Bcbp)
+            {
+                view.FormattingType = CommonFormattingType.BCBP;
             }
         }
     }
@@ -792,6 +848,38 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         if ((handler.BKDView != null) && (handler.BKDView.Config != null))
         {
             view.ARDoubleTapToFreezeEnabled = handler.BKDView.Config.ArConfig.DoubleTapToFreezeEnabled;
+        }
+    }
+
+    private static void MapARReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.ARReturnOnlyMatchedResults = handler.BKDView.Config.ArConfig.ReturnOnlyMatchedResults;
+        }
+    }
+
+    private static void MapARDisplayOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.ARDisplayOnlyMatchedResults = handler.BKDView.Config.ArConfig.DisplayOnlyMatchedResults;
+        }
+    }
+
+    private static void MapDecoderMatchFilter(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.DecoderMatchFilter = handler.BKDView.Config.DecoderConfig.MatchFilter ?? "";
+        }
+    }
+
+    private static void MapDecoderReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view)
+    {
+        if ((handler.BKDView != null) && (handler.BKDView.Config != null))
+        {
+            view.DecoderReturnOnlyMatchedResults = handler.BKDView.Config.DecoderConfig.ReturnOnlyMatchedResults;
         }
     }
 
@@ -1214,6 +1302,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         handler.BKDView?.UnfreezeScanning();
     }
 
+    private static void MapResetARCache(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        handler.BKDView?.ResetArCache();
+    }
+
     private static void MapRegionOfInterestVisible(BarkoderViewHandler handler, BarkoderView view)
     {
         if (handler.BKDView != null)
@@ -1550,6 +1643,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                         handler.BKDView.Config.ArConfig.ArMode = AndroidARMode.NonInteractive;
                         break;
                     }
+                case CommonARMode.MatchFilter:
+                    {
+                        handler.BKDView.Config.ArConfig.ArMode = AndroidARMode.MatchFilter;
+                        break;
+                    }
             }
         }
     }
@@ -1654,6 +1752,31 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapSetBarkoderRoiCenterMark(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is CommonRoiCenterMark roiCenterMark) && (handler.BKDView != null))
+        {
+            switch (roiCenterMark)
+            {
+                case CommonRoiCenterMark.NONE:
+                    {
+                        handler.BKDView.Config.RoiCenterMark = AndroidRoiCenterMark.None;
+                        break;
+                    }
+                case CommonRoiCenterMark.POINT:
+                    {
+                        handler.BKDView.Config.RoiCenterMark = AndroidRoiCenterMark.Point;
+                        break;
+                    }
+                case CommonRoiCenterMark.CROSSHAIR:
+                    {
+                        handler.BKDView.Config.RoiCenterMark = AndroidRoiCenterMark.Crosshair;
+                        break;
+                    }
+            }
+        }
+    }
+
     private static void MapSetFormattingType(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is CommonFormattingType formattingType) && (handler.BKDView != null))
@@ -1683,6 +1806,11 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
                 case CommonFormattingType.SADL:
                     {
                         handler.BKDView.Config.DecoderConfig.FormattingType = AndroidFormattingType.Sadl;
+                        break;
+                    }
+                case CommonFormattingType.BCBP:
+                    {
+                        handler.BKDView.Config.DecoderConfig.FormattingType = AndroidFormattingType.Bcbp;
                         break;
                     }
             }
@@ -2209,6 +2337,38 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
         }
     }
 
+    private static void MapSetARReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ArConfig.ReturnOnlyMatchedResults = enabled;
+        }
+    }
+
+    private static void MapSetARDisplayOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.ArConfig.DisplayOnlyMatchedResults = enabled;
+        }
+    }
+
+    private static void MapSetDecoderMatchFilter(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is string matchFilter) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.DecoderConfig.MatchFilter = matchFilter;
+        }
+    }
+
+    private static void MapSetDecoderReturnOnlyMatchedResults(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        if ((arg3 is bool enabled) && (handler.BKDView != null))
+        {
+            handler.BKDView.Config.DecoderConfig.ReturnOnlyMatchedResults = enabled;
+        }
+    }
+
     private static void MapSetThresholdBetweenDuplicatesScans(BarkoderViewHandler handler, BarkoderView view, object? arg3)
     {
         if ((arg3 is int thresholdBetweenDuplicatesScans) && (handler.BKDView != null))
@@ -2276,6 +2436,17 @@ public partial class BarkoderViewHandler : ViewHandler<BarkoderView, Android.Vie
 
             BarkoderHelper.ApplyJsonToConfig(handler.BKDView.Config, configAsJson);
         }
+    }
+
+    public List<Dictionary<string, string>> GetAvailableCameras()
+    {
+        // Not supported on Android - use SetCamera(front/back) instead
+        return new List<Dictionary<string, string>>();
+    }
+
+    private static void MapSetCameraById(BarkoderViewHandler handler, BarkoderView view, object? arg3)
+    {
+        // Not supported on Android - use SetCamera(front/back) instead
     }
 
 }
@@ -2487,7 +2658,8 @@ public class AndroidBarkoderView : AppCompatActivity, Com.Barkoder.Interfaces.IB
                         mrzImages,
                         location,
                         binaryDataAsBase64,
-                        sadlImageBase64
+                        sadlImageBase64,
+                        res.IsMatched
                     );
 
                     // Dispose extra wrappers
