@@ -12501,35 +12501,35 @@
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderResultHandler.swift",
       "kind": "StringLiteral",
-      "offset": 454,
+      "offset": 459,
       "length": 23,
       "value": "\"barkoder.decode.queue\""
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderResultHandler.swift",
       "kind": "BooleanLiteral",
-      "offset": 515,
+      "offset": 520,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderResultHandler.swift",
       "kind": "IntegerLiteral",
-      "offset": 610,
+      "offset": 615,
       "length": 2,
       "value": "40"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderResultHandler.swift",
       "kind": "IntegerLiteral",
-      "offset": 663,
+      "offset": 668,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderResultHandler.swift",
       "kind": "IntegerLiteral",
-      "offset": 714,
+      "offset": 719,
       "length": 1,
       "value": "0"
     },
@@ -12557,14 +12557,14 @@
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderARManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 37905,
+      "offset": 39716,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderARManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 38647,
+      "offset": 40458,
       "length": 5,
       "value": "false"
     },
@@ -12865,42 +12865,42 @@
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderCameraManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 1456,
-      "length": 5,
-      "value": "false"
+      "offset": 1473,
+      "length": 4,
+      "value": "true"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderCameraManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 1654,
+      "offset": 1704,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderCameraManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 1703,
+      "offset": 1753,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderCameraManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 1758,
+      "offset": 1808,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderCameraManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 1791,
+      "offset": 1841,
       "length": 2,
       "value": "30"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderCameraManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 2923,
+      "offset": 2992,
       "length": 5,
       "value": "false"
     },
@@ -13012,14 +13012,21 @@
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderView.swift",
       "kind": "BooleanLiteral",
-      "offset": 11795,
+      "offset": 11898,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 11954,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderView\/BarkoderView.swift",
       "kind": "IntegerLiteral",
-      "offset": 47913,
+      "offset": 51206,
       "length": 1,
       "value": "0"
     },
@@ -13208,35 +13215,77 @@
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
       "kind": "BooleanLiteral",
-      "offset": 3044,
+      "offset": 970,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3239,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3291,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
       "kind": "FloatLiteral",
-      "offset": 7021,
-      "length": 3,
-      "value": "1.0"
-    },
-    {
-      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
-      "kind": "FloatLiteral",
-      "offset": 11494,
-      "length": 3,
-      "value": "1.0"
-    },
-    {
-      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
-      "kind": "FloatLiteral",
-      "offset": 24198,
+      "offset": 7981,
       "length": 3,
       "value": "1.0"
     },
     {
       "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
       "kind": "BooleanLiteral",
-      "offset": 29353,
+      "offset": 8046,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "FloatLiteral",
+      "offset": 12766,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "FloatLiteral",
+      "offset": 26621,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 31776,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 31815,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 31867,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/goranchakarevski\/Desktop\/Barkoder\/barkoder-ios\/BarkoderSDK\/BarkoderSDK\/BarkoderOverlay\/BarkoderLocationsView.swift",
+      "kind": "BooleanLiteral",
+      "offset": 31918,
       "length": 5,
       "value": "false"
     },

@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/BarkoderSDK-Swift.h</key>
 		<data>
-		lb8PmkWp7+r0WA0KHW0K+MxHO3w=
+		0IKEe3isrish4y2A75HhpC2ZFdI=
 		</data>
 		<key>Headers/BarkoderSDK.h</key>
 		<data>
@@ -14,23 +14,23 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		NBVMwS6/NXDUGO3cGE9kjdKp4fo=
+		A3VW04RBiHQidfpXtctBYSZmat8=
 		</data>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		j1r2H6K1LIc8c9NrcLNpPu/5nI8=
+		1WR3DiPd1akFfojC3mKMINsaHSQ=
 		</data>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		g+0io0sgP9IjelaOtGS6PF7SjeU=
+		XQrtsWN28so606/N03OszMV7xm0=
 		</data>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		TKk+3xheD+kvFkpZ5qP8xaDvYX0=
+		PZG0r09FtNO83qCgat08wQKDfbo=
 		</data>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		g+0io0sgP9IjelaOtGS6PF7SjeU=
+		XQrtsWN28so606/N03OszMV7xm0=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -51,7 +51,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			k9jYjLsrydRWC5pZwPPQd9n1ye8a6JrSJHmoNg0mKVI=
+			2IzGadr8zIolQLxN3KtKsv1Bfvb6VSBBKKrN8+sdVFg=
 			</data>
 		</dict>
 		<key>Headers/BarkoderSDK.h</key>
@@ -65,28 +65,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			DgwQ0XmCnQhBJiBkf2rX6I/v9924IMOHlHil6s/rXEs=
+			bOeo26nFFS5KpSSZCXBZ1eT32O6J/TlRsUX8K2UVSA0=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8Ky2NfqoZmxMKSDvFm2TUWtPxFt5PyIck5eIIqkDrlE=
+			+3ZyVzaSbuu8LrQ4FwzS4kf02ezft58yE2dbGe8bUxs=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6dLAk+6LYvqnF88RPisXDDP2W7MNH8IWFrVxWxUOlL0=
+			WQIheemN6+Xcxu6uKNw7a3ID2HLMhlDc/k9FvdOslTg=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8Ky2NfqoZmxMKSDvFm2TUWtPxFt5PyIck5eIIqkDrlE=
+			+3ZyVzaSbuu8LrQ4FwzS4kf02ezft58yE2dbGe8bUxs=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

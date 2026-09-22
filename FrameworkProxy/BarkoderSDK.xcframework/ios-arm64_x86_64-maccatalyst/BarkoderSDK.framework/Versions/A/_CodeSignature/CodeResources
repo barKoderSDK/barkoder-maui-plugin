@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		5sJ5oLY4QMHwlHpoEFeJs2OTjU0=
+		aUt1o02WMpqvJlBKsEiIDufyw+c=
 		</data>
 		<key>Resources/beep.wav</key>
 		<data>
@@ -23,7 +23,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zUZ2J/cP2Ok93X1eJYW3uHyyDVxDKbOQxxUjpvZZ1q8=
+			EZGuzFUlhnO9509wNdz1l9X2bWfeR6SVz/K1IItAKhg=
 			</data>
 		</dict>
 		<key>Headers/BarkoderSDK.h</key>
@@ -37,56 +37,56 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			xNqsnEo6+EmlRgSCeFHBTWRHnEcL0/AFN2JPpUy7D4g=
+			gYqNSDlVabt0B5KDkHDkkuaDIN96pplJmELJsdVEiPE=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			cjSIu4Lku9YJWCWpQPxKOaGPHTVZScVhV6SKTfY6qUI=
+			EL8UIEu4gSY8AhMlegHhh9JB5nVM+o1n3X3FO5d+NEg=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios-macabi.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			yP18Afclp4j9Yb9Xy843f3JEnzLIU4r/wndNGryDH90=
+			hHtQXRS/0ApHj9Ai/qy1nfJDyBKqDAk6ivNJlS9x2/w=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/arm64-apple-ios-macabi.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			cjSIu4Lku9YJWCWpQPxKOaGPHTVZScVhV6SKTfY6qUI=
+			EL8UIEu4gSY8AhMlegHhh9JB5nVM+o1n3X3FO5d+NEg=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/x86_64-apple-ios-macabi.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xNqsnEo6+EmlRgSCeFHBTWRHnEcL0/AFN2JPpUy7D4g=
+			gYqNSDlVabt0B5KDkHDkkuaDIN96pplJmELJsdVEiPE=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/x86_64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lLbFnspkktCUB5zPMRW3wo8RoqkCd1Dn81Lk/sItuJY=
+			uhOE2mDObHhQ0ZDlROqYssO5deVkGufHGN+P4ldAQ1k=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/x86_64-apple-ios-macabi.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZED0Ph/KPWDNICundJrKopiixvvp8PXgBX6xaffw5uQ=
+			QMzeQQHsQ5PyUfRIaqAObzSDPqXbokkS+vE0be1IEX0=
 			</data>
 		</dict>
 		<key>Modules/BarkoderSDK.swiftmodule/x86_64-apple-ios-macabi.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lLbFnspkktCUB5zPMRW3wo8RoqkCd1Dn81Lk/sItuJY=
+			uhOE2mDObHhQ0ZDlROqYssO5deVkGufHGN+P4ldAQ1k=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -100,7 +100,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			9L5OlDeAZXF2+4L/XPwXDShebQMIMJH1ag4wywpCP7E=
+			whVAmwy2Cpzo9KO5X0J/s5yR5jpRwRGETt/otn8Q2H0=
 			</data>
 		</dict>
 		<key>Resources/beep.wav</key>

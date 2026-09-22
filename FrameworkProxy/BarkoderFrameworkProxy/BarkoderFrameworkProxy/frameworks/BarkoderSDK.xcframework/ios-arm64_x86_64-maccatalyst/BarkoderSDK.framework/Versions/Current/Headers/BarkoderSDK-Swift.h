@@ -735,9 +735,10 @@ SWIFT_CLASS("_TtC11BarkoderSDK12BarkoderView")
 - (NSArray<NSDictionary<NSString *, id> *> * _Nonnull)getAvailableCameras SWIFT_WARN_UNUSED_RESULT;
 /// Selects camera by unique device ID on Mac Catalyst.
 - (void)setCameraById:(NSString * _Nonnull)cameraId;
-/// Controls whether the Mac Catalyst camera preview is horizontally mirrored.
-/// Defaults to <code>false</code>.
-/// Set to <code>true</code> for a mirror-like webcam preview.
+/// Controls whether the camera preview is horizontally mirrored.
+/// On iOS, this setting affects only the front camera.
+/// The back camera is never mirrored.
+/// The default value is <code>true</code>.
 @property (nonatomic) BOOL previewMirrored;
 /// Enables or disables the device’s flash (torch) for illumination during barcode scanning
 /// \param enabled [true, false]. Default value is false
@@ -1626,9 +1627,10 @@ SWIFT_CLASS("_TtC11BarkoderSDK12BarkoderView")
 - (NSArray<NSDictionary<NSString *, id> *> * _Nonnull)getAvailableCameras SWIFT_WARN_UNUSED_RESULT;
 /// Selects camera by unique device ID on Mac Catalyst.
 - (void)setCameraById:(NSString * _Nonnull)cameraId;
-/// Controls whether the Mac Catalyst camera preview is horizontally mirrored.
-/// Defaults to <code>false</code>.
-/// Set to <code>true</code> for a mirror-like webcam preview.
+/// Controls whether the camera preview is horizontally mirrored.
+/// On iOS, this setting affects only the front camera.
+/// The back camera is never mirrored.
+/// The default value is <code>true</code>.
 @property (nonatomic) BOOL previewMirrored;
 /// Enables or disables the device’s flash (torch) for illumination during barcode scanning
 /// \param enabled [true, false]. Default value is false

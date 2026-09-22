@@ -1,6 +1,0 @@
-framework module Barkoder {
-  umbrella header "Barkoder.h"
-  export *
-
-  module * { export * }
-}
